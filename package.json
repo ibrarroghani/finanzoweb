@@ -12,10 +12,13 @@
     "format:fix": "prettier --write ./src/**/*.{js,jsx,ts,tsx}"
   },
   "dependencies": {
+    "antd": "^5.21.6",
     "axios": "^1.7.7",
     "next": "14.2.16",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "react-hook-form": "^7.53.1",
+    "yup": "^1.4.0"
   },
   "devDependencies": {
     "@types/node": "^20",
