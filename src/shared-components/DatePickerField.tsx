@@ -9,13 +9,13 @@ interface DatePickerFieldProps {
 }
 
 const DatePickerField: React.FC<DatePickerFieldProps> = ({
-  placeholder = 'Select date',
+  placeholder = 'Please select a date',
   name,
   error,
   control,
 }) => {
   return (
-    <div className='flex flex-col py-2'>
+    <div className='flex flex-col'>
       <div>
         <Controller
           name={name}

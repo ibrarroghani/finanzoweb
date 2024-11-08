@@ -8,8 +8,7 @@ interface InputFieldProps {
   error?: string;
   label?: string;
   readOnly?: boolean;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  control: Control<FieldValues, any>;
+  control: Control<FieldValues>;
 }
 
 const InputField: React.FC<InputFieldProps> = ({
@@ -25,11 +24,10 @@ const InputField: React.FC<InputFieldProps> = ({
         <Controller
           name={name}
           control={control}
-          render={({ field: { onChange, value } }) => (
+          render={({ field: { onChange } }) => (
             <Input
               type={type}
               onChange={onChange}
-              value={value}
               placeholder={placeholder ?? ''}
             />
           )}

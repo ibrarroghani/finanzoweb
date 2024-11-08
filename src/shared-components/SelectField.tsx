@@ -14,14 +14,13 @@ interface SelectFieldProps {
   error?: string;
   placeholder?: string;
   disabled?: boolean;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  control: Control<FieldValues, any>;
+  control: Control<FieldValues>;
 }
 
 const SelectField: React.FC<SelectFieldProps> = ({
   options,
   name,
-  placeholder = 'Please Select',
+  placeholder = 'Please select a value',
   error,
   control,
   disabled,

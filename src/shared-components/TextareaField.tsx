@@ -11,14 +11,14 @@ interface TextareaFieldProps {
 }
 
 const TextareaField: React.FC<TextareaFieldProps> = ({
-  placeholder = 'Enter your value',
+  placeholder = 'Please enter a value',
   name,
   error,
   maxLength = 100,
   control,
 }) => {
   return (
-    <div className='flex flex-col py-2'>
+    <div className='flex flex-col'>
       <div>
         <Controller
           name={name}
@@ -29,6 +29,7 @@ const TextareaField: React.FC<TextareaFieldProps> = ({
               maxLength={maxLength}
               onChange={onChange}
               placeholder={placeholder}
+              style={{ height: 120 }}
             />
           )}
         />
