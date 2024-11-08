@@ -17,12 +17,11 @@ const InputField: React.FC<InputFieldProps> = ({
   type = 'text',
   name,
   error,
-  label,
   control,
 }) => {
   return (
-    <div className='relative flex flex-col'>
-      <div className='relative py-2'>
+    <div className='flex flex-col'>
+      <div>
         <Controller
           name={name}
           control={control}
@@ -35,11 +34,6 @@ const InputField: React.FC<InputFieldProps> = ({
             />
           )}
         />
-        {label && (
-          <p className='absolute left-5 top-[20%] text-[11px] text-black'>
-            {label}
-          </p>
-        )}
       </div>
       {error && (
         <p className='flex items-center gap-1 text-sm text-red-400'>{error}</p>

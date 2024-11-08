@@ -1,21 +1,24 @@
 'use client';
+import DatePickerField from '@/shared-components/DatePickerField';
 import InputField from '@/shared-components/InputField';
 import SelectField from '@/shared-components/SelectField';
-import React, { useState, useEffect } from 'react';
+import TextareaField from '@/shared-components/TextareaField';
+// import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 
 interface formData {
   firstName?: string;
   lastName?: string;
+  details?: string;
+  date?: Date | null;
 }
 
 const Home = () => {
-  // Hydration check
-  const [isMounted, setIsMounted] = useState(false);
-
   const initialValue: formData = {
     firstName: '',
     lastName: '',
+    details: '',
+    date: null,
   };
 
   const { control, handleSubmit } = useForm<formData>({
@@ -25,20 +28,14 @@ const Home = () => {
   const handleFormSubmit = (data: formData) => {
     console.log('data', data);
   };
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-  // Return a loading state if not yet mounted
-  if (!isMounted) {
-    return <div>Loading...</div>;
-  }
+
   return (
-    <div className='h-screen bg-slate-300'>
+    <div className='h-screen bg-slate-100'>
       <form
         onSubmit={handleSubmit(handleFormSubmit)}
-        className='mx-6 flex gap-2'
+        className='mx-6 flex flex-col gap-2'
       >
-        <div className='w-1/2'>
+        <div className='mt-2 w-1/2'>
           <InputField control={control} name='firstName' />
         </div>
 
@@ -55,9 +52,22 @@ const Home = () => {
           />
         </div>
 
-        <button className='rounded-md bg-red-300 px-2' type='submit'>
-          Submit
-        </button>
+        <div className='w-1/2'>
+          <TextareaField control={control} name='details' />
+        </div>
+
+        <div className='w-1/2'>
+          <DatePickerField control={control} name='date' />
+        </div>
+
+        <div className='w-1/2'>
+          <button
+            className='rounded-md bg-red-300 px-2 text-white'
+            type='submit'
+          >
+            Submit
+          </button>
+        </div>
       </form>
     </div>
   );
