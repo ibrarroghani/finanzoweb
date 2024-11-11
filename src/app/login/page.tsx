@@ -4,50 +4,83 @@ import { useMsal, useIsAuthenticated } from '@azure/msal-react';
 import { loginRequest } from '../../config/msalConfig';
 import { useEffect, useState } from 'react';
 
+// Define an interface to represent the user's profile data structure
+interface UserProfile {
+  displayName: string;
+  mail?: string;
+  userPrincipalName?: string;
+}
+
 const LoginPage: React.FC = () => {
   const { instance } = useMsal();
   const isAuthenticated = useIsAuthenticated();
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<UserProfile | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   const handleLogin = () => {
-    instance.loginPopup(loginRequest).catch((error) => {
-      console.error('Login failed:', error);
-    });
+    instance
+      .loginPopup(loginRequest)
+      .then((response) => {
+        instance.setActiveAccount(response.account); // Set the active account after login
+      })
+      .catch((error) => {
+        console.error('Login failed:', error);
+        setError('Login failed. Please try again.');
+      });
   };
 
   const handleLogout = () => {
     instance.logoutPopup().catch((error) => {
       console.error('Logout failed:', error);
+      setError('Logout failed. Please try again.');
     });
   };
 
   useEffect(() => {
     if (isAuthenticated) {
-      instance
-        .acquireTokenSilent(loginRequest)
-        .then((response) => {
-          const accessToken = response.accessToken;
+      const activeAccount = instance.getActiveAccount(); // Retrieve the active account
 
-          fetch('https://graph.microsoft.com/v1.0/me', {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
+      if (activeAccount) {
+        instance
+          .acquireTokenSilent(loginRequest)
+          .then((response) => {
+            const accessToken = response.accessToken;
+
+            return fetch('https://graph.microsoft.com/v1.0/me', {
+              headers: {
+                Authorization: `Bearer ${accessToken}`,
+              },
+            });
           })
-            .then((res) => res.json())
-            .then((profile) => setUser(profile))
-            .catch((error) =>
-              console.error('Failed to fetch user profile:', error)
+          .then((res) => {
+            console.log('res', res);
+            if (!res.ok) {
+              throw new Error(`Error fetching profile: ${res.statusText}`);
+            }
+            return res.json();
+          })
+          .then((profile: UserProfile) => {
+            setUser(profile);
+            setError(null); // Clear any previous errors
+          })
+          .catch((error) => {
+            console.error(
+              'Failed to fetch user profile or acquire token:',
+              error
             );
-        })
-        .catch((error) => {
-          console.error('Token acquisition failed:', error);
-        });
+            setError('Failed to fetch user profile. Please try again.');
+          });
+      } else {
+        console.error('No active account found');
+        setError('No active account found. Please log in again.');
+      }
     }
   }, [isAuthenticated, instance]);
 
   return (
     <div className='flex h-screen flex-col items-center justify-center'>
+      {error && <p className='text-red-500'>{error}</p>}
+
       {isAuthenticated && user ? (
         <div>
           <p>Welcome, {user.displayName}</p>
