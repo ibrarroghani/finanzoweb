@@ -47,8 +47,7 @@ const LoginPage: React.FC = () => {
   }, [isAuthenticated, instance]);
 
   return (
-    <div>
-      <h1>Login Page</h1>
+    <div className='flex h-screen flex-col items-center justify-center'>
       {isAuthenticated && user ? (
         <div>
           <p>Welcome, {user.displayName}</p>
@@ -56,7 +55,12 @@ const LoginPage: React.FC = () => {
           <button onClick={handleLogout}>Logout</button>
         </div>
       ) : (
-        <button onClick={handleLogin}>Login with Azure AD</button>
+        <button
+          className='rounded-md bg-gray-500 p-4 text-white'
+          onClick={handleLogin}
+        >
+          Login with Azure AD
+        </button>
       )}
     </div>
   );
