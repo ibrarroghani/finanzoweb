@@ -56,7 +56,7 @@ const LoginPage: React.FC = () => {
         </div>
       ) : (
         <button
-          className='rounded-md bg-gray-500 p-4 text-white'
+          className='rounded-md bg-blue-500 p-4 text-white shadow-md hover:bg-blue-400'
           onClick={handleLogin}
         >
           Login with Azure AD
