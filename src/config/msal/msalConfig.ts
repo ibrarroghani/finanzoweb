@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { Configuration, LogLevel } from '@azure/msal-browser';
 
 const msalConfig: Configuration = {
@@ -35,11 +36,6 @@ const msalConfig: Configuration = {
       },
     },
   },
-};
-
-export const loginRequest = {
-  scopes: process.env.NEXT_PUBLIC_AZURE_AD_SCOPES?.split(',') || ['User.Read'],
-  prompt: 'select_account',
 };
 
 export default msalConfig;

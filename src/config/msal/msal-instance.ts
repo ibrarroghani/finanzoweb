@@ -25,8 +25,6 @@ msalInstance.initialize().then(() => {
       event.eventType === EventType.ACQUIRE_TOKEN_SUCCESS ||
       event.eventType === EventType.SSO_SILENT_SUCCESS
     ) {
-      //   const account = event.payload?.account;
-      //   msalInstance.setActiveAccount(account);
       const payload = event.payload;
       if ((payload as AuthenticationResult)?.account) {
         const account = (payload as AuthenticationResult).account;
