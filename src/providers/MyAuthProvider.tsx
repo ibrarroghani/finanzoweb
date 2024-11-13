@@ -44,8 +44,11 @@ export const MyAuthProvider: React.FC<{ children: React.ReactNode }> = ({
       const msalUser = accounts[0];
 
       const res = await ApiService.post('/auth/login', {
-        name: msalUser.name,
-        email: msalUser.username,
+        user: {
+          name: msalUser.name,
+          email: msalUser.username,
+          userType: 'broker',
+        },
         accessToken: accessToken,
       });
 
