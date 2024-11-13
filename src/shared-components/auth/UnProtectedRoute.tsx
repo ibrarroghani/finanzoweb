@@ -2,22 +2,26 @@
 
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import useAuth from '@/hooks/msal/useAuth';
+import { useMyAuth } from '@/providers/MyAuthProvider'; // Use the MyAuthProvider context
 
-interface UnprotectedRouteProps {
+interface UnProtectedRouteProps {
   children: React.ReactNode;
 }
 
-const UnProtectedRoute = ({ children }: UnprotectedRouteProps) => {
-  const { isAuthenticated } = useAuth();
-
+const UnProtectedRoute = ({ children }: UnProtectedRouteProps) => {
+  const { isAuthenticated, loading } = useMyAuth();
   const router = useRouter();
 
   useEffect(() => {
-    if (isAuthenticated) {
+    if (isAuthenticated && !loading) {
       router.push('/admin/dashboard');
     }
-  }, [isAuthenticated, router]);
+  }, [isAuthenticated, loading, router]);
+
+  // Optionally show a loading spinner or message if it's still loading
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return isAuthenticated ? null : children;
 };

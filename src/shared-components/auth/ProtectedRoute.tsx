@@ -1,6 +1,6 @@
 'use client';
 
-import useAuth from '@/hooks/msal/useAuth';
+import { useMyAuth } from '@/providers/MyAuthProvider'; // Make sure the path is correct
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 
@@ -9,15 +9,19 @@ interface ProtectedRouteProps {
 }
 
 const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
-  const { isAuthenticated } = useAuth();
-
+  const { isAuthenticated, loading } = useMyAuth();
   const router = useRouter();
 
   useEffect(() => {
-    if (!isAuthenticated) {
+    if (!isAuthenticated && !loading) {
       router.push('/login');
     }
-  }, [isAuthenticated, router]);
+  }, [isAuthenticated, loading, router]);
+
+  // Optionally show a loading spinner or message if it's still loading
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return isAuthenticated ? children : null;
 };
