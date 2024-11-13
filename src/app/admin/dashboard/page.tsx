@@ -1,12 +1,12 @@
 import React from 'react';
 import Dashboard from '@/app/admin/dashboard/components/Dashboard';
-import Auth from '@/shared-components/auth/Auth';
+import ProtectedRoute from '@/shared-components/auth/ProtectedRoute';
 
 const page = () => {
   return (
-    <Auth>
+    <ProtectedRoute>
       <Dashboard />
-    </Auth>
+    </ProtectedRoute>
   );
 };
 

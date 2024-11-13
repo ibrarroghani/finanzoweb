@@ -1,22 +1,15 @@
 /* eslint-disable no-console */
 'use client';
 
-import React, { useEffect } from 'react';
-import useAuth from '@/hooks/auth/useAuth';
+import React from 'react';
+import useAuth from '@/hooks/msal/useAuth';
 import { notification } from 'antd';
 import { useRouter } from 'next/navigation';
+import Spinner from '@/shared-components/Spinner';
 
 const Login: React.FC = () => {
-  const { instance, isAuthenticated } = useAuth();
+  const { instance, inProgress } = useAuth();
   const router = useRouter();
-
-  useEffect(() => {
-    if (isAuthenticated) {
-      router.push('/admin/dashboard');
-    } else {
-      router.push('/login');
-    }
-  }, [isAuthenticated, router]);
 
   const handleLogin = () => {
     instance
@@ -35,14 +28,22 @@ const Login: React.FC = () => {
       });
   };
 
+  const isLoading = ['logout', 'startup', 'handleRedirect'].includes(
+    inProgress
+  );
+
   return (
-    <div className='flex h-screen flex-col items-center justify-center'>
-      <button
-        className='rounded-md bg-blue-500 p-4 text-white shadow-md hover:bg-blue-400'
-        onClick={handleLogin}
-      >
-        Login with Azure AD
-      </button>
+    <div className='flex h-screen items-center justify-center'>
+      {isLoading ? (
+        <Spinner />
+      ) : (
+        <button
+          className='rounded-md bg-blue-500 p-4 text-white shadow-md hover:bg-blue-400'
+          onClick={handleLogin}
+        >
+          Login with Azure AD
+        </button>
+      )}
     </div>
   );
 };

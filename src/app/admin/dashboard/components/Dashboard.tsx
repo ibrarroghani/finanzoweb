@@ -1,6 +1,6 @@
 'use client';
 import React from 'react';
-import useAuth from '@/hooks/auth/useAuth';
+import useAuth from '@/hooks/msal/useAuth';
 
 const Dashboard = () => {
   const { user, instance } = useAuth();
