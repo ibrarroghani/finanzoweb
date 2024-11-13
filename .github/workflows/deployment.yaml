@@ -9,31 +9,45 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout
-      uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '20'
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
 
-    - name: Deploy Code
-      uses: appleboy/ssh-action@v0.1.9
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        key: ${{ secrets.SSH_PRIVATE_KEY }}
-        script: |
-          set -e  # Exit on any error
-          export NVM_DIR="$HOME/.nvm"
-            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-          nvm install 20
-          cd /www/finanzo_web
-          git stash || echo "No changes to stash"
-          git pull origin main || exit 1
-          npm install || exit 1
-          npm i pm2
-          npm run build || exit 1  # Ensure build failure exits with error
-          pm2 install pm2-logrotate
-          pm2 restart dev_website || pm2 start npm --name "dev_website" -- start
-          pm2 save
+      - name: Deploy Code
+        uses: appleboy/ssh-action@v0.1.9
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            set -e  # Exit on any error
+
+              # Path to the .env file in the project directory
+              ENV_FILE="/www/finanzo_web/.env"
+
+              # Append secrets to the .env file
+              echo "NEXT_PUBLIC_API_URL=${{ vars.DEV_NEXT_PUBLIC_API_URL }}" > $ENV_FILE
+              echo "NEXT_PUBLIC_AZURE_AD_CLIENT_ID=${{ secrets.DEV_NEXT_PUBLIC_AZURE_AD_CLIENT_ID }}" >> $ENV_FILE
+              echo "NEXT_PUBLIC_AZURE_AD_TENANT_ID=${{ secrets.DEV_NEXT_PUBLIC_AZURE_AD_TENANT_ID }}" >> $ENV_FILE
+              echo "NEXT_PUBLIC_AZURE_AD_REDIRECT_URI=${{ vars.DEV_NEXT_PUBLIC_AZURE_AD_REDIRECT_URI }}" >> $ENV_FILE
+              echo "NEXT_PUBLIC_AZURE_AD_AUTHORITY=${{ secrets.DEV_NEXT_PUBLIC_AZURE_AD_AUTHORITY }}" >> $ENV_FILE
+              echo "NEXT_PUBLIC_AZURE_AD_SCOPES=${{ vars.DEV_NEXT_PUBLIC_AZURE_AD_SCOPES }}" >> $ENV_FILE
+
+              # Continue the further Deployment process  
+
+            export NVM_DIR="$HOME/.nvm"
+              [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+            nvm install 20
+            cd /www/finanzo_web
+            git stash || echo "No changes to stash"
+            git pull origin main || exit 1
+            npm install || exit 1
+            npm i pm2
+            npm run build || exit 1  # Ensure build failure exits with error
+            pm2 install pm2-logrotate
+            pm2 restart dev_website || pm2 start npm --name "dev_website" -- start
+            pm2 save
