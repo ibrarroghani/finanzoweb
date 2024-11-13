@@ -1,9 +1,8 @@
-'use client';
 import React from 'react';
-import UnProtectedRoute from '@/shared-components/auth/UnProtectedRoute';
 import Login from '@/app/login/components/Login';
+import UnProtectedRoute from '@/shared-components/auth/UnProtectedRoute';
 
-const Home = () => {
+const LoginPage = () => {
   return (
     <UnProtectedRoute>
       <Login />
@@ -11,4 +10,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default LoginPage;
