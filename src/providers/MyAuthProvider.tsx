@@ -49,14 +49,16 @@ export const MyAuthProvider: React.FC<{ children: React.ReactNode }> = ({
         accessToken: accessToken,
       });
 
-      const { user: backendUser, token } = res.data;
+      const { user: backendUser, accessToken: validatedBackendToken } =
+        res.data;
 
       sessionStorage.setItem('user', JSON.stringify(backendUser));
-      sessionStorage.setItem('accessToken', token);
+      sessionStorage.setItem('accessToken', validatedBackendToken);
 
       setUser(backendUser);
       setIsAuthenticated(true);
-      ApiService.defaults.headers['Authorization'] = `Bearer ${token}`;
+      ApiService.defaults.headers['Authorization'] =
+        `Bearer ${validatedBackendToken}`;
 
       setLoading(false);
     } catch (error) {
