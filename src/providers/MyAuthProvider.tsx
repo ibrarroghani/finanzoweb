@@ -29,7 +29,7 @@ export const useMyAuth = () => {
 export const MyAuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const { instance, accounts, inProgress } = useMsal();
+  const { instance, inProgress } = useMsal();
   const [loading, setLoading] = useState(false);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [user, setUser] = useState<any>(null);
@@ -41,13 +41,14 @@ export const MyAuthProvider: React.FC<{ children: React.ReactNode }> = ({
     try {
       const response = await instance.loginPopup();
       const accessToken = response.accessToken;
-      const msalUser = accounts[0];
+
+      console.log('response', response);
 
       const res = await ApiService.post('/auth/login', {
         user: {
-          name: msalUser.name,
-          email: msalUser.username,
-          userType: 'broker',
+          name: response.account.name,
+          email: response.account.username,
+          user_type: 'broker',
         },
         accessToken: accessToken,
       });
@@ -66,13 +67,18 @@ export const MyAuthProvider: React.FC<{ children: React.ReactNode }> = ({
       setLoading(false);
     } catch (error) {
       console.error('Login failed:', error);
+
+      sessionStorage.clear();
+      localStorage.clear();
+
+      setUser(null);
+      setIsAuthenticated(false);
+
       notification.error({
         message: 'Login Failed',
         description: 'There was an issue logging in. Please try again.',
         placement: 'topRight',
       });
-      setLoading(false);
-      setIsAuthenticated(false);
     }
   };
 
