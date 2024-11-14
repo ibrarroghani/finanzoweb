@@ -2,14 +2,17 @@
 
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { useMyAuth } from '@/providers/MyAuthProvider'; // Use the MyAuthProvider context
+import { RootState } from '@/store';
+import { useSelector } from 'react-redux';
 
 interface UnProtectedRouteProps {
   children: React.ReactNode;
 }
 
 const UnProtectedRoute = ({ children }: UnProtectedRouteProps) => {
-  const { isAuthenticated, loading } = useMyAuth();
+  const { isAuthenticated, loading } = useSelector(
+    (state: RootState) => state.auth
+  );
   const router = useRouter();
 
   useEffect(() => {

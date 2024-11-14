@@ -1,15 +1,18 @@
 'use client';
 
-import { useMyAuth } from '@/providers/MyAuthProvider'; // Make sure the path is correct
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
+import { RootState } from '@/store';
+import { useSelector } from 'react-redux';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
 }
 
 const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
-  const { isAuthenticated, loading } = useMyAuth();
+  const { isAuthenticated, loading } = useSelector(
+    (state: RootState) => state.auth
+  );
   const router = useRouter();
 
   useEffect(() => {
