@@ -1,54 +1,33 @@
 'use client';
 
-import React, { useState } from 'react';
-import { Button, Spin, notification } from 'antd';
-import { useMyAuth } from '@/providers/MyAuthProvider';
+import React from 'react';
+import { Button } from 'antd';
+import { AppDispatch, RootState } from '@/store';
+import { useDispatch, useSelector } from 'react-redux';
+import { login } from '@/store/slices/AuthSlice';
+import { useMsal } from '@azure/msal-react';
+import Spinner from '@/shared-components/Spinner';
 
-const LoginPage = () => {
-  const { login, loading, user, isAuthenticated } = useMyAuth();
-  const [error, setError] = useState<string | null>(null);
+const LoginPage: React.FC = () => {
+  const { instance, inProgress } = useMsal();
+  const dispatch = useDispatch<AppDispatch>();
+  const loading = useSelector((state: RootState) => state.auth.loading);
 
-  const handleLogin = async () => {
-    try {
-      await login();
-    } catch (err) {
-      console.error('Login error:', err);
-      setError('Login failed. Please try again.');
-      notification.error({
-        message: 'Login Failed',
-        description: 'There was an issue logging in. Please try again.',
-        placement: 'topRight',
-      });
-    }
+  const isLoggingIn = loading || inProgress !== 'none';
+
+  const handleLogin = () => {
+    dispatch(login(instance));
   };
-
-  if (loading) {
-    return (
-      <div className='flex h-screen items-center justify-center'>
-        <Spin size='large' />
-      </div>
-    );
-  }
-
-  if (isAuthenticated && user) {
-    return (
-      <div className='flex h-screen items-center justify-center'>
-        <div>
-          <p>Welcome, {user.name}!</p>
-          <p>Email: {user.email}</p>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className='flex h-screen items-center justify-center'>
-      <div>
+      {isLoggingIn ? (
+        <Spinner />
+      ) : (
         <Button type='primary' onClick={handleLogin} size='large'>
           Login with MSAL
         </Button>
-        {error && <p className='mt-2 text-red-500'>{error}</p>}
-      </div>
+      )}
     </div>
   );
 };

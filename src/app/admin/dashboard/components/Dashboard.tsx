@@ -1,21 +1,16 @@
 'use client';
 import React from 'react';
-import { useMyAuth } from '@/providers/MyAuthProvider'; // Ensure the path is correct
+import { AppDispatch, RootState } from '@/store';
+import { useDispatch, useSelector } from 'react-redux';
+import { logout } from '@/store/slices/AuthSlice';
+import { useMsal } from '@azure/msal-react';
 
 const Dashboard = () => {
-  const { user, logout, isAuthenticated, loading } = useMyAuth();
+  const { instance } = useMsal();
+  const dispatch = useDispatch<AppDispatch>();
+  const { user } = useSelector((state: RootState) => state.auth);
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (!isAuthenticated) {
-    return <div>Please log in to access this page.</div>;
-  }
-
-  const handleLogout = () => {
-    logout();
-  };
+  const handleLogout = () => dispatch(logout(instance));
 
   return (
     <div className='items flex h-screen flex-col items-center justify-center'>

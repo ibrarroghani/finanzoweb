@@ -1,29 +1,36 @@
 'use client';
 
-import { useMyAuth } from '@/providers/MyAuthProvider'; // Make sure the path is correct
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
+import { RootState } from '@/store';
+import { useSelector } from 'react-redux';
+import Spinner from '@/shared-components/Spinner';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
 }
 
 const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
-  const { isAuthenticated, loading } = useMyAuth();
+  const { isAuthenticated, loading } = useSelector(
+    (state: RootState) => state.auth
+  );
   const router = useRouter();
 
   useEffect(() => {
-    if (!isAuthenticated && !loading) {
+    if (!loading && !isAuthenticated) {
       router.push('/login');
     }
   }, [isAuthenticated, loading, router]);
 
-  // Optionally show a loading spinner or message if it's still loading
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className='flex h-screen items-center justify-center'>
+        <Spinner />
+      </div>
+    );
   }
 
-  return isAuthenticated ? children : null;
+  return isAuthenticated ? <>{children}</> : null;
 };
 
 export default ProtectedRoute;
