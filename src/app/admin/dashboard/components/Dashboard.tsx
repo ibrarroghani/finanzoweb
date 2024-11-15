@@ -8,21 +8,9 @@ import { useMsal } from '@azure/msal-react';
 const Dashboard = () => {
   const { instance } = useMsal();
   const dispatch = useDispatch<AppDispatch>();
-  const { user, isAuthenticated, loading } = useSelector(
-    (state: RootState) => state.auth
-  );
+  const { user } = useSelector((state: RootState) => state.auth);
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (!isAuthenticated) {
-    return <div>Please log in to access this page.</div>;
-  }
-
-  const handleLogout = () => {
-    dispatch(logout(instance));
-  };
+  const handleLogout = () => dispatch(logout(instance));
 
   return (
     <div className='items flex h-screen flex-col items-center justify-center'>
