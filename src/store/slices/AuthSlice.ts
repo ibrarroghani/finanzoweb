@@ -1,11 +1,14 @@
-// store/slices/authSlice.ts
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { notification } from 'antd';
 import {
   IPublicClientApplication,
   AuthenticationResult,
+  BrowserAuthError,
 } from '@azure/msal-browser';
 import ApiService from '@/utils/services/api-service';
+
+const LOGIN = 'auth/login';
+const LOGOUT = 'auth/logout';
 
 interface IUser {
   name: string;
@@ -25,13 +28,11 @@ const initialState: AuthState = {
   loading: false,
 };
 
-// Async thunk for login
 export const login = createAsyncThunk(
-  'auth/login',
+  LOGIN,
   async (msalInstance: IPublicClientApplication, { rejectWithValue }) => {
     try {
       const response: AuthenticationResult = await msalInstance.loginPopup();
-      console.log('response', response);
       const accessToken = response.accessToken;
 
       const res = await ApiService.post('/auth/login', {
@@ -53,36 +54,38 @@ export const login = createAsyncThunk(
 
       return backendUser;
     } catch (error) {
-      console.log('error', error);
+      const errorMessage =
+        error instanceof BrowserAuthError
+          ? error.errorMessage
+          : 'An unexpected error occurred during login.';
       notification.error({
         message: 'Login Failed',
-        description: 'There was an issue logging in. Please try again.',
+        description: errorMessage,
         placement: 'topRight',
       });
-      return rejectWithValue('Login failed');
+      return rejectWithValue(errorMessage);
     }
   }
 );
 
-// Async thunk for logout
 export const logout = createAsyncThunk(
-  'auth/logout',
-  async (
-    msalInstance: IPublicClientApplication,
-    { dispatch, rejectWithValue }
-  ) => {
+  LOGOUT,
+  async (msalInstance: IPublicClientApplication, { rejectWithValue }) => {
     try {
-      await msalInstance.logoutPopup();
       sessionStorage.clear();
-      dispatch(clearAuth());
+      localStorage.clear();
+      msalInstance.logoutRedirect();
     } catch (error) {
-      console.log('error', error);
+      const errorMessage =
+        error instanceof BrowserAuthError
+          ? error.errorMessage
+          : 'An unexpected error occurred during logout.';
       notification.error({
         message: 'Logout Failed',
-        description: 'There was an issue logging out. Please try again.',
+        description: errorMessage,
         placement: 'topRight',
       });
-      return rejectWithValue('Logout failed');
+      return rejectWithValue(errorMessage);
     }
   }
 );
@@ -95,7 +98,11 @@ const authSlice = createSlice({
     setLoading(state, action: PayloadAction<boolean>) {
       state.loading = action.payload;
     },
-    clearAuth: () => initialState,
+    clearAuth: (state) => {
+      state.user = null;
+      state.isAuthenticated = false;
+      state.loading = false;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -103,14 +110,18 @@ const authSlice = createSlice({
         state.loading = true;
       })
       .addCase(login.fulfilled, (state, action) => {
+        const { name, email, user_type } = action.payload;
         state.loading = false;
-        state.user = action.payload;
+        state.user = { name, email, user_type };
         state.isAuthenticated = true;
       })
       .addCase(login.rejected, (state) => {
         state.loading = false;
         state.user = null;
         state.isAuthenticated = false;
+      })
+      .addCase(logout.pending, (state) => {
+        state.loading = true;
       })
       .addCase(logout.fulfilled, (state) => {
         state.user = null;

@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { RootState } from '@/store';
 import { useSelector } from 'react-redux';
+import Spinner from '@/shared-components/Spinner';
 
 interface UnProtectedRouteProps {
   children: React.ReactNode;
@@ -16,17 +17,20 @@ const UnProtectedRoute = ({ children }: UnProtectedRouteProps) => {
   const router = useRouter();
 
   useEffect(() => {
-    if (isAuthenticated && !loading) {
+    if (!loading && isAuthenticated) {
       router.push('/admin/dashboard');
     }
   }, [isAuthenticated, loading, router]);
 
-  // Optionally show a loading spinner or message if it's still loading
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className='flex h-screen items-center justify-center'>
+        <Spinner />
+      </div>
+    );
   }
 
-  return isAuthenticated ? null : children;
+  return !isAuthenticated ? <>{children}</> : null;
 };
 
 export default UnProtectedRoute;
