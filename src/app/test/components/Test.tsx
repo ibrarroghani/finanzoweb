@@ -60,6 +60,7 @@ const Test = () => {
   });
 
   const handleFormSubmit = (data: formData) => {
+    //eslint-disable-next-line no-console
     console.log('data', data);
   };
 
