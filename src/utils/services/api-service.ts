@@ -1,8 +1,7 @@
 import axios from 'axios';
-import { API_PREFIX } from '@/config/constants';
 
 const ApiService = axios.create({
-  baseURL: `${process.env.NEXT_PUBLIC_API_URL}/${API_PREFIX}`,
+  baseURL: `${process.env.NEXT_PUBLIC_API_URL}`,
 });
 
 ApiService.interceptors.request.use(
