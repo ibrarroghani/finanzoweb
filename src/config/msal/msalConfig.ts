@@ -38,4 +38,8 @@ const msalConfig: Configuration = {
   },
 };
 
+export const defaultScopes = process.env.NEXT_PUBLIC_AZURE_AD_SCOPES?.split(
+  ','
+) || ['User.Read'];
+
 export default msalConfig;

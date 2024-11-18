@@ -6,6 +6,7 @@ import {
   BrowserAuthError,
 } from '@azure/msal-browser';
 import ApiService from '@/utils/services/api-service';
+import { defaultScopes } from '@/config/msal/msalConfig';
 
 const LOGIN = 'auth/login';
 const LOGOUT = 'auth/logout';
@@ -32,7 +33,9 @@ export const login = createAsyncThunk(
   LOGIN,
   async (msalInstance: IPublicClientApplication, { rejectWithValue }) => {
     try {
-      const response: AuthenticationResult = await msalInstance.loginPopup();
+      const response: AuthenticationResult = await msalInstance.loginPopup({
+        scopes: defaultScopes,
+      });
       const accessToken = response.accessToken;
 
       const res = await ApiService.post('/auth/login', {
