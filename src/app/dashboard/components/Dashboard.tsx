@@ -5,8 +5,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '@/store/slices/AuthSlice';
 import { useMsal } from '@azure/msal-react';
 import { usePlaidLink } from 'react-plaid-link';
-import useGetPublicToken from '@/hooks/data-hooks/plaid/useGetPublicToken';
-import useGetAccessToken from '@/hooks/data-hooks/plaid/useGetAccessToken';
+import useGetPlaidPublicToken from '@/hooks/data-hooks/plaid/useGetPlaidPublicToken';
+import useGetPlaidAccessToken from '@/hooks/data-hooks/plaid/useGetPlaidAccessToken';
 
 const Dashboard = () => {
   const [token, setToken] = useState(null);
@@ -16,9 +16,9 @@ const Dashboard = () => {
 
   const handleLogout = () => dispatch(logout(instance));
 
-  const { data: ResponsePublicToken } = useGetPublicToken();
+  const { data: ResponsePublicToken } = useGetPlaidPublicToken();
 
-  const { mutate: accessToken } = useGetAccessToken();
+  const { mutate: accessToken } = useGetPlaidAccessToken();
 
   useEffect(() => {
     if (ResponsePublicToken?.data) {

@@ -5,7 +5,7 @@ interface IAccessToken {
   public_token: string | null;
 }
 
-const useGetAccessToken = () => {
+const useGetPlaidAccessToken = () => {
   // const queryClient = useQueryClient();
 
   return useMutation({
@@ -29,4 +29,4 @@ const useGetAccessToken = () => {
   });
 };
 
-export default useGetAccessToken;
+export default useGetPlaidAccessToken;
