@@ -1,4 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
+import { AxiosError } from 'axios';
 import { PlaidAPIEndpoint } from '@/config/api/api-endpoints/plaid-api-endpoint';
 
 interface IAccessToken {
@@ -6,26 +7,33 @@ interface IAccessToken {
 }
 
 const useGetPlaidAccessToken = () => {
-  // const queryClient = useQueryClient();
-
   return useMutation({
     mutationFn: async (data: IAccessToken) => {
       try {
         const response = await PlaidAPIEndpoint.getAccessToken(data);
-        return response;
+        return response.data; // Assuming `data` contains the access token
       } catch (error) {
-        console.log('error', error);
-        // throw new Error(
-        //   error.response?.data?.message || 'Failed to create account'
-        // );
+        // Handle AxiosError (specific error from Axios requests)
+        if (error instanceof AxiosError) {
+          console.error('Axios error:', error.response?.data || error.message);
+          // Throw a specific error for Axios errors
+          throw new Error(
+            error.response?.data?.message ||
+              'Failed to exchange public token due to network issue.'
+          );
+        }
+
+        // Handle other types of errors (non-Axios)
+        if (error instanceof Error) {
+          console.error('General error:', error.message);
+          throw new Error(error.message || 'Failed to exchange public token.');
+        }
+
+        // Handle any unknown errors
+        console.error('Unknown error:', error);
+        throw new Error('An unknown error occurred during token exchange.');
       }
     },
-    // onSuccess: () => {
-    //   // Add a delay before invalidating the query
-    //   setTimeout(() => {
-    //     queryClient.invalidateQueries(['getPublicToken']); // Invalidate the accounts list query
-    //   }, 1000); // 1000 milliseconds = 1 second
-    // },
   });
 };
 
