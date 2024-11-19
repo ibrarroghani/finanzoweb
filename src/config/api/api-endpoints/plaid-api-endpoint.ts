@@ -5,7 +5,7 @@ interface IAccessToken {
 }
 
 export const PlaidAPIEndpoint = {
-  getPublicToken: () => ApiService.post('/create_link_token'),
+  getPublicToken: () => ApiService.post('/plaid/create-link-token'),
   getAccessToken: (data: IAccessToken) =>
-    ApiService.post('/exchange-public-token', data),
+    ApiService.post('/plaid/exchange-public-token', data),
 };

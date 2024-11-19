@@ -1,8 +1,9 @@
 'use client';
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import useGetPlaidPublicToken from '@/hooks/data-hooks/plaid/useGetPlaidPublicToken';
 import useGetPlaidAccessToken from '@/hooks/data-hooks/plaid/useGetPlaidAccessToken';
 import { usePlaidLink } from 'react-plaid-link';
+import { Button, notification } from 'antd';
 
 const PlaidTokenExchange = () => {
   const [linkToken, setLinkToken] = useState<string | null>(null);
@@ -24,26 +25,7 @@ const PlaidTokenExchange = () => {
     data: accessTokenResponse,
   } = useGetPlaidAccessToken();
 
-  // Trigger public token fetch on component mount
-  useEffect(() => {
-    getPublicToken();
-  }, [getPublicToken]);
-
-  // Once public token is received, set the link token and trigger access token exchange
-  useEffect(() => {
-    if (publicTokenResponse?.link_token) {
-      setLinkToken(publicTokenResponse.link_token); // Set the link token here
-      exchangePublicToken({ public_token: publicTokenResponse.link_token });
-    }
-  }, [publicTokenResponse, exchangePublicToken]);
-
-  // Once access token is received, set the access token
-  useEffect(() => {
-    if (accessTokenResponse?.access_token) {
-      setAccessToken(accessTokenResponse.access_token); // Set the access token here
-    }
-  }, [accessTokenResponse]);
-
+  // Initialize Plaid Link
   const onSuccess = useCallback(
     (publicToken: string) => {
       exchangePublicToken({ public_token: publicToken });
@@ -56,24 +38,68 @@ const PlaidTokenExchange = () => {
     onSuccess,
   });
 
+  // Fetch public token when "Start Linking" is clicked
+  const startLinking = () => {
+    getPublicToken();
+  };
+
+  // Set link token when public token is fetched
+  useEffect(() => {
+    if (publicTokenResponse?.link_token) {
+      setLinkToken(publicTokenResponse.link_token);
+    }
+  }, [publicTokenResponse]);
+
+  // Automatically open Plaid Link when the link token is ready
+  useEffect(() => {
+    if (linkToken && ready) {
+      open();
+    }
+  }, [linkToken, ready, open]);
+
+  // Set access token when exchanged
+  useEffect(() => {
+    if (accessTokenResponse?.access_token) {
+      setAccessToken(accessTokenResponse.access_token);
+    }
+  }, [accessTokenResponse]);
+
+  // Handle errors for fetching tokens
+  useEffect(() => {
+    if (publicTokenError) {
+      notification.error({
+        message: 'Error Fetching Public Token',
+        description: publicTokenError.message,
+        placement: 'topRight',
+      });
+    }
+
+    if (accessTokenError) {
+      notification.error({
+        message: 'Error Fetching Access Token',
+        description: accessTokenError.message,
+        placement: 'topRight',
+      });
+    }
+  }, [publicTokenError, accessTokenError]);
+
   return (
     <div>
-      {publicTokenError && (
-        <p className='text-red-500'>Error: {publicTokenError.message}</p>
-      )}
       {isPublicTokenPending && <p>Loading public token...</p>}
-      {accessTokenError && (
-        <p className='text-red-500'>Error: {accessTokenError.message}</p>
-      )}
       {isAccessTokenPending && <p>Loading access token...</p>}
 
-      <button
-        onClick={() => open()}
-        disabled={!ready || isPublicTokenPending || isAccessTokenPending}
-      >
-        <p>Link account</p>
-      </button>
+      {/* Button to start the linking process */}
+      {!linkToken && (
+        <Button
+          type='primary'
+          onClick={startLinking}
+          loading={isPublicTokenPending}
+        >
+          Start Linking
+        </Button>
+      )}
 
+      {/* Display Access Token */}
       {accessToken && (
         <div>
           <h3>Access Token:</h3>
