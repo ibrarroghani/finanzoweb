@@ -91,7 +91,7 @@ const PlaidTokenExchange = () => {
       {/* Button to start the linking process */}
       {!linkToken && (
         <Button
-          type='primary'
+          type='link'
           onClick={startLinking}
           loading={isPublicTokenPending}
         >

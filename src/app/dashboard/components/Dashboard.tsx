@@ -25,7 +25,9 @@ const Dashboard = () => {
           <p>Email: {user?.email}</p>
 
           {/* Plaid Token Exchange Component */}
-          <PlaidTokenExchange />
+          <div className='py-10'>
+            <PlaidTokenExchange />
+          </div>
 
           <button
             className='rounded-md bg-green-400 p-2 text-white'
