@@ -16,9 +16,23 @@ const Dashboard = () => {
 
   const handleLogout = () => dispatch(logout(instance));
 
-  const { data: ResponsePublicToken } = useGetPublicToken();
+  const {
+    data: ResponsePublicToken,
+    isError: isPublicTokenError,
+    error: publicTokenError,
+  } = useGetPublicToken();
 
-  const { mutate: accessToken } = useGetAccessToken();
+  if (isPublicTokenError)
+    console.log('error from public token', (publicTokenError as Error).message);
+
+  const {
+    mutate: accessToken,
+    isError: isAccessTokenError,
+    error: accessTokenError,
+  } = useGetAccessToken();
+
+  if (isAccessTokenError)
+    console.log('error from access token', (accessTokenError as Error).message);
 
   useEffect(() => {
     if (ResponsePublicToken?.data) {

@@ -1,5 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
 import { PlaidAPIEndpoint } from '@/config/api/api-endpoints/plaid-api-endpoint';
+import { handleApiError } from '@/utils/error/api-error-handler';
 
 interface IAccessToken {
   public_token: string | null;
@@ -14,10 +15,7 @@ const useGetAccessToken = () => {
         const response = await PlaidAPIEndpoint.getAccessToken(data);
         return response;
       } catch (error) {
-        console.log('error', error);
-        // throw new Error(
-        //   error.response?.data?.message || 'Failed to create account'
-        // );
+        throw handleApiError(error);
       }
     },
     // onSuccess: () => {

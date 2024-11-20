@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { API_PREFIX } from '@/config/api/constrants';
+import getToken from '@/utils/token/token-fetcher';
 
 const ApiService = axios.create({
   baseURL: `${process.env.NEXT_PUBLIC_API_URL}/${API_PREFIX}`,
@@ -7,12 +8,17 @@ const ApiService = axios.create({
 
 ApiService.interceptors.request.use(
   async (config) => {
-    const token = sessionStorage.getItem('accessToken');
-    if (token) {
-      config.headers['Authorization'] = `Bearer ${token}`;
+    try {
+      const token = await getToken();
+      if (token) {
+        config.headers['Authorization'] = `Bearer ${token}`;
+      }
+    } catch (error) {
+      console.log('error', error);
+      console.log('Auth failed');
     }
-    config.headers['Content-Type'] = 'application/json';
 
+    config.headers['Content-Type'] = 'application/json';
     return config;
   },
   (error) => Promise.reject(error)
@@ -21,7 +27,7 @@ ApiService.interceptors.request.use(
 ApiService.interceptors.response.use(
   (response) => response?.data || {},
   (error) => {
-    if (error.response.status === 401) {
+    if (error.response?.status === 401) {
       // Handle token expiration or unauthorized access
     }
     return Promise.reject(error);
