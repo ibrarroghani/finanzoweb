@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { API_PREFIX } from '@/config/constants';
+import { API_PREFIX } from '@/config/api/constrants';
 
 const ApiService = axios.create({
   baseURL: `${process.env.NEXT_PUBLIC_API_URL}/${API_PREFIX}`,

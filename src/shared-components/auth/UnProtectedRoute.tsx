@@ -18,7 +18,7 @@ const UnProtectedRoute = ({ children }: UnProtectedRouteProps) => {
 
   useEffect(() => {
     if (!loading && isAuthenticated) {
-      router.push('/admin/dashboard');
+      router.push('/dashboard');
     }
   }, [isAuthenticated, loading, router]);
 
