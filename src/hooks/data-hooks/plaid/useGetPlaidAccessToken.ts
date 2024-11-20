@@ -6,25 +6,17 @@ interface IAccessToken {
   public_token: string | null;
 }
 
-const useGetAccessToken = () => {
-  // const queryClient = useQueryClient();
-
+const useGetPlaidAccessToken = () => {
   return useMutation({
     mutationFn: async (data: IAccessToken) => {
       try {
         const response = await PlaidAPIEndpoint.getAccessToken(data);
-        return response;
+        return response.data; // Assuming `data` contains the access token
       } catch (error) {
         throw handleApiError(error);
       }
     },
-    // onSuccess: () => {
-    //   // Add a delay before invalidating the query
-    //   setTimeout(() => {
-    //     queryClient.invalidateQueries(['getPublicToken']); // Invalidate the accounts list query
-    //   }, 1000); // 1000 milliseconds = 1 second
-    // },
   });
 };
 
-export default useGetAccessToken;
+export default useGetPlaidAccessToken;
