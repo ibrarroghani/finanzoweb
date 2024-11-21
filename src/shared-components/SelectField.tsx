@@ -2,14 +2,14 @@ import React from 'react';
 import { Controller, Control, FieldValues } from 'react-hook-form';
 import { Select } from 'antd';
 
-interface Option {
+interface IOption {
   value: string | number;
   label: string;
 }
 
-interface SelectFieldProps {
+interface ISelectFieldProps {
   label?: string;
-  options: Option[];
+  options: IOption[];
   name: string;
   error?: string;
   placeholder?: string;
@@ -17,7 +17,7 @@ interface SelectFieldProps {
   control: Control<FieldValues>;
 }
 
-const SelectField: React.FC<SelectFieldProps> = ({
+const SelectField: React.FC<ISelectFieldProps> = ({
   options,
   name,
   placeholder = 'Please select a value',

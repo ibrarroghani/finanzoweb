@@ -17,13 +17,13 @@ interface IUser {
   user_type: string;
 }
 
-interface AuthState {
+interface IAuthState {
   user: IUser | null;
   isAuthenticated: boolean;
   loading: boolean;
 }
 
-const initialState: AuthState = {
+const initialState: IAuthState = {
   user: null,
   isAuthenticated: false,
   loading: false,

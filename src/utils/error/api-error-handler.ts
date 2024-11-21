@@ -1,13 +1,13 @@
 import { AxiosError } from 'axios';
 
-interface AxiosErrorResponse {
+interface IAxiosErrorResponse {
   message: string;
   status: number;
 }
 
 export const handleApiError = (error: unknown): Error => {
   if ((error as AxiosError).isAxiosError) {
-    const axiosError = error as AxiosError<AxiosErrorResponse>;
+    const axiosError = error as AxiosError<IAxiosErrorResponse>;
 
     if (axiosError.response) {
       return new Error(

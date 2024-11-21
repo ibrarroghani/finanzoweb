@@ -1,14 +1,14 @@
 import { Controller, Control, FieldValues } from 'react-hook-form';
 import { DatePicker } from 'antd';
 
-interface DatePickerFieldProps {
+interface IDatePickerFieldProps {
   placeholder?: string;
   name: string;
   error?: string;
   control: Control<FieldValues>;
 }
 
-const DatePickerField: React.FC<DatePickerFieldProps> = ({
+const DatePickerField: React.FC<IDatePickerFieldProps> = ({
   placeholder = 'Please select a date',
   name,
   error,

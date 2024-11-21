@@ -1,7 +1,7 @@
 import { Controller, Control, FieldValues } from 'react-hook-form';
 import { Input } from 'antd';
 
-interface InputFieldProps {
+interface IInputFieldProps {
   placeholder?: string;
   type?: string;
   name: string;
@@ -11,7 +11,7 @@ interface InputFieldProps {
   control: Control<FieldValues>;
 }
 
-const InputField: React.FC<InputFieldProps> = ({
+const InputField: React.FC<IInputFieldProps> = ({
   placeholder = 'Please enter a value',
   type = 'text',
   name,
