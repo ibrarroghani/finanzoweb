@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
-import { PlaidAPIEndpoint } from '@/config/api/api-endpoints/plaid-api-endpoint';
+import { plaidAPIEndpoint } from '@/config/api/api-endpoints/plaid-api-endpoint';
 import { handleApiError } from '@/utils/error/api-error-handler';
 
 interface IAccessToken {
@@ -10,7 +10,7 @@ const useGetPlaidAccessToken = () => {
   return useMutation({
     mutationFn: async (data: IAccessToken) => {
       try {
-        const response = await PlaidAPIEndpoint.getAccessToken(data);
+        const response = await plaidAPIEndpoint.getAccessToken(data);
         return response.data; // Assuming `data` contains the access token
       } catch (error) {
         throw handleApiError(error);

@@ -2,11 +2,11 @@ import axios from 'axios';
 import { API_PREFIX } from '@/config/api/constrants';
 import getToken from '@/utils/token/token-fetcher';
 
-const ApiService = axios.create({
+const apiService = axios.create({
   baseURL: `${process.env.NEXT_PUBLIC_API_URL}/${API_PREFIX}`,
 });
 
-ApiService.interceptors.request.use(
+apiService.interceptors.request.use(
   async (config) => {
     try {
       const token = await getToken();
@@ -24,7 +24,7 @@ ApiService.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-ApiService.interceptors.response.use(
+apiService.interceptors.response.use(
   (response) => response?.data || {},
   (error) => {
     if (error.response?.status === 401) {
@@ -34,4 +34,4 @@ ApiService.interceptors.response.use(
   }
 );
 
-export default ApiService;
+export default apiService;

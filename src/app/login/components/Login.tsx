@@ -4,7 +4,7 @@ import React from 'react';
 import { Button } from 'antd';
 import { AppDispatch, RootState } from '@/store';
 import { useDispatch, useSelector } from 'react-redux';
-import { login } from '@/store/slices/AuthSlice';
+import { login } from '@/store/slices/auth-slice';
 import { useMsal } from '@azure/msal-react';
 import Spinner from '@/shared-components/Spinner';
 

@@ -1,7 +1,7 @@
 import { msalInstance } from '@/config/msal/msal-instance';
 import { checkTokenIsValid } from './token-validator';
 import { AccountInfo } from '@azure/msal-browser';
-import { defaultScopes } from '@/config/msal/msalConfig';
+import { defaultScopes } from '@/config/msal/msal-config';
 
 async function getToken() {
   try {
