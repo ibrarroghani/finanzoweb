@@ -14,8 +14,8 @@ ApiService.interceptors.request.use(
         config.headers['Authorization'] = `Bearer ${token}`;
       }
     } catch (error) {
-      console.log('error', error);
-      console.log('Auth failed');
+      //eslint-disable-next-line no-console
+      console.log('Auth failed', error);
     }
 
     config.headers['Content-Type'] = 'application/json';

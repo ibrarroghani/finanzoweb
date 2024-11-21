@@ -12,6 +12,7 @@ async function getToken() {
     }
     const account: AccountInfo | null = msalInstance.getActiveAccount();
     if (!account) {
+      sessionStorage.clear();
       window.location.href = '/login';
       return;
     }
@@ -26,6 +27,7 @@ async function getToken() {
 
     return accessToken;
   } catch (error) {
+    //eslint-disable-next-line no-console
     console.log('MSAL Token Re-Fetching error', error);
   }
 }
