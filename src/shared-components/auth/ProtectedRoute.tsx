@@ -6,11 +6,11 @@ import { RootState } from '@/store';
 import { useSelector } from 'react-redux';
 import Spinner from '@/shared-components/Spinner';
 
-interface ProtectedRouteProps {
+interface IProtectedRouteProps {
   children: React.ReactNode;
 }
 
-const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
+const ProtectedRoute = ({ children }: IProtectedRouteProps) => {
   const { isAuthenticated, loading } = useSelector(
     (state: RootState) => state.auth
   );

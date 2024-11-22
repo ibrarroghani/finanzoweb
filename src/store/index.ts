@@ -2,7 +2,7 @@
 
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import { persistReducer, persistStore } from 'redux-persist';
-import authSlice from '@/store/slices/AuthSlice';
+import authSlice from '@/store/slices/auth-slice';
 
 import storageSession from 'redux-persist/lib/storage/session';
 

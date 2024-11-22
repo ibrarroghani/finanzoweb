@@ -35,7 +35,7 @@ const testValidationSchema = yup.object().shape({
     ), // Custom validation to check for new Date(0)
 });
 
-interface formData {
+interface IFormData {
   firstName: string;
   lastName: string;
   details: string;
@@ -43,7 +43,7 @@ interface formData {
 }
 
 const Test = () => {
-  const initialValue: formData = {
+  const initialValue: IFormData = {
     firstName: '',
     lastName: '',
     details: '',
@@ -54,12 +54,12 @@ const Test = () => {
     control,
     handleSubmit,
     formState: { errors: formErrors },
-  } = useForm<formData>({
+  } = useForm<IFormData>({
     defaultValues: initialValue,
     resolver: yupResolver(testValidationSchema),
   });
 
-  const handleFormSubmit = (data: formData) => {
+  const handleFormSubmit = (data: IFormData) => {
     //eslint-disable-next-line no-console
     console.log('data', data);
   };

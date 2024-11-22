@@ -1,7 +1,7 @@
 import { msalInstance } from '@/config/msal/msal-instance';
 import { checkTokenIsValid } from './token-validator';
 import { AccountInfo } from '@azure/msal-browser';
-import { defaultScopes } from '@/config/msal/msalConfig';
+import { defaultScopes } from '@/config/msal/msal-config';
 
 async function getToken() {
   try {
@@ -12,6 +12,7 @@ async function getToken() {
     }
     const account: AccountInfo | null = msalInstance.getActiveAccount();
     if (!account) {
+      sessionStorage.clear();
       window.location.href = '/login';
       return;
     }
@@ -26,6 +27,7 @@ async function getToken() {
 
     return accessToken;
   } catch (error) {
+    //eslint-disable-next-line no-console
     console.log('MSAL Token Re-Fetching error', error);
   }
 }

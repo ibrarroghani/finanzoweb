@@ -3,7 +3,7 @@ import {
   PublicClientApplication,
   AuthenticationResult,
 } from '@azure/msal-browser';
-import msalConfig from './msalConfig';
+import msalConfig from './msal-config';
 
 export const msalInstance = new PublicClientApplication(msalConfig);
 msalInstance.initialize().then(() => {

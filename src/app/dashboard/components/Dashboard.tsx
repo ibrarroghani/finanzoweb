@@ -2,7 +2,7 @@
 import React from 'react';
 import { AppDispatch, RootState } from '@/store';
 import { useDispatch, useSelector } from 'react-redux';
-import { logout } from '@/store/slices/AuthSlice';
+import { logout } from '@/store/slices/auth-slice';
 import { useMsal } from '@azure/msal-react';
 import PlaidTokenExchange from './PlaidTokenExchange'; // Import the Plaid token exchange component
 

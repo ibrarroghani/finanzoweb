@@ -1,7 +1,7 @@
 'use client';
 import React, { useState, useCallback, useEffect } from 'react';
-import useGetPlaidPublicToken from '@/hooks/data-hooks/plaid/useGetPlaidPublicToken';
-import useGetPlaidAccessToken from '@/hooks/data-hooks/plaid/useGetPlaidAccessToken';
+import useGetPlaidPublicToken from '@/hooks/data-hooks/plaid/use-get-plaid-public-token';
+import useGetPlaidAccessToken from '@/hooks/data-hooks/plaid/use-get-plaid-access-token';
 import { usePlaidLink } from 'react-plaid-link';
 import { Button, notification } from 'antd';
 

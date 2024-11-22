@@ -2,7 +2,7 @@ import { Controller, Control, FieldValues } from 'react-hook-form';
 import { Input } from 'antd';
 const { TextArea } = Input;
 
-interface TextareaFieldProps {
+interface ITextareaFieldProps {
   placeholder?: string;
   name: string;
   error?: string;
@@ -10,7 +10,7 @@ interface TextareaFieldProps {
   control: Control<FieldValues>;
 }
 
-const TextareaField: React.FC<TextareaFieldProps> = ({
+const TextareaField: React.FC<ITextareaFieldProps> = ({
   placeholder = 'Please enter a value',
   name,
   error,

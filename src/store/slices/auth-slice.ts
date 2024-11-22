@@ -5,8 +5,8 @@ import {
   AuthenticationResult,
   BrowserAuthError,
 } from '@azure/msal-browser';
-import ApiService from '@/utils/services/api-service';
-import { defaultScopes } from '@/config/msal/msalConfig';
+import apiService from '@/utils/services/api-service';
+import { defaultScopes } from '@/config/msal/msal-config';
 
 const LOGIN = 'auth/login';
 const LOGOUT = 'auth/logout';
@@ -17,13 +17,13 @@ interface IUser {
   user_type: string;
 }
 
-interface AuthState {
+interface IAuthState {
   user: IUser | null;
   isAuthenticated: boolean;
   loading: boolean;
 }
 
-const initialState: AuthState = {
+const initialState: IAuthState = {
   user: null,
   isAuthenticated: false,
   loading: false,
@@ -38,7 +38,7 @@ export const login = createAsyncThunk(
       });
       const accessToken = response.accessToken;
 
-      const res = await ApiService.post('/auth/login', {
+      const res = await apiService.post('/auth/login', {
         user: {
           name: response.account?.name,
           email: response.account?.username,
@@ -52,7 +52,7 @@ export const login = createAsyncThunk(
 
       sessionStorage.setItem('accessToken', validatedBackendToken);
 
-      ApiService.defaults.headers['Authorization'] =
+      apiService.defaults.headers['Authorization'] =
         `Bearer ${validatedBackendToken}`;
 
       return backendUser;
