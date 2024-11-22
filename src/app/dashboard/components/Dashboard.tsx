@@ -18,7 +18,6 @@ const Dashboard = () => {
   return (
     <div className='items flex h-screen flex-col items-center justify-center'>
       {!isAuthenticated && <p>You are not authenticated. Please log in.</p>}
-
       {isAuthenticated && (
         <>
           <p>Welcome, {user?.name}</p>
