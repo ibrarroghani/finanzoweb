@@ -4,7 +4,6 @@ import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { RootState } from '@/store';
 import { useSelector } from 'react-redux';
-import Spinner from '@/shared-components/Spinner';
 
 interface IProtectedRouteProps {
   children: React.ReactNode;
@@ -21,14 +20,6 @@ const ProtectedRoute = ({ children }: IProtectedRouteProps) => {
       router.push('/login');
     }
   }, [isAuthenticated, loading, router]);
-
-  if (loading) {
-    return (
-      <div className='flex h-screen items-center justify-center'>
-        <Spinner />
-      </div>
-    );
-  }
 
   return isAuthenticated ? <>{children}</> : null;
 };

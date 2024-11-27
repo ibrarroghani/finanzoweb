@@ -77,7 +77,9 @@ export const logout = createAsyncThunk(
     try {
       sessionStorage.clear();
       localStorage.clear();
-      msalInstance.logoutRedirect();
+      await msalInstance.logoutRedirect({
+        postLogoutRedirectUri: '/logout-success',
+      });
     } catch (error) {
       const errorMessage =
         error instanceof BrowserAuthError
@@ -98,7 +100,7 @@ const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    setLoading(state, action: PayloadAction<boolean>) {
+    setLoading: (state, action: PayloadAction<boolean>) => {
       state.loading = action.payload;
     },
     clearAuth: (state) => {
@@ -127,8 +129,6 @@ const authSlice = createSlice({
         state.loading = true;
       })
       .addCase(logout.fulfilled, (state) => {
-        state.user = null;
-        state.isAuthenticated = false;
         state.loading = false;
       })
       .addCase(logout.rejected, (state) => {

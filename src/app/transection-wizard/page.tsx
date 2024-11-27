@@ -1,13 +1,13 @@
 import React from 'react';
-import Dashboard from '@/app/dashboard/components/Dashboard';
-import ProtectedRoute from '@/shared-components/auth/ProtectedRoute';
+import TransectionWizard from './components/TransectionWizard';
 import Header from '@/shared-components/layouts/Header';
+import ProtectedRoute from '@/shared-components/auth/ProtectedRoute';
 
 const page = () => {
   return (
     <ProtectedRoute>
       <Header />
-      <Dashboard />
+      <TransectionWizard />
     </ProtectedRoute>
   );
 };
