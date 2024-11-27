@@ -73,17 +73,14 @@ export const login = createAsyncThunk(
 
 export const logout = createAsyncThunk(
   LOGOUT,
-  async (
-    msalInstance: IPublicClientApplication,
-    { rejectWithValue, dispatch }
-  ) => {
+  async (msalInstance: IPublicClientApplication, { rejectWithValue }) => {
     try {
       sessionStorage.clear();
       localStorage.clear();
-      await msalInstance.logoutRedirect();
-      dispatch(clearAuth());
+      await msalInstance.logoutRedirect({
+        postLogoutRedirectUri: '/logout-success',
+      });
     } catch (error) {
-      console.log('hello');
       const errorMessage =
         error instanceof BrowserAuthError
           ? error.errorMessage

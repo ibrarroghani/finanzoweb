@@ -1,13 +1,13 @@
 import React from 'react';
-import Dashboard from '@/app/dashboard/components/Dashboard';
-import ProtectedRoute from '@/shared-components/auth/ProtectedRoute';
+import Client from './components/Client';
 import Header from '@/shared-components/layouts/Header';
+import ProtectedRoute from '@/shared-components/auth/ProtectedRoute';
 
 const page = () => {
   return (
     <ProtectedRoute>
       <Header />
-      <Dashboard />
+      <Client />
     </ProtectedRoute>
   );
 };
