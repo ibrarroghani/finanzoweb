@@ -11,8 +11,6 @@ import { logout } from '@/store/slices/auth-slice';
 import { useMsal } from '@azure/msal-react';
 import { Dropdown, MenuProps } from 'antd';
 import Link from 'next/link';
-// import { usePathname, useRouter } from 'next/navigation';
-// import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import MenuItem from './MenuItem';
 
