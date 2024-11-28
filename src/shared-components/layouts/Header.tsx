@@ -2,17 +2,17 @@
 import {
   BellIcon,
   FinanzoLogo,
+  MenuIcon,
   UserIcon,
-} from '@/assets/icons/BussinessPanelIcons';
+} from '@/assets/icons/bussiness-panel-icons';
 import { MENU_ITEM_ROUTE } from '@/config/route-config';
 import { AppDispatch } from '@/store';
 import { logout } from '@/store/slices/auth-slice';
 import { useMsal } from '@azure/msal-react';
-import { Dropdown } from 'antd';
+import { Dropdown, MenuProps } from 'antd';
 import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
+import MenuItem from './MenuItem';
 
 const Header = () => {
   const { instance } = useMsal();
@@ -33,9 +33,22 @@ const Header = () => {
     console.log('home is clicked');
   };
 
+  const menuItems: MenuProps['items'] = [
+    { key: '1', label: <Link href='/dashboard'>Dashboard</Link> },
+    { key: '2', label: <Link href='/clients'>Clients</Link> },
+    { key: '3', label: <Link href='/goals'>goals</Link> },
+    {
+      key: '4',
+      label: <Link href='/transection-wizard'>Transection Wizard</Link>,
+    },
+    { key: '5', label: <Link href='/reports'>Reports</Link> },
+    { key: '6', label: <Link href='/settings'>Setting</Link> },
+    { key: '7', label: <Link href='#'>Logout</Link>, onClick: handleLogout },
+  ];
+
   return (
     <>
-      <nav className='fixed start-0 top-0 z-20 h-20 w-full border-b pt-4'>
+      <nav className='min-h-20 w-full border-b pt-4'>
         <div className='mx-auto flex items-center justify-between px-4'>
           <div className='flex justify-center'>
             <button onClick={handleHomeClick}>
@@ -43,31 +56,40 @@ const Header = () => {
             </button>
           </div>
 
-          <div>
+          <div className='hidden md:flex'>
             <ul className='flex gap-4'>
               {MENU_ITEM_ROUTE.map((menu) => (
                 <li key={menu.id}>
-                  <SidebarItem menu={menu} />
+                  <MenuItem menu={menu} />
                 </li>
               ))}
             </ul>
           </div>
 
           <div className='flex justify-center space-x-3'>
-            <Dropdown menu={{ items }} trigger={['click']}>
-              <div className='flex cursor-pointer items-center rounded-md p-2 pr-4 text-sm font-medium'>
-                <div className='flex gap-4'>
-                  <div className='relative flex h-9 w-9 items-center justify-center rounded-full bg-[#191F4B08]'>
-                    <span className='absolute'>
-                      <BellIcon />
-                    </span>
-                  </div>
-                  <span>
-                    <UserIcon />
+            <div className='flex cursor-pointer items-center rounded-md p-2 pr-4 text-sm font-medium'>
+              <div className='flex gap-4'>
+                <div className='relative flex h-9 w-9 items-center justify-center rounded-full bg-[#191F4B08]'>
+                  <span className='absolute'>
+                    <BellIcon />
                   </span>
                 </div>
+                <div className='hidden md:flex'>
+                  <Dropdown menu={{ items }} trigger={['click']}>
+                    <span>
+                      <UserIcon />
+                    </span>
+                  </Dropdown>
+                </div>
+                <div className='md:hidden'>
+                  <Dropdown menu={{ items: menuItems }} trigger={['click']}>
+                    <span>
+                      <MenuIcon />
+                    </span>
+                  </Dropdown>
+                </div>
               </div>
-            </Dropdown>
+            </div>
           </div>
         </div>
       </nav>
@@ -76,31 +98,3 @@ const Header = () => {
 };
 
 export default Header;
-
-//eslint-disable-next-line
-const SidebarItem = ({ menu }: any) => {
-  const [active, setActive] = useState(false);
-  const router = useRouter();
-  const pathname = usePathname();
-
-  const { title, url, showable } = menu;
-  useEffect(() => {
-    if (url === pathname || pathname.startsWith(url)) {
-      setActive(true);
-    }
-  }, [url, pathname]);
-
-  const onSideClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    if (showable) router.push(url);
-  };
-
-  return (
-    <div
-      onClick={onSideClick}
-      className={`flex cursor-pointer items-center rounded-md px-4 py-1 ${active ? 'bg-black' : 'hover:bg-blue-300'}`}
-    >
-      <span className={`${active && 'text-blue-300'}`}>{title}</span>
-    </div>
-  );
-};
