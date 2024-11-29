@@ -62,7 +62,7 @@ const Login: React.FC = () => {
       additionalLink={{
         // eslint-disable-next-line quotes
         text: `Don't have an account?`,
-        href: '#',
+        href: '/sign-up',
         linkText: 'Sign Up',
       }}
     />

@@ -1,7 +1,7 @@
 import { emailValidationRegex } from '@/utils/validation-regex';
 import * as yup from 'yup';
 
-const signUpValidationSchema = yup.object({
+export const signUpValidationSchema = yup.object({
   firstName: yup
     .string()
     .trim()
@@ -26,4 +26,6 @@ const signUpValidationSchema = yup.object({
     .required('Confirm Password is required'),
 });
 
-export default signUpValidationSchema;
+export const signUpOtpValidationSchema = yup.object({
+  otp: yup.string().trim().min(6, 'OTP is required').required(),
+});

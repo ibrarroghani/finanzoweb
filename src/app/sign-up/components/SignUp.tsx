@@ -2,8 +2,11 @@
 import React from 'react';
 import { Control, useForm, FieldValues } from 'react-hook-form';
 import AuthForm from '@/app/login/components/AuthForm';
-import signUpValidationSchema from '../validations/sign-up-validation-schema';
+import { signUpValidationSchema } from '../validations/sign-up-validation-schema';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '@/store';
+import { increment } from '@/store/slices/sign-up-slice';
 
 interface IFormData {
   firstName: string;
@@ -14,6 +17,8 @@ interface IFormData {
 }
 
 const SignUp: React.FC = () => {
+  const dispatch = useDispatch<AppDispatch>();
+
   const {
     control,
     handleSubmit,
@@ -32,6 +37,7 @@ const SignUp: React.FC = () => {
   const handleSignUpSubmit = (data: IFormData) => {
     //eslint-disable-next-line no-console
     console.log('data', data);
+    dispatch(increment());
   };
 
   const formFields = [
@@ -69,13 +75,6 @@ const SignUp: React.FC = () => {
     },
   ];
 
-  const images = [
-    { src: '/images/slide-image1.svg', alt: 'First slider image' },
-    { src: '/images/slide-image1.svg', alt: 'Second slider image' },
-    { src: '/images/slide-image1.svg', alt: 'Third slider image' },
-    { src: '/images/slide-image1.svg', alt: 'Fourth slider image' },
-  ];
-
   return (
     <AuthForm
       images={images}
@@ -97,3 +96,10 @@ const SignUp: React.FC = () => {
 };
 
 export default SignUp;
+
+export const images = [
+  { src: '/images/slide-image1.svg', alt: 'First slider image' },
+  { src: '/images/slide-image1.svg', alt: 'Second slider image' },
+  { src: '/images/slide-image1.svg', alt: 'Third slider image' },
+  { src: '/images/slide-image1.svg', alt: 'Fourth slider image' },
+];

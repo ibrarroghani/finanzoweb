@@ -10,7 +10,8 @@ interface IAuthFormProps {
   images: { src: string; alt: string }[];
   formTitle: string;
   formDescription: string;
-  formSubDescription: string;
+  formSubDescription?: string;
+  socialLoginButton?: boolean;
   fields: {
     id: string;
     name: string;
@@ -32,6 +33,7 @@ const AuthFormTest: React.FC<IAuthFormProps> = ({
   formTitle,
   formDescription,
   formSubDescription,
+  socialLoginButton = true,
   fields,
   control,
   handleSubmit,
@@ -50,20 +52,24 @@ const AuthFormTest: React.FC<IAuthFormProps> = ({
         <h6 className='text-xl font-bold text-[#202020]'>{formTitle}</h6>
         <p className='mt-2 text-sm capitalize'>{formDescription}</p>
 
-        <div className='mt-2 flex w-full items-center justify-center gap-3'>
-          <div className='w-24 border-b border-b-[#eeeeee]'></div>
-          <p className='text-sm capitalize'>{formSubDescription}</p>
-          <div className='w-24 border-b border-b-[#eeeeee]'></div>
-        </div>
+        {formSubDescription && (
+          <div className='mt-2 flex w-full items-center justify-center gap-3'>
+            <div className='w-24 border-b border-b-[#eeeeee]'></div>
+            <p className='text-sm capitalize'>{formSubDescription}</p>
+            <div className='w-24 border-b border-b-[#eeeeee]'></div>
+          </div>
+        )}
 
-        <div className='my-2 flex w-full items-center justify-center gap-2 md:w-1/2'>
-          <div className='w-full md:w-1/2'>
-            <CustomButton title='google' icon={<GoogleIcon />} />
+        {socialLoginButton && (
+          <div className='my-2 flex w-full items-center justify-center gap-2 md:w-1/2'>
+            <div className='w-full md:w-1/2'>
+              <CustomButton title='google' icon={<GoogleIcon />} />
+            </div>
+            <div className='w-full md:w-1/2'>
+              <CustomButton title='apple' icon={<AppleIcon />} />
+            </div>
           </div>
-          <div className='w-full md:w-1/2'>
-            <CustomButton title='apple' icon={<AppleIcon />} />
-          </div>
-        </div>
+        )}
 
         <form
           className='flex w-full flex-col items-center justify-center'

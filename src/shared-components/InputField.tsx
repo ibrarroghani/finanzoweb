@@ -48,7 +48,7 @@ const InputField: React.FC<IInputFieldProps> = ({
               placeholder={placeholder}
               value={value}
               onChange={onChange}
-              className='block w-full max-w-full rounded-md border border-[#eeeeee] bg-white px-4 py-6 pb-2 text-sm text-gray-900 placeholder-gray-400 focus:outline-1 focus:outline-green-300'
+              className='no-spinner block w-full max-w-full rounded-md border border-[#eeeeee] bg-white px-4 py-6 pb-2 text-sm text-gray-900 placeholder-gray-400 focus:outline-1 focus:outline-green-300'
             />
           )}
         />
