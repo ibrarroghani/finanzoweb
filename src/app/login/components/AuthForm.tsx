@@ -46,7 +46,7 @@ const AuthFormTest: React.FC<IAuthFormProps> = ({
           <ImageSlider images={images} />
         </div>
       </div>
-      <div className='flex w-full flex-col items-center justify-center rounded-l-3xl bg-white md:w-1/2'>
+      <div className='flex w-full flex-col items-center justify-center bg-white p-4 md:w-1/2 md:rounded-l-3xl md:p-0'>
         <h6 className='text-xl font-bold text-[#202020]'>{formTitle}</h6>
         <p className='mt-2 text-sm capitalize'>{formDescription}</p>
 
@@ -56,11 +56,11 @@ const AuthFormTest: React.FC<IAuthFormProps> = ({
           <div className='w-24 border-b border-b-[#eeeeee]'></div>
         </div>
 
-        <div className='my-2 flex w-1/2 items-center justify-center gap-2'>
-          <div className='w-1/2'>
+        <div className='my-2 flex w-full items-center justify-center gap-2 md:w-1/2'>
+          <div className='w-full md:w-1/2'>
             <CustomButton title='google' icon={<GoogleIcon />} />
           </div>
-          <div className='w-1/2'>
+          <div className='w-full md:w-1/2'>
             <CustomButton title='apple' icon={<AppleIcon />} />
           </div>
         </div>
@@ -70,7 +70,7 @@ const AuthFormTest: React.FC<IAuthFormProps> = ({
           onSubmit={handleSubmit(onSubmit)}
         >
           {fields.map((field) => (
-            <div key={field.id} className='w-1/2'>
+            <div key={field.id} className='w-full md:w-1/2'>
               <InputField
                 id={field.id}
                 name={field.name}
@@ -82,7 +82,7 @@ const AuthFormTest: React.FC<IAuthFormProps> = ({
             </div>
           ))}
 
-          <div className='mt-2 w-1/2'>
+          <div className='mt-2 w-full md:w-1/2'>
             <CustomButton title={submitButtonText} type='submit' />
           </div>
         </form>
