@@ -4,6 +4,7 @@ import CustomButton from '@/shared-components/CustomButton';
 import InputField from '@/shared-components/InputField';
 import Link from 'next/link';
 import { AppleIcon, GoogleIcon } from '@/assets/icons/bussiness-panel-icons';
+import ImageSlider from '@/shared-components/ImageSlider';
 
 interface IAuthFormProps {
   formTitle: string;
@@ -38,7 +39,11 @@ const AuthFormTest: React.FC<IAuthFormProps> = ({
 }) => {
   return (
     <div className='flex h-screen bg-[#202020]'>
-      <div className='hidden w-1/2 md:flex'></div>
+      <div className='hidden md:flex md:w-1/2'>
+        <div className='w-full'>
+          <ImageSlider />
+        </div>
+      </div>
       <div className='flex w-full flex-col items-center justify-center rounded-l-3xl bg-white md:w-1/2'>
         <h6 className='text-xl font-bold text-[#202020]'>{formTitle}</h6>
         <p className='mt-2 text-sm capitalize'>{formDescription}</p>

@@ -3,11 +3,11 @@
 // import CustomButton from '@/shared-components/CustomButton';
 // import InputField from '@/shared-components/InputField';
 // import Link from 'next/link';
-//import { yupResolver } from '@hookform/resolvers/yup';
+import { yupResolver } from '@hookform/resolvers/yup';
 import React from 'react';
 import { Control, useForm, FieldValues } from 'react-hook-form';
 import AuthForm from './AuthForm';
-//import AuthFormTest from './AuthFormTest';
+import loginValidationSchema from '../validations/login-validation-schema';
 
 interface IFormData {
   email: string;
@@ -21,7 +21,7 @@ const Login: React.FC = () => {
     formState: { errors: formErrors },
   } = useForm<IFormData>({
     defaultValues: { email: '', password: '' },
-    // resolver: yupResolver(testValidationSchema),
+    resolver: yupResolver(loginValidationSchema),
   });
 
   const handleLoginSubmit = (data: IFormData) => {

@@ -2,6 +2,8 @@
 import React from 'react';
 import { Control, useForm, FieldValues } from 'react-hook-form';
 import AuthForm from '@/app/login/components/AuthForm';
+import signUpValidationSchema from '../validations/sign-up-validation-schema';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 interface IFormData {
   firstName: string;
@@ -24,7 +26,7 @@ const SignUp: React.FC = () => {
       password: '',
       confirmPassword: '',
     },
-    // resolver: yupResolver(testValidationSchema),
+    resolver: yupResolver(signUpValidationSchema),
   });
 
   const handleSignUpSubmit = (data: IFormData) => {

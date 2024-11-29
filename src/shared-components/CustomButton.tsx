@@ -9,7 +9,7 @@ interface IButtonProps {
 const CustomButton = ({ title, icon, type = 'button' }: IButtonProps) => {
   return (
     <button
-      className='flex w-full items-center justify-center gap-2 rounded-md bg-[#202020] p-1.5 capitalize text-white'
+      className='flex w-full items-center justify-center gap-2 rounded-md bg-[#202020] p-3 capitalize text-white'
       type={type}
     >
       {icon && <span>{icon}</span>}
