@@ -7,16 +7,17 @@ import { AppleIcon, GoogleIcon } from '@/assets/icons/bussiness-panel-icons';
 import ImageSlider from '@/shared-components/ImageSlider';
 
 interface IAuthFormProps {
+  images: { src: string; alt: string }[];
   formTitle: string;
   formDescription: string;
   formSubDescription: string;
-  fields: Array<{
+  fields: {
     id: string;
     name: string;
     type?: string;
     label: string;
     error?: string;
-  }>;
+  }[];
   control: Control<FieldValues>;
   //eslint-disable-next-line
   handleSubmit: UseFormHandleSubmit<any>;
@@ -27,6 +28,7 @@ interface IAuthFormProps {
 }
 
 const AuthFormTest: React.FC<IAuthFormProps> = ({
+  images,
   formTitle,
   formDescription,
   formSubDescription,
@@ -41,7 +43,7 @@ const AuthFormTest: React.FC<IAuthFormProps> = ({
     <div className='flex h-screen bg-[#202020]'>
       <div className='hidden md:flex md:w-1/2'>
         <div className='w-full'>
-          <ImageSlider />
+          <ImageSlider images={images} />
         </div>
       </div>
       <div className='flex w-full flex-col items-center justify-center rounded-l-3xl bg-white md:w-1/2'>

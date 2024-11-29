@@ -2,45 +2,27 @@ import React from 'react';
 import { Carousel } from 'antd';
 import Image from 'next/image';
 
-const ImageSlider: React.FC = () => {
+interface IImageSliderProps {
+  images: { src: string; alt: string }[];
+}
+
+const ImageSlider: React.FC<IImageSliderProps> = ({ images }) => {
+  const defaultWidth = 500;
+  const defaultHeight = 500;
   return (
     <Carousel autoplay>
-      <div className='h-screen pt-16'>
-        <Image
-          src='/images/slide-image1.svg'
-          alt='slider image'
-          width={500}
-          height={300}
-          className='h-full w-full'
-        />
-      </div>
-      <div className='h-screen pt-16'>
-        <Image
-          src='/images/slide-image1.svg'
-          alt='slider image'
-          width={500}
-          height={500}
-          className='h-full w-full'
-        />
-      </div>
-      <div className='h-screen pt-16'>
-        <Image
-          src='/images/slide-image1.svg'
-          alt='slider image'
-          width={500}
-          height={500}
-          className='h-full w-full'
-        />
-      </div>
-      <div className='h-screen pt-16'>
-        <Image
-          src='/images/slide-image1.svg'
-          alt='slider image'
-          width={500}
-          height={500}
-          className='h-full w-full'
-        />
-      </div>
+      {images.map((image, index) => (
+        <div key={index} className='h-screen pt-16'>
+          <Image
+            src={image.src}
+            alt={image.alt}
+            width={defaultWidth}
+            height={defaultHeight}
+            className='h-full w-full'
+            priority={index === 0}
+          />
+        </div>
+      ))}
     </Carousel>
   );
 };

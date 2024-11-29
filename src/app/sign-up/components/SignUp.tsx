@@ -69,8 +69,16 @@ const SignUp: React.FC = () => {
     },
   ];
 
+  const images = [
+    { src: '/images/slide-image1.svg', alt: 'First slider image' },
+    { src: '/images/slide-image1.svg', alt: 'Second slider image' },
+    { src: '/images/slide-image1.svg', alt: 'Third slider image' },
+    { src: '/images/slide-image1.svg', alt: 'Fourth slider image' },
+  ];
+
   return (
     <AuthForm
+      images={images}
       formTitle='Sign Up'
       formDescription='Please enter your details below'
       formSubDescription='Or sign up with'
