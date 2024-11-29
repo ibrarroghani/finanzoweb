@@ -3,8 +3,6 @@ import React from 'react';
 import { RootState } from '@/store';
 import { useSelector } from 'react-redux';
 
-import PlaidTokenExchange from './PlaidTokenExchange';
-
 const Dashboard = () => {
   const { user, isAuthenticated } = useSelector(
     (state: RootState) => state.auth
@@ -17,11 +15,6 @@ const Dashboard = () => {
         <>
           <p>Welcome, {user?.name}</p>
           <p>Email: {user?.email}</p>
-
-          {/* Plaid Token Exchange Component */}
-          <div className='py-10'>
-            <PlaidTokenExchange />
-          </div>
         </>
       )}
     </div>
