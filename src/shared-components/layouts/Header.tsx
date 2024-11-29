@@ -6,19 +6,15 @@ import {
   UserIcon,
 } from '@/assets/icons/bussiness-panel-icons';
 import { MENU_ITEM_ROUTE } from '@/config/route-config';
-import { AppDispatch } from '@/store';
-import { logout } from '@/store/slices/auth-slice';
-import { useMsal } from '@azure/msal-react';
 import { Dropdown, MenuProps } from 'antd';
 import Link from 'next/link';
-import { useDispatch } from 'react-redux';
 import MenuItem from './MenuItem';
 
 const Header = () => {
-  const { instance } = useMsal();
-  const dispatch = useDispatch<AppDispatch>();
-
-  const handleLogout = () => dispatch(logout(instance));
+  const handleLogout = () => {
+    //eslint-disable-next-line no-console
+    console.log('Logout Button is clicked');
+  };
 
   const items = [
     {

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { API_PREFIX } from '@/config/api/constrants';
-import getToken from '@/utils/token/token-fetcher';
+// import getToken from '@/utils/token/token-fetcher';
 
 const apiService = axios.create({
   baseURL: `${process.env.NEXT_PUBLIC_API_URL}/${API_PREFIX}`,
@@ -9,10 +9,12 @@ const apiService = axios.create({
 apiService.interceptors.request.use(
   async (config) => {
     try {
-      const token = await getToken();
-      if (token) {
-        config.headers['Authorization'] = `Bearer ${token}`;
-      }
+      const token = sessionStorage.getItem('accessToken');
+      config.headers['Authorization'] = `Bearer ${token}`;
+      // const token = await getToken();
+      // if (token) {
+      //   config.headers['Authorization'] = `Bearer ${token}`;
+      // }
     } catch (error) {
       //eslint-disable-next-line no-console
       console.log('Auth failed', error);

@@ -2,21 +2,16 @@
 import React from 'react';
 import { RootState } from '@/store';
 import { useSelector } from 'react-redux';
-// import { logout } from '@/store/slices/auth-slice';
-// import { useMsal } from '@azure/msal-react';
-import PlaidTokenExchange from './PlaidTokenExchange'; // Import the Plaid token exchange component
+
+import PlaidTokenExchange from './PlaidTokenExchange';
 
 const Dashboard = () => {
-  // const { instance } = useMsal();
   const { user, isAuthenticated } = useSelector(
     (state: RootState) => state.auth
   );
-  // const dispatch = useDispatch<AppDispatch>();
-
-  // const handleLogout = () => dispatch(logout(instance));
 
   return (
-    <div className='items flex h-screen flex-col items-center justify-center'>
+    <div className='items flex flex-col items-center justify-center'>
       {!isAuthenticated && <p>You are not authenticated. Please log in.</p>}
       {isAuthenticated && (
         <>
@@ -27,13 +22,6 @@ const Dashboard = () => {
           <div className='py-10'>
             <PlaidTokenExchange />
           </div>
-
-          {/* <button
-            className='rounded-md bg-green-400 p-2 text-white'
-            onClick={handleLogout}
-          >
-            Logout
-          </button> */}
         </>
       )}
     </div>
