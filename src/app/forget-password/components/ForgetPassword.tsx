@@ -2,18 +2,19 @@
 import React from 'react';
 import { Control, useForm, FieldValues } from 'react-hook-form';
 import AuthForm from '@/shared-components/auth/AuthForm';
-import { yupResolver } from '@hookform/resolvers/yup';
+// import { yupResolver } from '@hookform/resolvers/yup';
+import { images } from '@/app/sign-up/components/SignUp';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '@/store';
-import { images } from './SignUp';
-import { signUpOtpValidationSchema } from '../validations/sign-up-validation-schema';
 import { increment } from '@/store/slices/forget-password-slice';
+//import { images } from './SignUp';
+//import { signUpOtpValidationSchema } from '../validations/sign-up-validation-schema';
 
 interface IFormData {
-  otp: string;
+  email: string;
 }
 
-const SignUpOtp: React.FC = () => {
+const ForgetPassword: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
 
   const {
@@ -22,12 +23,12 @@ const SignUpOtp: React.FC = () => {
     formState: { errors: formErrors },
   } = useForm<IFormData>({
     defaultValues: {
-      otp: '',
+      email: '',
     },
-    resolver: yupResolver(signUpOtpValidationSchema),
+    // resolver: yupResolver(signUpOtpValidationSchema),
   });
 
-  const handleOtpSubmit = (data: IFormData) => {
+  const handleForgetPasswordSubmit = (data: IFormData) => {
     //eslint-disable-next-line no-console
     console.log('data', data);
     dispatch(increment());
@@ -35,32 +36,26 @@ const SignUpOtp: React.FC = () => {
 
   const formFields = [
     {
-      id: 'otp',
-      name: 'otp',
-      label: 'OTP',
-      type: 'number',
-      error: formErrors.otp?.message,
+      id: 'email',
+      name: 'email',
+      label: 'Email',
+      error: formErrors.email?.message,
     },
   ];
 
   const authFormProps = {
     images,
-    formTitle: 'OTP',
-    formDescription: 'Please enter the OTP below',
+    formTitle: 'Forget Password',
+    formDescription: 'Please enter your email below',
     socialLoginButton: false,
     fields: formFields,
     control: control as unknown as Control<FieldValues>,
     handleSubmit,
-    onSubmit: handleOtpSubmit,
-    submitButtonText: 'Send',
-    additionalLink: {
-      text: '',
-      href: '#',
-      linkText: 'ResendOTP',
-    },
+    onSubmit: handleForgetPasswordSubmit,
+    submitButtonText: 'Next',
   };
 
   return <AuthForm {...authFormProps} />;
 };
 
-export default SignUpOtp;
+export default ForgetPassword;

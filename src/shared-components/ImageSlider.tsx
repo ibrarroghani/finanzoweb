@@ -10,7 +10,7 @@ const ImageSlider: React.FC<IImageSliderProps> = ({ images }) => {
   const defaultWidth = 500;
   const defaultHeight = 500;
   return (
-    <Carousel autoplay>
+    <Carousel autoplay dots={false}>
       {images.map((image, index) => (
         <div key={index} className='h-screen pt-16'>
           <Image

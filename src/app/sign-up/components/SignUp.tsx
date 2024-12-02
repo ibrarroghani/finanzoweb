@@ -1,14 +1,14 @@
 'use client';
 import React from 'react';
 import { Control, useForm, FieldValues } from 'react-hook-form';
-import AuthForm from '@/app/login/components/AuthForm';
+import AuthForm from '@/shared-components/auth/AuthForm';
 import { signUpValidationSchema } from '../validations/sign-up-validation-schema';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '@/store';
 import { increment } from '@/store/slices/sign-up-slice';
 
-interface IFormData {
+export interface IFormData {
   firstName: string;
   lastName: string;
   email: string;
@@ -75,24 +75,24 @@ const SignUp: React.FC = () => {
     },
   ];
 
-  return (
-    <AuthForm
-      images={images}
-      formTitle='Sign Up'
-      formDescription='Please enter your details below'
-      formSubDescription='Or sign up with'
-      fields={formFields}
-      control={control as unknown as Control<FieldValues>}
-      handleSubmit={handleSubmit}
-      onSubmit={handleSignUpSubmit}
-      submitButtonText='Sign Up'
-      additionalLink={{
-        text: 'Already have an account?',
-        href: '#',
-        linkText: 'Sign In',
-      }}
-    />
-  );
+  const authFormProps = {
+    images,
+    formTitle: 'Sign Up',
+    formDescription: 'Please enter your details below',
+    formSubDescription: 'Or sign up with',
+    fields: formFields,
+    control: control as unknown as Control<FieldValues>,
+    handleSubmit,
+    onSubmit: handleSignUpSubmit,
+    submitButtonText: 'Sign Up',
+    additionalLink: {
+      text: 'Already have an account?',
+      href: '/login',
+      linkText: 'Sign In',
+    },
+  };
+
+  return <AuthForm {...authFormProps} />;
 };
 
 export default SignUp;
