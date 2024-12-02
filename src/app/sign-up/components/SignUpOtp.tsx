@@ -7,7 +7,7 @@ import { useDispatch } from 'react-redux';
 import { AppDispatch } from '@/store';
 import { images } from './SignUp';
 import { signUpOtpValidationSchema } from '../validations/sign-up-validation-schema';
-import { increment } from '@/store/slices/forget-password-slice';
+import { decrement, increment } from '@/store/slices/forget-password-slice';
 
 interface IFormData {
   otp: string;
@@ -33,6 +33,10 @@ const SignUpOtp: React.FC = () => {
     dispatch(increment());
   };
 
+  const handleBackButton = () => {
+    dispatch(decrement());
+  };
+
   const formFields = [
     {
       id: 'otp',
@@ -52,6 +56,8 @@ const SignUpOtp: React.FC = () => {
     control: control as unknown as Control<FieldValues>,
     handleSubmit,
     onSubmit: handleOtpSubmit,
+    handleBackButton,
+    backButtonText: 'Back',
     submitButtonText: 'Send',
     additionalLink: {
       text: '',

@@ -4,9 +4,9 @@ import { Control, useForm, FieldValues } from 'react-hook-form';
 import AuthForm from '@/shared-components/auth/AuthForm';
 import { signUpValidationSchema } from '../validations/sign-up-validation-schema';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useDispatch } from 'react-redux';
-import { AppDispatch } from '@/store';
-import { increment } from '@/store/slices/sign-up-slice';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '@/store';
+import { increment, setUser } from '@/store/slices/sign-up-slice';
 
 export interface IFormData {
   firstName: string;
@@ -17,6 +17,7 @@ export interface IFormData {
 }
 
 const SignUp: React.FC = () => {
+  const user = useSelector((state: RootState) => state.signUp.user);
   const dispatch = useDispatch<AppDispatch>();
 
   const {
@@ -24,19 +25,14 @@ const SignUp: React.FC = () => {
     handleSubmit,
     formState: { errors: formErrors },
   } = useForm<IFormData>({
-    defaultValues: {
-      firstName: '',
-      lastName: '',
-      email: '',
-      password: '',
-      confirmPassword: '',
-    },
+    defaultValues: user,
     resolver: yupResolver(signUpValidationSchema),
   });
 
   const handleSignUpSubmit = (data: IFormData) => {
     //eslint-disable-next-line no-console
     console.log('data', data);
+    dispatch(setUser(data));
     dispatch(increment());
   };
 

@@ -1,13 +1,27 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+
+interface IUser {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+}
 
 interface ISingUpState {
   step: number;
-  email: string;
+  user: IUser;
 }
 
 const initialState: ISingUpState = {
   step: 1,
-  email: '',
+  user: {
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+  },
 };
 
 // Auth slice
@@ -21,9 +35,18 @@ const signUpSlice = createSlice({
     decrement: (state) => {
       state.step = state.step - 1;
     },
+    setUser: (state, action: PayloadAction<IUser>) => {
+      const { firstName, lastName, email, password, confirmPassword } =
+        action.payload;
+      state.user.firstName = firstName;
+      state.user.lastName = lastName;
+      state.user.email = email;
+      state.user.password = password;
+      state.user.confirmPassword = confirmPassword;
+    },
   },
 });
 
-export const { increment, decrement } = signUpSlice.actions;
+export const { increment, decrement, setUser } = signUpSlice.actions;
 
 export default signUpSlice.reducer;

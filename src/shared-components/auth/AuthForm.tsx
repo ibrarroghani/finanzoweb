@@ -27,7 +27,9 @@ interface IAuthFormProps {
   handleSubmit: UseFormHandleSubmit<any>;
   //eslint-disable-next-line
   onSubmit: (data: any) => void;
+  handleBackButton?: () => void;
   isForgetPassword?: boolean;
+  backButtonText?: string;
   submitButtonText: string;
   additionalLink?: { text: string; href: string; linkText: string };
 }
@@ -42,7 +44,9 @@ const AuthForm: React.FC<IAuthFormProps> = ({
   control,
   handleSubmit,
   onSubmit,
+  handleBackButton,
   isForgetPassword,
+  backButtonText,
   submitButtonText,
   additionalLink,
 }) => {
@@ -70,6 +74,16 @@ const AuthForm: React.FC<IAuthFormProps> = ({
           <div className='mt-2 w-full md:w-1/2'>
             <CustomButton title={submitButtonText} type='submit' />
           </div>
+
+          {handleBackButton && backButtonText && (
+            <div className='my-2 w-full md:w-1/2'>
+              <CustomButton
+                onClick={handleBackButton}
+                title={backButtonText}
+                type='button'
+              />
+            </div>
+          )}
         </form>
 
         {additionalLink && <AdditionalLink {...additionalLink} />}
