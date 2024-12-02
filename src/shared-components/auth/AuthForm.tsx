@@ -51,42 +51,52 @@ const AuthForm: React.FC<IAuthFormProps> = ({
   additionalLink,
 }) => {
   return (
-    <div className='flex h-screen bg-[#202020]'>
+    <div className='flex min-h-screen bg-[#202020]'>
       <AuthImageSlider images={images} />
-      <div className='flex w-full flex-col items-center justify-center bg-white p-4 md:w-1/2 md:rounded-l-3xl md:p-0'>
-        <Header
-          title={formTitle}
-          description={formDescription}
-          subDescription={formSubDescription}
-        />
+      <div className='flex w-full flex-col items-center bg-white pt-6 md:w-1/2 md:rounded-l-3xl'>
+        <div className='flex w-full flex-1 flex-col justify-center'>
+          <Header
+            title={formTitle}
+            description={formDescription}
+            subDescription={formSubDescription}
+          />
 
-        {socialLoginButton && <SocialLoginButtons />}
-        <form
-          className='flex w-full flex-col items-center justify-center'
-          onSubmit={handleSubmit(onSubmit)}
-        >
-          {fields.map((field) => (
-            <InputFieldWrapper key={field.id} field={field} control={control} />
-          ))}
-
-          {isForgetPassword && <RememberMe />}
-
-          <div className='mt-2 w-full md:w-1/2'>
-            <CustomButton title={submitButtonText} type='submit' />
-          </div>
-
-          {handleBackButton && backButtonText && (
-            <div className='my-2 w-full md:w-1/2'>
-              <CustomButton
-                onClick={handleBackButton}
-                title={backButtonText}
-                type='button'
+          {socialLoginButton && <SocialLoginButtons />}
+          <form
+            className='flex w-full flex-col items-center justify-center'
+            onSubmit={handleSubmit(onSubmit)}
+          >
+            {fields.map((field) => (
+              <InputFieldWrapper
+                key={field.id}
+                field={field}
+                control={control}
               />
-            </div>
-          )}
-        </form>
+            ))}
 
-        {additionalLink && <AdditionalLink {...additionalLink} />}
+            {isForgetPassword && <RememberMe />}
+
+            <div className='mt-2 w-full md:w-1/2'>
+              <CustomButton title={submitButtonText} type='submit' />
+            </div>
+
+            {handleBackButton && backButtonText && (
+              <div className='my-2 w-full md:w-1/2'>
+                <CustomButton
+                  onClick={handleBackButton}
+                  title={backButtonText}
+                  type='button'
+                />
+              </div>
+            )}
+          </form>
+
+          {additionalLink && <AdditionalLink {...additionalLink} />}
+        </div>
+
+        <p className='mt-10 text-sm capitalize md:mb-2'>
+          &copy; 2024 Finanzo. crafted by finanzo
+        </p>
       </div>
     </div>
   );
@@ -109,7 +119,7 @@ const Header: React.FC<{
   description: string;
   subDescription?: string;
 }> = ({ title, description, subDescription }) => (
-  <div className='text-center'>
+  <div className='flex flex-col items-center justify-center'>
     <h6 className='text-xl font-bold text-[#202020]'>{title}</h6>
     <p className='mt-2 text-sm capitalize'>{description}</p>
     {subDescription && (
@@ -123,11 +133,11 @@ const Header: React.FC<{
 );
 
 const SocialLoginButtons: React.FC = () => (
-  <div className='my-2 flex w-full items-center justify-center gap-2 md:w-1/2'>
-    <div className='w-full md:w-1/2'>
+  <div className='my-2 flex w-full items-center justify-center gap-2'>
+    <div className='w-1/2 md:w-1/4'>
       <CustomButton title='Google' icon={<GoogleIcon />} />
     </div>
-    <div className='w-full md:w-1/2'>
+    <div className='w-1/2 md:w-1/4'>
       <CustomButton title='Apple' icon={<AppleIcon />} />
     </div>
   </div>
