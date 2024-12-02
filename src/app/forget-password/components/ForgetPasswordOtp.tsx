@@ -5,12 +5,12 @@ import AuthForm from '@/shared-components/auth/AuthForm';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '@/store';
-import { images } from './SignUp';
-import { otpValidationSchema } from '../validations/sign-up-validation-schema';
-import { decrement } from '@/store/slices/sign-up-slice';
 import { IOtpFormData } from '@/interfaces/otp-interface';
+import { decrement, increment } from '@/store/slices/forget-password-slice';
+import { images } from '@/app/sign-up/components/SignUp';
+import { otpValidationSchema } from '@/app/sign-up/validations/sign-up-validation-schema';
 
-const SignUpOtp: React.FC = () => {
+const ForgetPasswordOtp: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
 
   const {
@@ -27,6 +27,7 @@ const SignUpOtp: React.FC = () => {
   const handleOtpSubmit = (data: IOtpFormData) => {
     //eslint-disable-next-line no-console
     console.log('data', data);
+    dispatch(increment());
   };
 
   const handleBackButton = () => {
@@ -65,4 +66,4 @@ const SignUpOtp: React.FC = () => {
   return <AuthForm {...authFormProps} />;
 };
 
-export default SignUpOtp;
+export default ForgetPasswordOtp;

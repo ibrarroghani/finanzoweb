@@ -1,16 +1,9 @@
+import { ISignUpFormData } from '@/app/sign-up/interfaces/sign-up-interface';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-
-interface IUser {
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-}
 
 interface ISingUpState {
   step: number;
-  user: IUser;
+  user: ISignUpFormData;
 }
 
 const initialState: ISingUpState = {
@@ -24,7 +17,6 @@ const initialState: ISingUpState = {
   },
 };
 
-// Auth slice
 const signUpSlice = createSlice({
   name: 'sign-up',
   initialState,
@@ -35,7 +27,7 @@ const signUpSlice = createSlice({
     decrement: (state) => {
       state.step = state.step - 1;
     },
-    setUser: (state, action: PayloadAction<IUser>) => {
+    setUser: (state, action: PayloadAction<ISignUpFormData>) => {
       const { firstName, lastName, email, password, confirmPassword } =
         action.payload;
       state.user.firstName = firstName;

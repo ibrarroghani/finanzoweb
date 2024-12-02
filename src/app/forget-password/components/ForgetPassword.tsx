@@ -2,19 +2,19 @@
 import React from 'react';
 import { Control, useForm, FieldValues } from 'react-hook-form';
 import AuthForm from '@/shared-components/auth/AuthForm';
-// import { yupResolver } from '@hookform/resolvers/yup';
+import { yupResolver } from '@hookform/resolvers/yup';
 import { images } from '@/app/sign-up/components/SignUp';
-import { useDispatch } from 'react-redux';
-import { AppDispatch } from '@/store';
-import { increment } from '@/store/slices/forget-password-slice';
-//import { images } from './SignUp';
-//import { signUpOtpValidationSchema } from '../validations/sign-up-validation-schema';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '@/store';
+import { increment, setEmail } from '@/store/slices/forget-password-slice';
+import { forgetPasswordValidationSchema } from '../validations/forget-password-validation-schema';
 
 interface IFormData {
   email: string;
 }
 
 const ForgetPassword: React.FC = () => {
+  const email = useSelector((state: RootState) => state.forgetPassword.email);
   const dispatch = useDispatch<AppDispatch>();
 
   const {
@@ -23,14 +23,15 @@ const ForgetPassword: React.FC = () => {
     formState: { errors: formErrors },
   } = useForm<IFormData>({
     defaultValues: {
-      email: '',
+      email: email,
     },
-    // resolver: yupResolver(signUpOtpValidationSchema),
+    resolver: yupResolver(forgetPasswordValidationSchema),
   });
 
   const handleForgetPasswordSubmit = (data: IFormData) => {
     //eslint-disable-next-line no-console
     console.log('data', data);
+    dispatch(setEmail(data));
     dispatch(increment());
   };
 

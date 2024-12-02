@@ -7,14 +7,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/store';
 import { increment, setUser } from '@/store/slices/sign-up-slice';
-
-export interface IFormData {
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-}
+import { ISignUpFormData } from '../interfaces/sign-up-interface';
 
 const SignUp: React.FC = () => {
   const user = useSelector((state: RootState) => state.signUp.user);
@@ -24,12 +17,12 @@ const SignUp: React.FC = () => {
     control,
     handleSubmit,
     formState: { errors: formErrors },
-  } = useForm<IFormData>({
+  } = useForm<ISignUpFormData>({
     defaultValues: user,
     resolver: yupResolver(signUpValidationSchema),
   });
 
-  const handleSignUpSubmit = (data: IFormData) => {
+  const handleSignUpSubmit = (data: ISignUpFormData) => {
     //eslint-disable-next-line no-console
     console.log('data', data);
     dispatch(setUser(data));

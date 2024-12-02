@@ -2,13 +2,9 @@
 import React from 'react';
 import { Control, useForm, FieldValues } from 'react-hook-form';
 import AuthForm from '@/shared-components/auth/AuthForm';
-// import { yupResolver } from '@hookform/resolvers/yup';
+import { yupResolver } from '@hookform/resolvers/yup';
 import { images } from '@/app/sign-up/components/SignUp';
-// import { useDispatch } from 'react-redux';
-// import { AppDispatch } from '@/store';
-// import { increment } from '@/store/slices/forget-password-slice';
-//import { images } from './SignUp';
-//import { signUpOtpValidationSchema } from '../validations/sign-up-validation-schema';
+import { newPasswordValidationSchema } from '../validations/new-password-validation-schema';
 
 interface IFormData {
   password: string;
@@ -16,8 +12,6 @@ interface IFormData {
 }
 
 const NewPassword: React.FC = () => {
-  //   const dispatch = useDispatch<AppDispatch>();
-
   const {
     control,
     handleSubmit,
@@ -27,13 +21,12 @@ const NewPassword: React.FC = () => {
       password: '',
       confirmPassword: '',
     },
-    // resolver: yupResolver(signUpOtpValidationSchema),
+    resolver: yupResolver(newPasswordValidationSchema),
   });
 
   const handleNewPasswordSubmit = (data: IFormData) => {
     //eslint-disable-next-line no-console
     console.log('data', data);
-    //dispatch(increment());
   };
 
   const formFields = [

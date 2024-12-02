@@ -10,9 +10,8 @@ const initialState: IForgetPasswordState = {
   email: '',
 };
 
-// Auth slice
 const forgetPasswordSlice = createSlice({
-  name: 'sign-up',
+  name: 'forget-password',
   initialState,
   reducers: {
     increment: (state) => {
@@ -27,6 +26,6 @@ const forgetPasswordSlice = createSlice({
   },
 });
 
-export const { increment, decrement } = forgetPasswordSlice.actions;
+export const { increment, decrement, setEmail } = forgetPasswordSlice.actions;
 
 export default forgetPasswordSlice.reducer;

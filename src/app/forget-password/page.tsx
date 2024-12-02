@@ -5,8 +5,8 @@ import UnProtectedRoute from '@/shared-components/auth/UnProtectedRoute';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store';
 import ForgetPassword from './components/ForgetPassword';
-import SignUpOtp from '../sign-up/components/SignUpOtp';
 import NewPassword from './components/NewPassword';
+import ForgetPasswordOtp from './components/ForgetPasswordOtp';
 
 const ForgetPasswordPage = () => {
   const step = useSelector((state: RootState) => state.forgetPassword.step);
@@ -21,7 +21,7 @@ const ForgetPasswordPage = () => {
     case 2:
       return (
         <UnProtectedRoute>
-          <SignUpOtp />
+          <ForgetPasswordOtp />
         </UnProtectedRoute>
       );
     case 3:

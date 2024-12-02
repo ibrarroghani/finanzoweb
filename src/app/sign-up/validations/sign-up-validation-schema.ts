@@ -26,6 +26,6 @@ export const signUpValidationSchema = yup.object({
     .required('Confirm Password is required'),
 });
 
-export const signUpOtpValidationSchema = yup.object({
+export const otpValidationSchema = yup.object({
   otp: yup.string().trim().min(6, 'OTP is required').required(),
 });
