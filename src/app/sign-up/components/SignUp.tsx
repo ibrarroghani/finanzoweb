@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/store';
 import { increment, setUser } from '@/store/slices/sign-up-slice';
 import { ISignUpFormData } from '../interfaces/sign-up-interface';
+//import useSignUpAccount from '@/hooks/data-hooks/auth/use-sign-up-account';
 
 const SignUp: React.FC = () => {
   const user = useSelector((state: RootState) => state.signUp.user);
@@ -22,9 +23,26 @@ const SignUp: React.FC = () => {
     resolver: yupResolver(signUpValidationSchema),
   });
 
+  // const {
+  //   mutate: signUpAccount,
+  //   isPending: isSignUpPending,
+  //   error: isSignUpError,
+  // } = useSignUpAccount();
+
   const handleSignUpSubmit = (data: ISignUpFormData) => {
     //eslint-disable-next-line no-console
     console.log('data', data);
+
+    // const { firstName, lastName, email, password, confirmPassword } = data;
+    // const newUser = {
+    //   name: firstName + ' ' + lastName,
+    //   email,
+    //   password,
+    //   confirmPassword,
+    //   user_type: 'broker',
+    // };
+    // signUpAccount(newUser);
+
     dispatch(setUser(data));
     dispatch(increment());
   };
