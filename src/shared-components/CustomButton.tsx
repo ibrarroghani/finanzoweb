@@ -15,7 +15,7 @@ const CustomButton = ({
 }: IButtonProps) => {
   return (
     <button
-      className='flex w-full items-center justify-center gap-2 rounded-md bg-[#202020] p-3 capitalize text-white'
+      className='bg-primaryDarkAccent flex w-full items-center justify-center gap-2 rounded-md p-3 capitalize text-white'
       type={type}
       onClick={onClick}
     >

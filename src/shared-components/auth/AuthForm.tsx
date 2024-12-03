@@ -51,7 +51,7 @@ const AuthForm: React.FC<IAuthFormProps> = ({
   additionalLink,
 }) => {
   return (
-    <div className='flex min-h-screen bg-[#202020]'>
+    <div className='bg-primaryDarkAccent flex min-h-screen'>
       <AuthImageSlider images={images} />
       <div className='flex w-full flex-col items-center bg-white pt-6 md:w-1/2 md:rounded-l-3xl'>
         <div className='flex w-full flex-1 flex-col justify-center'>
@@ -120,13 +120,13 @@ const FormHeader: React.FC<{
   subDescription?: string;
 }> = ({ title, description, subDescription }) => (
   <div className='flex flex-col items-center justify-center'>
-    <h6 className='text-xl font-bold text-[#202020]'>{title}</h6>
+    <h6 className='text-primaryDarkAccent text-xl font-bold'>{title}</h6>
     <p className='mt-2 text-sm capitalize'>{description}</p>
     {subDescription && (
       <div className='mt-2 flex items-center gap-3'>
-        <div className='w-24 border-b border-b-[#eeeeee]' />
+        <div className='border-b-borderAccent w-24 border-b' />
         <p className='text-sm capitalize'>{subDescription}</p>
-        <div className='w-24 border-b border-b-[#eeeeee]' />
+        <div className='border-b-borderAccent w-24 border-b' />
       </div>
     )}
   </div>

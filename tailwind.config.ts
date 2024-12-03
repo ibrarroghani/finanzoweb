@@ -10,8 +10,12 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        background: 'var(--background)',
-        foreground: 'var(--foreground)',
+        contentBackground: 'var(--contentBackground)',
+        primaryDarkAccent: 'var(--primaryDarkAccent)',
+        cardBackground: 'var(--cardBackground)',
+        successAccent: 'var(--successAccent)',
+        borderAccent: 'var(--borderAccent)',
+        dangerAccent: 'var(--dangerAccent)',
       },
     },
   },

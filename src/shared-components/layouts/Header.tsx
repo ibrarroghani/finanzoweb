@@ -45,7 +45,7 @@ const Header = () => {
   return (
     <>
       <nav className='min-h-20 w-full border-b pt-4'>
-        <div className='mx-auto flex items-center justify-between px-4'>
+        <div className='flex items-center justify-between'>
           <div className='flex justify-center'>
             <button onClick={handleHomeClick}>
               <FinanzoLogo />
@@ -62,8 +62,8 @@ const Header = () => {
             </ul>
           </div>
 
-          <div className='flex justify-center space-x-3'>
-            <div className='flex cursor-pointer items-center rounded-md p-2 pr-4 text-sm font-medium'>
+          <div className='flex justify-center'>
+            <div className='flex cursor-pointer items-center rounded-md text-sm font-medium'>
               <div className='flex gap-4'>
                 <div className='relative flex h-9 w-9 items-center justify-center rounded-full bg-[#191F4B08]'>
                   <span className='absolute'>

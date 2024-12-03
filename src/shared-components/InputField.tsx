@@ -53,7 +53,7 @@ const InputField: React.FC<IInputFieldProps> = ({
           )}
         />
 
-        <p className='absolute left-4 top-[20%] text-[11px] text-[#202020]'>
+        <p className='text-primaryDarkAccent absolute left-4 top-[20%] text-[11px]'>
           {label}
         </p>
 
