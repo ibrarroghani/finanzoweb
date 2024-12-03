@@ -55,7 +55,7 @@ const AuthForm: React.FC<IAuthFormProps> = ({
       <AuthImageSlider images={images} />
       <div className='flex w-full flex-col items-center bg-white pt-6 md:w-1/2 md:rounded-l-3xl'>
         <div className='flex w-full flex-1 flex-col justify-center'>
-          <Header
+          <FormHeader
             title={formTitle}
             description={formDescription}
             subDescription={formSubDescription}
@@ -114,7 +114,7 @@ const AuthImageSlider: React.FC<{ images: { src: string; alt: string }[] }> = ({
   </div>
 );
 
-const Header: React.FC<{
+const FormHeader: React.FC<{
   title: string;
   description: string;
   subDescription?: string;
