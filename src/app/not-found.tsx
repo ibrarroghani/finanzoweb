@@ -21,7 +21,7 @@ const ErrorPage = () => {
               ' absolute bottom-0 left-0 right-0 m-auto inline-block w-[242px] bg-white px-[5px] py-[10px] text-center text-[12px] font-normal uppercase text-[#211b19] sm:w-[360px] sm:text-[18px] md:w-[472px] md:text-[24px] xl:w-[590px] xl:text-[28px]'
             }
           >
-            {'404 - The Page can not be found'}
+            404 - The Page can&apos;t be found
           </h2>
         </div>
         <Link

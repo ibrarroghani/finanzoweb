@@ -6,6 +6,7 @@ import TextareaField from '@/shared-components/TextareaField';
 import { useForm, Control, FieldValues } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
+import CustomButton from '@/shared-components/CustomButton';
 
 const testValidationSchema = yup.object().shape({
   firstName: yup
@@ -65,16 +66,18 @@ const Test = () => {
   };
 
   return (
-    <div className='flex h-screen justify-center bg-slate-100'>
+    <div className='flex h-screen justify-center bg-white'>
       <form
         onSubmit={handleSubmit(handleFormSubmit)}
         className='mx-6 flex w-full flex-col items-center justify-center gap-2'
       >
         <div className='w-1/3'>
           <InputField
-            control={control as unknown as Control<FieldValues>}
+            id='firstName'
             name='firstName'
+            control={control as unknown as Control<FieldValues>}
             error={formErrors.firstName?.message}
+            label='Email'
           />
         </div>
 
@@ -109,12 +112,7 @@ const Test = () => {
         </div>
 
         <div className='mt-4 flex w-1/3 justify-center'>
-          <button
-            className='w-full rounded-md bg-blue-400 p-1.5 text-white'
-            type='submit'
-          >
-            Submit
-          </button>
+          <CustomButton title='submit' />
         </div>
       </form>
     </div>

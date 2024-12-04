@@ -138,7 +138,7 @@ const PlaidTokenExchange = () => {
   ];
 
   return (
-    <div>
+    <div className='flex h-screen items-center justify-center'>
       {isPublicTokenPending && <p>Loading public token...</p>}
       {isAccessTokenPending && <p>Loading access token...</p>}
       {isGetAccountPending && <p>Loading get account...</p>}

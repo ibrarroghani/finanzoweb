@@ -1,35 +1,73 @@
 'use client';
-
+import { yupResolver } from '@hookform/resolvers/yup';
 import React from 'react';
-import { Button } from 'antd';
-import { AppDispatch, RootState } from '@/store';
-import { useDispatch, useSelector } from 'react-redux';
-import { login } from '@/store/slices/auth-slice';
-import { useMsal } from '@azure/msal-react';
+import { Control, useForm, FieldValues } from 'react-hook-form';
+import AuthForm from '../../../shared-components/auth/AuthForm';
+import loginValidationSchema from '../validations/login-validation-schema';
 
-const LoginPage: React.FC = () => {
-  const { instance, inProgress } = useMsal();
-  const dispatch = useDispatch<AppDispatch>();
-  const loading = useSelector((state: RootState) => state.auth.loading);
+interface IFormData {
+  email: string;
+  password: string;
+}
 
-  const isLoggingIn = loading || inProgress !== 'none';
+const Login: React.FC = () => {
+  const {
+    control,
+    handleSubmit,
+    formState: { errors: formErrors },
+  } = useForm<IFormData>({
+    defaultValues: { email: '', password: '' },
+    resolver: yupResolver(loginValidationSchema),
+  });
 
-  const handleLogin = () => {
-    dispatch(login(instance));
+  const handleLoginSubmit = (data: IFormData) => {
+    //eslint-disable-next-line no-console
+    console.log('data', data);
   };
 
-  return (
-    <div className='flex h-screen items-center justify-center'>
-      <Button
-        type='primary'
-        onClick={handleLogin}
-        size='large'
-        loading={isLoggingIn}
-      >
-        Login with MSAL
-      </Button>
-    </div>
-  );
+  const formFields = [
+    {
+      id: 'email',
+      name: 'email',
+      label: 'Email',
+      error: formErrors.email?.message,
+    },
+    {
+      id: 'password',
+      name: 'password',
+      type: 'password',
+      label: 'Password',
+      error: formErrors.password?.message,
+    },
+  ];
+
+  const images = [
+    { src: '/images/slide-image1.svg', alt: 'First slider image' },
+    { src: '/images/slide-image1.svg', alt: 'Second slider image' },
+    { src: '/images/slide-image1.svg', alt: 'Third slider image' },
+    { src: '/images/slide-image1.svg', alt: 'Fourth slider image' },
+  ];
+
+  const authFormProps = {
+    images,
+    formTitle: 'Sign In',
+    formDescription: 'Please enter your details below',
+    formSubDescription: 'Or sign in with',
+    fields: formFields,
+    control: control as unknown as Control<FieldValues>,
+    handleSubmit,
+    onSubmit: handleLoginSubmit,
+    submitButtonText: 'Sign In',
+    isForgetPassword: true,
+    additionalLink: {
+      // eslint-disable-next-line quotes
+      text: `Don't have an account?`,
+      href: '/sign-up',
+      linkText: 'Sign Up',
+    },
+  };
+
+  return <AuthForm {...authFormProps} />;
 };
 
-export default LoginPage;
+export default Login;

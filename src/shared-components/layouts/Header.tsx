@@ -3,22 +3,18 @@ import {
   BellIcon,
   FinanzoLogo,
   MenuIcon,
-  UserIcon,
+  UserActiveIcon,
 } from '@/assets/icons/bussiness-panel-icons';
 import { MENU_ITEM_ROUTE } from '@/config/route-config';
-import { AppDispatch } from '@/store';
-import { logout } from '@/store/slices/auth-slice';
-import { useMsal } from '@azure/msal-react';
 import { Dropdown, MenuProps } from 'antd';
 import Link from 'next/link';
-import { useDispatch } from 'react-redux';
 import MenuItem from './MenuItem';
 
 const Header = () => {
-  const { instance } = useMsal();
-  const dispatch = useDispatch<AppDispatch>();
-
-  const handleLogout = () => dispatch(logout(instance));
+  const handleLogout = () => {
+    //eslint-disable-next-line no-console
+    console.log('Logout Button is clicked');
+  };
 
   const items = [
     {
@@ -49,7 +45,7 @@ const Header = () => {
   return (
     <>
       <nav className='min-h-20 w-full border-b pt-4'>
-        <div className='mx-auto flex items-center justify-between px-4'>
+        <div className='flex items-center justify-between'>
           <div className='flex justify-center'>
             <button onClick={handleHomeClick}>
               <FinanzoLogo />
@@ -66,8 +62,8 @@ const Header = () => {
             </ul>
           </div>
 
-          <div className='flex justify-center space-x-3'>
-            <div className='flex cursor-pointer items-center rounded-md p-2 pr-4 text-sm font-medium'>
+          <div className='flex justify-center'>
+            <div className='flex cursor-pointer items-center rounded-md text-sm font-medium'>
               <div className='flex gap-4'>
                 <div className='relative flex h-9 w-9 items-center justify-center rounded-full bg-[#191F4B08]'>
                   <span className='absolute'>
@@ -77,7 +73,7 @@ const Header = () => {
                 <div className='hidden md:flex'>
                   <Dropdown menu={{ items }} trigger={['click']}>
                     <span>
-                      <UserIcon />
+                      <UserActiveIcon />
                     </span>
                   </Dropdown>
                 </div>
