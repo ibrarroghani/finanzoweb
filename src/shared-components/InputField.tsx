@@ -48,14 +48,12 @@ const InputField: React.FC<IInputFieldProps> = ({
               placeholder={placeholder}
               value={value}
               onChange={onChange}
-              className='no-spinner block w-full max-w-full rounded-md border border-[#eeeeee] bg-white px-4 py-6 pb-2 text-sm text-gray-900 placeholder-gray-400 focus:outline-1 focus:outline-green-300'
+              className='no-spinner text-15 bg-primary-light block w-full max-w-full rounded-md border border-[#eeeeee] px-4 py-6 pb-2 text-gray-900 placeholder-gray-400 focus:outline-1 focus:outline-green-300'
             />
           )}
         />
 
-        <p className='text-primaryDarkAccent absolute left-4 top-[20%] text-[11px]'>
-          {label}
-        </p>
+        <p className='text-10 absolute left-4 top-[20%]'>{label}</p>
 
         {type === 'password' && (
           <span

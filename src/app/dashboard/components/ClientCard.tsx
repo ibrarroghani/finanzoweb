@@ -12,7 +12,7 @@ const ClientCard: React.FC<IClientCardProps> = ({ name, status, onClick }) => {
   return (
     <div
       onClick={onClick}
-      className='bg-cardBackground mb-2 flex h-20 cursor-pointer items-center justify-between gap-4 rounded-md px-4'
+      className='bg-card mb-2 flex h-20 cursor-pointer items-center justify-between gap-4 rounded-md px-4'
     >
       <div className='flex items-center gap-2 overflow-hidden'>
         <div className='h-12 w-12 flex-shrink-0 rounded-full'>

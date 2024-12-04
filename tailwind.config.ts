@@ -10,12 +10,27 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        contentBackground: 'var(--contentBackground)',
-        primaryDarkAccent: 'var(--primaryDarkAccent)',
-        cardBackground: 'var(--cardBackground)',
-        successAccent: 'var(--successAccent)',
-        borderAccent: 'var(--borderAccent)',
-        dangerAccent: 'var(--dangerAccent)',
+        content: 'var(--color-bg-content)',
+        card: 'var(--color-bg-card)',
+        danger: 'var(--color-danger)',
+        warning: 'var(--color-warning)',
+        success: 'var(--color-success)',
+
+        'card-dark': 'var(--color-bg-card-dark)',
+        'primary-dark': 'var(--color-primary-dark)',
+        'primary-light': 'var(--color-primary-light)',
+        'border-primary': 'var(--color-border)',
+      },
+      fontSize: {
+        '10': '10px',
+        '12': '12px',
+        '15': '15px',
+        '25': '25px',
+      },
+      borderRadius: {
+        '3': '3px',
+        '5': '5px',
+        '10': '10px',
       },
     },
   },

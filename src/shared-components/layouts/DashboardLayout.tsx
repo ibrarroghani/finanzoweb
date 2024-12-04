@@ -6,11 +6,11 @@ const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   return (
-    <div className='flex h-screen flex-col bg-white px-6'>
+    <div className='bg-primary-light flex h-screen flex-col'>
       <Header />
-      <main className='flex flex-1 gap-6 overflow-hidden'>
+      <main className='flex flex-1 gap-3 overflow-hidden'>
         <Sidebar />
-        <div className='flex-1'>{children}</div>
+        <div className='bg-content flex-1'>{children}</div>
       </main>
     </div>
   );

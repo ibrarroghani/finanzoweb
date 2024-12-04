@@ -23,7 +23,7 @@ const Sidebar = () => {
 
   return (
     <div className='w-64 border-r'>
-      <div className='border-b-borderAccent h-[calc(100%-100px)] overflow-y-auto border-b p-4'>
+      <div className='border-b-border-primary h-[calc(100%-100px)] overflow-y-auto border-b p-4'>
         {clients.map((client) => (
           <ClientCard
             key={client.id}

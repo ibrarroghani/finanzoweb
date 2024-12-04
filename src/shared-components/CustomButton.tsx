@@ -15,12 +15,12 @@ const CustomButton = ({
 }: IButtonProps) => {
   return (
     <button
-      className='bg-primaryDarkAccent flex w-full items-center justify-center gap-2 rounded-md p-3 capitalize text-white'
+      className='bg-primary-dark text-primary-light flex w-full items-center justify-center gap-2 rounded-md p-3 capitalize'
       type={type}
       onClick={onClick}
     >
       {icon && <span>{icon}</span>}
-      <span className='text-sm'>{title}</span>
+      <span className='text-15'>{title}</span>
     </button>
   );
 };
