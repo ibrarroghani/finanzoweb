@@ -3,7 +3,7 @@ import {
   BellIcon,
   FinanzoLogo,
   MenuIcon,
-  UserIcon,
+  UserActiveIcon,
 } from '@/assets/icons/bussiness-panel-icons';
 import { MENU_ITEM_ROUTE } from '@/config/route-config';
 import { Dropdown, MenuProps } from 'antd';
@@ -73,7 +73,7 @@ const Header = () => {
                 <div className='hidden md:flex'>
                   <Dropdown menu={{ items }} trigger={['click']}>
                     <span>
-                      <UserIcon />
+                      <UserActiveIcon />
                     </span>
                   </Dropdown>
                 </div>
