@@ -4,7 +4,10 @@ import ClientCard from '@/app/dashboard/components/ClientCard';
 import CustomButton from '../CustomButton';
 import InputField from '../InputField';
 import { useForm, Control, FieldValues } from 'react-hook-form';
-import { SearchIcon } from '@/assets/icons/bussiness-panel-icons';
+import {
+  ClientAddIcon,
+  SearchIcon,
+} from '@/assets/icons/bussiness-panel-icons';
 
 const Sidebar = () => {
   const { control } = useForm();
@@ -47,7 +50,7 @@ const Sidebar = () => {
         </div>
       </div>
 
-      <div className='custom-scrollbar h-[calc(100%-100px)] flex-1 overflow-y-auto px-4'>
+      <div className='custom-scrollbar h-[calc(100%-100px)] flex-1 overflow-y-auto px-3'>
         {clients.map((client) => (
           <ClientCard
             key={client.id}
@@ -60,7 +63,7 @@ const Sidebar = () => {
 
       <div className='border-t-border-primary -mx-2 border-t'>
         <div className='my-4 pl-4 pr-8'>
-          <CustomButton title='Add Client' />
+          <CustomButton title='Add Client' icon={<ClientAddIcon />} />
         </div>
       </div>
     </div>

@@ -4,6 +4,7 @@ import React from 'react';
 import { Control, useForm, FieldValues } from 'react-hook-form';
 import AuthForm from '../../../shared-components/auth/AuthForm';
 import loginValidationSchema from '../validations/login-validation-schema';
+import { useRouter } from 'next/navigation';
 
 interface IFormData {
   email: string;
@@ -11,6 +12,8 @@ interface IFormData {
 }
 
 const Login: React.FC = () => {
+  const router = useRouter();
+
   const {
     control,
     handleSubmit,
@@ -23,6 +26,7 @@ const Login: React.FC = () => {
   const handleLoginSubmit = (data: IFormData) => {
     //eslint-disable-next-line no-console
     console.log('data', data);
+    router.push('/dashboard');
   };
 
   const formFields = [
