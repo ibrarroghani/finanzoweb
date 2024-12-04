@@ -19,7 +19,7 @@ const ClientCard: React.FC<IClientCardProps> = ({ name, status, onClick }) => {
           <UserIcon />
         </div>
         <div className='flex max-w-full flex-col gap-2 overflow-hidden'>
-          <p className='truncate font-semibold'>{name}</p>
+          <p className='text-primary-dark truncate font-semibold'>{name}</p>
           {status && (
             <p className='flex w-auto'>
               <CustomBadge text='Active' color='#3FA75A' />
