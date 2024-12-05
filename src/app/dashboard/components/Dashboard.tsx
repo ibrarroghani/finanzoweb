@@ -2,6 +2,7 @@
 import React from 'react';
 import ClientDetailsCard from './ClientDetailsCard';
 import BalanceCard from './BalanceCard';
+import BankCard from './BankCard';
 
 const Dashboard = () => {
   return (
@@ -12,6 +13,7 @@ const Dashboard = () => {
       />
 
       <BalanceCard title='balance' amount='$12000' rate='12.5%' />
+      <BankCard title='bank name' account='1234567890' card='123433332' />
     </div>
   );
 };
