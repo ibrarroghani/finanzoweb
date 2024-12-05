@@ -13,7 +13,7 @@ const Sidebar = () => {
   const { control } = useForm();
 
   const clients = [
-    { id: 1, name: 'mithun', status: true },
+    { id: 1, name: 'mithun Rahman shikhon', status: true },
     { id: 2, name: 'mithun', status: true },
     { id: 3, name: 'mithun', status: true },
     { id: 4, name: 'mithun', status: true },
@@ -31,8 +31,8 @@ const Sidebar = () => {
   };
 
   return (
-    <div className='border-r-border-primary flex w-64 flex-col border-r px-2'>
-      <div className='border-b-border-primary -mx-2 mb-3 border-b'>
+    <div className='flex w-64 flex-col border-r border-r-border-primary px-2'>
+      <div className='-mx-2 mb-3 border-b border-b-border-primary'>
         <div className='flex flex-col px-6 py-2'>
           <div className='flex items-center justify-between'>
             <p className='text-15 font-semibold'>Client List</p>
@@ -61,7 +61,7 @@ const Sidebar = () => {
         ))}
       </div>
 
-      <div className='border-t-border-primary -mx-2 border-t'>
+      <div className='-mx-2 border-t border-t-border-primary'>
         <div className='my-4 pl-4 pr-8'>
           <CustomButton title='Add Client' icon={<ClientAddIcon />} />
         </div>

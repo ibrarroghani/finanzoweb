@@ -16,17 +16,20 @@ const config: Config = {
         danger: 'var(--color-danger)',
         warning: 'var(--color-warning)',
         success: 'var(--color-success)',
+        muted: 'var(--color-text-muted)',
 
         'card-dark': 'var(--color-bg-card-dark)',
         'primary-dark': 'var(--color-primary-dark)',
         'primary-light': 'var(--color-primary-light)',
         'border-primary': 'var(--color-border)',
+        'success-light': 'var(--color-success-light)',
       },
       fontSize: {
         '10': '10px',
         '12': '12px',
         '15': '15px',
         '25': '25px',
+        '28': '28px',
       },
       borderRadius: {
         '3': '3px',

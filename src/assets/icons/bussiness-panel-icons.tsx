@@ -299,3 +299,35 @@ export const ClientAddIcon = () => (
     />
   </svg>
 );
+
+export const UpArrowIcon = () => (
+  <svg
+    width='12'
+    height='12'
+    viewBox='0 0 12 12'
+    fill='none'
+    xmlns='http://www.w3.org/2000/svg'
+  >
+    <path
+      d='M6 2.5V9.5'
+      stroke='#17B26A'
+      strokeWidth='1.5'
+      strokeLinecap='round'
+      strokeLinejoin='round'
+    />
+    <path
+      d='M9 5.5L6 2.5'
+      stroke='#17B26A'
+      strokeWidth='1.5'
+      strokeLinecap='round'
+      strokeLinejoin='round'
+    />
+    <path
+      d='M3 5.5L6 2.5'
+      stroke='#17B26A'
+      strokeWidth='1.5'
+      strokeLinecap='round'
+      strokeLinejoin='round'
+    />
+  </svg>
+);

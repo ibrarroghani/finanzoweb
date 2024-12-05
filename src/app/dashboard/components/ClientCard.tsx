@@ -12,18 +12,18 @@ const ClientCard: React.FC<IClientCardProps> = ({ name, status, onClick }) => {
   return (
     <div
       onClick={onClick}
-      className='bg-card mb-2 flex h-20 cursor-pointer items-center justify-between gap-4 rounded-md px-4'
+      className='mb-2 flex h-20 cursor-pointer items-center justify-between gap-4 rounded-md bg-card px-4'
     >
       <div className='flex items-center gap-2 overflow-hidden'>
         <div className='h-12 w-12 flex-shrink-0 rounded-full'>
           <UserIcon />
         </div>
         <div className='flex max-w-full flex-col gap-2 overflow-hidden'>
-          <p className='text-primary-dark truncate font-semibold'>{name}</p>
+          <p className='truncate font-semibold text-primary-dark'>{name}</p>
           {status && (
-            <p className='flex w-auto'>
+            <div className='flex items-start'>
               <CustomBadge text='Active' color='#3FA75A' />
-            </p>
+            </div>
           )}
         </div>
       </div>

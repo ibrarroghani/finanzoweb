@@ -5,7 +5,7 @@ const CustomBadge = ({ text, color }: any) => {
   return (
     <div
       style={{ backgroundColor: color }}
-      className='text-primary-light flex items-center justify-center rounded-full px-3 text-[10px]'
+      className='flex items-center justify-center rounded-full px-3 text-[10px] uppercase text-primary-light'
     >
       {text}
     </div>

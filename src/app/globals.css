@@ -13,7 +13,10 @@
   --color-danger: #ea4335;
   --color-warning: #a44a28;
   --color-success: #3fa75a;
+  --color-success-light: #3fa75a1a;
   --color-border: #e6e6e6;
+
+  --color-text-muted: #989898;
 }
 
 input[type='number']::-webkit-outer-spin-button,

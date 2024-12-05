@@ -1,22 +1,17 @@
 'use client';
 import React from 'react';
-import { RootState } from '@/store';
-import { useSelector } from 'react-redux';
+import ClientDetailsCard from './ClientDetailsCard';
+import BalanceCard from './BalanceCard';
 
 const Dashboard = () => {
-  const { user, isAuthenticated } = useSelector(
-    (state: RootState) => state.auth
-  );
-
   return (
-    <div className='items flex flex-col items-center justify-center'>
-      {!isAuthenticated && <p>You are not authenticated. Please log in.</p>}
-      {isAuthenticated && (
-        <>
-          <p>Welcome, {user?.name}</p>
-          <p>Email: {user?.email}</p>
-        </>
-      )}
+    <div className='p-4'>
+      <ClientDetailsCard
+        name='client name'
+        address='Lorem ipsum dolor, sit amet consectetur adipisicing elit.asperiores liy'
+      />
+
+      <BalanceCard title='balance' amount='$12000' rate='12.5%' />
     </div>
   );
 };
