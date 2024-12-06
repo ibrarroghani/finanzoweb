@@ -8,6 +8,7 @@ import {
   ImageUploadIcon,
   MessageSendIcon,
 } from '@/assets/icons/bussiness-panel-icons';
+import DocumentCard from './DocumentCard';
 
 const Dashboard = () => {
   return (
@@ -16,14 +17,14 @@ const Dashboard = () => {
         name='client name'
         address='Lorem ipsum dolor, sit amet consectetur adipisicing elit.asperiore'
       />
-      <div className='flex gap-2'>
+      <div className='mt-6 flex gap-4'>
         <div className='w-[70%]'>
-          <div className='flex gap-2'>
+          <div className='flex gap-4'>
             <BalanceCard title='balance' amount='$12000' rate='12.5%' />
             <BalanceCard title='income' amount='$12000' rate='12.5%' />
             <BalanceCard title='expense' amount='$12000' rate='12.5%' />
           </div>
-          <div className='mt-2 flex gap-2'>
+          <div className='mt-6 flex gap-4'>
             <div className='custom-scrollbar flex h-[500px] w-1/2 flex-col gap-2 overflow-y-auto rounded-3 bg-primary-light p-3'>
               <p>Linked Account</p>
               <BankCard
@@ -55,8 +56,14 @@ const Dashboard = () => {
               <GoalCard />
             </div>
           </div>
+          <div className='mt-6 rounded-3 bg-primary-light p-2'>
+            <p>Client Documents</p>
+            <DocumentCard />
+            <DocumentCard />
+            <DocumentCard />
+          </div>
         </div>
-        <div className='mt-2 flex h-[500px] w-[30%] flex-col rounded-3 bg-primary-light'>
+        <div className='mt-2 flex h-[690px] w-[30%] flex-col rounded-3 bg-primary-light'>
           {/* Chat Messages Section */}
           <div className='custom-scrollbar overflow-y-auto p-4'>
             {/* Message (Left) */}
@@ -64,7 +71,7 @@ const Dashboard = () => {
               <div className='max-w-[80%] self-start rounded-lg bg-content p-4'>
                 <p className='text-12'>
                   Lorem Ipsum is simply dummy text of the printing and
-                  typesetting industry. Lorem Ipsum has been the industry's
+                  typesetting industry. Lorem Ipsum has been the industry
                   standard dummy text ever since the 1500s.
                 </p>
                 <p className='mt-2 text-10 text-gray-500'>6:00, 8/11/2024</p>
@@ -75,7 +82,7 @@ const Dashboard = () => {
               <div className='max-w-[80%] self-start rounded-lg bg-content p-4'>
                 <p className='text-12'>
                   Lorem Ipsum is simply dummy text of the printing and
-                  typesetting industry. Lorem Ipsum has been the industry's
+                  typesetting industry. Lorem Ipsum has been the industry
                   standard dummy text ever since the 1500s.
                 </p>
                 <p className='mt-2 text-10 text-gray-500'>6:00, 8/11/2024</p>
@@ -86,7 +93,7 @@ const Dashboard = () => {
               <div className='max-w-[80%] self-start rounded-lg bg-content p-4'>
                 <p className='text-12'>
                   Lorem Ipsum is simply dummy text of the printing and
-                  typesetting industry. Lorem Ipsum has been the industry's
+                  typesetting industry. Lorem Ipsum has been the industry
                   standard dummy text ever since the 1500s.
                 </p>
                 <p className='mt-2 text-10 text-gray-500'>6:00, 8/11/2024</p>
@@ -97,7 +104,7 @@ const Dashboard = () => {
               <div className='max-w-[80%] self-start rounded-lg bg-content p-4'>
                 <p className='text-12'>
                   Lorem Ipsum is simply dummy text of the printing and
-                  typesetting industry. Lorem Ipsum has been the industry's
+                  typesetting industry. Lorem Ipsum has been the industry
                   standard dummy text ever since the 1500s.
                 </p>
                 <p className='mt-2 text-10 text-gray-500'>6:00, 8/11/2024</p>
@@ -108,7 +115,7 @@ const Dashboard = () => {
               <div className='max-w-[80%] self-start rounded-lg bg-content p-4'>
                 <p className='text-12'>
                   Lorem Ipsum is simply dummy text of the printing and
-                  typesetting industry. Lorem Ipsum has been the industry's
+                  typesetting industry. Lorem Ipsum has been the industry
                   standard dummy text ever since the 1500s.
                 </p>
                 <p className='mt-2 text-10 text-gray-500'>6:00, 8/11/2024</p>
@@ -120,7 +127,7 @@ const Dashboard = () => {
               <div className='max-w-[80%] self-end rounded-lg bg-content p-4'>
                 <p className='text-12'>
                   Lorem Ipsum is simply dummy text of the printing and
-                  typesetting industry. Lorem Ipsum has been the industry's
+                  typesetting industry. Lorem Ipsum has been the industry
                   standard dummy text ever since the.
                 </p>
                 <p className='mt-2 text-10 text-gray-500'>6:00, 8/11/2024</p>
