@@ -14,6 +14,7 @@ const Dashboard = () => {
       <ClientDetailsCard
         name='client name'
         address='Lorem ipsum dolor, sit amet consectetur adipisicing elit.asperiore'
+        image='/images/user-image.png'
       />
       <div className='mt-6 flex gap-4'>
         <div className='w-[65%]'>
@@ -22,9 +23,9 @@ const Dashboard = () => {
             <BalanceCard title='income' amount='$12000' rate='12.5%' />
             <BalanceCard title='expense' amount='$12000' rate='12.5%' />
           </div>
-          <div className='mt-6 flex gap-4'>
+          <div className='mt-6 flex flex-col gap-4 lg:flex-row'>
             {/* Linked Account */}
-            <div className='w-1/2 rounded-3 bg-primary-light px-2 py-4'>
+            <div className='w-full rounded-3 bg-primary-light px-2 py-4 lg:w-1/2'>
               <div className='custom-scrollbar flex h-[500px] w-full flex-col gap-2 overflow-y-auto px-3'>
                 <p>Linked Account</p>
                 <BankCard
@@ -51,7 +52,7 @@ const Dashboard = () => {
             </div>
 
             {/* Goals */}
-            <div className='w-1/2 rounded-3 bg-primary-light px-2 py-4'>
+            <div className='w-full rounded-3 bg-primary-light px-2 py-4 lg:w-1/2'>
               <div className='custom-scrollbar flex h-[500px] w-full flex-col gap-2 overflow-y-auto px-3'>
                 <p>Goals</p>
                 <GoalCard />
