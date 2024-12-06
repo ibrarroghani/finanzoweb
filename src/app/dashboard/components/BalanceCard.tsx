@@ -10,10 +10,10 @@ interface IBalanceCardProps {
 
 const BalanceCard: React.FC<IBalanceCardProps> = ({ title, amount, rate }) => {
   return (
-    <div className='mt-2 w-full rounded-5 bg-primary-light p-4'>
-      <p className='text-muted text-15 capitalize'>{title}</p>
-      <p className='text-28 my-2 font-semibold text-primary-dark'>{amount}</p>
-      <p className='bg-success-light my-2 flex w-fit items-center rounded-3 px-2.5'>
+    <div className='w-full rounded-5 bg-primary-light p-4'>
+      <p className='text-15 capitalize text-muted'>{title}</p>
+      <p className='my-2 text-28 font-semibold text-primary-dark'>{amount}</p>
+      <p className='my-2 flex w-fit items-center rounded-3 bg-success-light px-2.5'>
         <span className='mr-1'>
           <UpArrowIcon />
         </span>
