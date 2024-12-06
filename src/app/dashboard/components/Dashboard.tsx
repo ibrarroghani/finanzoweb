@@ -70,7 +70,7 @@ const Dashboard = () => {
             <DocumentCard />
           </div>
         </div>
-        <div className='mt-2 flex h-[690px] w-[30%] flex-col rounded-3 bg-primary-light p-6'>
+        <div className='mt-2 flex h-[690px] w-[30%] flex-col rounded-3 bg-primary-light py-6 pr-2'>
           {/* Chat Messages Section */}
           <div className='custom-scrollbar overflow-y-auto px-4'>
             {/* Message (Left) */}
@@ -149,7 +149,7 @@ const Dashboard = () => {
               <input
                 type='text'
                 placeholder='Enter Your Message'
-                className='w-full max-w-full rounded-3 border border-border-primary p-4 pr-16 text-sm focus:outline-none'
+                className='w-full max-w-full rounded-3 border border-border-primary py-4 pl-4 pr-24 text-sm focus:outline-none'
               />
 
               {/* Send Icon */}
