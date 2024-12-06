@@ -3,9 +3,9 @@ import React from 'react';
 
 const GoalCard = () => {
   return (
-    <div className='flex rounded-5 border border-border-primary bg-primary-light px-4'>
-      <div className='w-1/2'>
-        <p className='text-18 mt-2 border-b border-border-primary font-bold text-primary-dark'>
+    <div className='flex rounded-5 border border-border-primary bg-primary-light'>
+      <div className='w-1/2 px-4'>
+        <p className='mt-2 border-b border-border-primary text-18 font-bold text-primary-dark'>
           SIP Goal
         </p>
         <p className='my-2 text-12 capitalize'>last payment</p>
@@ -13,7 +13,7 @@ const GoalCard = () => {
         <p className='my-2 text-12 capitalize'>upcoming payment</p>
         <p className='text-18 font-bold text-primary-dark'>$200</p>
       </div>
-      <div className='w-1/2 pt-8'>
+      <div className='flex w-1/2 items-center pt-8'>
         <DonutIcon />
       </div>
     </div>
