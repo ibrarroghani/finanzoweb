@@ -25,35 +25,42 @@ const Dashboard = () => {
             <BalanceCard title='expense' amount='$12000' rate='12.5%' />
           </div>
           <div className='mt-6 flex gap-4'>
-            <div className='custom-scrollbar flex h-[500px] w-1/2 flex-col gap-2 overflow-y-auto rounded-3 bg-primary-light p-3'>
-              <p>Linked Account</p>
-              <BankCard
-                title='bank name'
-                account='1234567890'
-                card='123433332'
-              />
-              <BankCard
-                title='bank name'
-                account='1234567890'
-                card='123433332'
-              />
-              <BankCard
-                title='bank name'
-                account='1234567890'
-                card='123433332'
-              />
-              <BankCard
-                title='bank name'
-                account='1234567890'
-                card='123433332'
-              />
+            {/* Linked Account */}
+            <div className='w-1/2 rounded-3 bg-primary-light px-2 py-4'>
+              <div className='custom-scrollbar flex h-[500px] w-full flex-col gap-2 overflow-y-auto px-3'>
+                <p>Linked Account</p>
+                <BankCard
+                  title='bank name'
+                  account='1234567890'
+                  card='123433332'
+                />
+                <BankCard
+                  title='bank name'
+                  account='1234567890'
+                  card='123433332'
+                />
+                <BankCard
+                  title='bank name'
+                  account='1234567890'
+                  card='123433332'
+                />
+                <BankCard
+                  title='bank name'
+                  account='1234567890'
+                  card='123433332'
+                />
+              </div>
             </div>
-            <div className='custom-scrollbar flex h-[500px] w-1/2 flex-col gap-2 overflow-y-auto rounded-3 bg-primary-light p-3'>
-              <p>Goals</p>
-              <GoalCard />
-              <GoalCard />
-              <GoalCard />
-              <GoalCard />
+
+            {/* Goals */}
+            <div className='w-1/2 rounded-3 bg-primary-light px-2 py-4'>
+              <div className='custom-scrollbar flex h-[500px] w-full flex-col gap-2 overflow-y-auto px-3'>
+                <p>Goals</p>
+                <GoalCard />
+                <GoalCard />
+                <GoalCard />
+                <GoalCard />
+              </div>
             </div>
           </div>
           <div className='mt-6 rounded-3 bg-primary-light p-2'>
@@ -63,9 +70,9 @@ const Dashboard = () => {
             <DocumentCard />
           </div>
         </div>
-        <div className='mt-2 flex h-[690px] w-[30%] flex-col rounded-3 bg-primary-light'>
+        <div className='mt-2 flex h-[690px] w-[30%] flex-col rounded-3 bg-primary-light p-6'>
           {/* Chat Messages Section */}
-          <div className='custom-scrollbar overflow-y-auto p-4'>
+          <div className='custom-scrollbar overflow-y-auto px-4'>
             {/* Message (Left) */}
             <div className='mb-4 flex items-start'>
               <div className='max-w-[80%] self-start rounded-lg bg-content p-4'>
