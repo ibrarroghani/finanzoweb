@@ -9,7 +9,7 @@ const GoalCard = () => {
           SIP Goal
         </p>
         <p className='my-2 text-12 capitalize'>last payment</p>
-        <p className='text-[20px] font-bold text-primary-dark'>$200</p>
+        <p className='text-[20px] font-bold text-success'>$200</p>
         <p className='my-2 text-12 capitalize'>upcoming payment</p>
         <p className='text-18 font-bold text-primary-dark'>$200</p>
       </div>
