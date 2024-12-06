@@ -51,9 +51,9 @@ const AuthForm: React.FC<IAuthFormProps> = ({
   additionalLink,
 }) => {
   return (
-    <div className='bg-primary-dark flex min-h-screen'>
+    <div className='flex min-h-screen bg-primary-dark'>
       <AuthImageSlider images={images} />
-      <div className='bg-primary-light flex w-full flex-col items-center px-10 pt-4 md:w-1/2 md:rounded-l-3xl md:px-0'>
+      <div className='flex w-full flex-col items-center bg-primary-light px-10 pt-4 md:w-1/2 md:rounded-l-3xl md:px-0'>
         <div className='flex w-full flex-1 flex-col justify-center'>
           <FormHeader
             title={formTitle}
@@ -94,7 +94,7 @@ const AuthForm: React.FC<IAuthFormProps> = ({
           {additionalLink && <AdditionalLink {...additionalLink} />}
         </div>
 
-        <p className='text-12 m-10 mb-2 capitalize'>
+        <p className='m-10 mb-2 text-12 capitalize'>
           &copy; 2024 Finanzo. crafted by finanzo
         </p>
       </div>
@@ -120,13 +120,13 @@ const FormHeader: React.FC<{
   subDescription?: string;
 }> = ({ title, description, subDescription }) => (
   <div className='flex flex-col items-center justify-center'>
-    <h6 className='text-25 text-primary-dark font-black'>{title}</h6>
-    <p className='text-12 mt-2 capitalize'>{description}</p>
+    <h6 className='text-25 font-black text-primary-dark'>{title}</h6>
+    <p className='mt-2 text-12 capitalize'>{description}</p>
     {subDescription && (
       <div className='mt-2 flex items-center gap-3'>
-        <div className='border-b-border-primary w-24 border-b' />
+        <div className='w-24 border-b border-b-border-primary' />
         <p className='text-12 capitalize'>{subDescription}</p>
-        <div className='border-b-border-primary w-24 border-b' />
+        <div className='w-24 border-b border-b-border-primary' />
       </div>
     )}
   </div>
@@ -168,7 +168,7 @@ const AdditionalLink: React.FC<{
 }> = ({ text, href, linkText }) => (
   <div className='mt-2 flex items-center justify-center'>
     <p className='text-12 capitalize'>{text}</p>
-    <Link href={href} className='text-12 ml-1 font-bold'>
+    <Link href={href} className='ml-1 text-12 font-bold'>
       {linkText}
     </Link>
   </div>

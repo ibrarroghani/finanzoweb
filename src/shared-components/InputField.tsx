@@ -50,7 +50,7 @@ const InputField: React.FC<IInputFieldProps> = ({
               placeholder={placeholder}
               value={value}
               onChange={onChange}
-              className={`${icon ? 'py-2 pl-8 pr-4' : 'px-4 py-6 pb-2'} no-spinner text-15 bg-primary-light block w-full max-w-full rounded-md border border-[#eeeeee] text-gray-900 placeholder-gray-400 focus:outline-1 focus:outline-green-300`}
+              className={`${icon ? 'py-2 pl-8 pr-4' : 'px-4 py-6 pb-2'} no-spinner block w-full max-w-full rounded-md border border-[#eeeeee] bg-primary-light text-15 text-gray-900 placeholder-gray-400 focus:outline-1 focus:outline-green-300`}
             />
           )}
         />
@@ -61,7 +61,7 @@ const InputField: React.FC<IInputFieldProps> = ({
             {icon}
           </span>
         ) : (
-          <p className='text-10 absolute left-4 top-[20%]'>{label}</p>
+          <p className='absolute left-4 top-[20%] text-10'>{label}</p>
         )}
 
         {type === 'password' && (
