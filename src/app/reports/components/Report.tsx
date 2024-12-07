@@ -2,7 +2,9 @@ import React from 'react';
 
 const Report = () => {
   return (
-    <div className='flex h-screen items-center justify-center'>Report</div>
+    <div className='mt-10 flex items-center justify-center'>
+      Under Development
+    </div>
   );
 };
 

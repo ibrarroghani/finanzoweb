@@ -16,6 +16,7 @@ interface IInputFieldProps {
   readOnly?: boolean;
   control: Control<FieldValues>;
   readonly?: boolean;
+  icon?: React.ReactNode;
 }
 
 const InputField: React.FC<IInputFieldProps> = ({
@@ -27,6 +28,7 @@ const InputField: React.FC<IInputFieldProps> = ({
   control,
   label,
   readOnly,
+  icon,
 }) => {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -48,14 +50,19 @@ const InputField: React.FC<IInputFieldProps> = ({
               placeholder={placeholder}
               value={value}
               onChange={onChange}
-              className='no-spinner block w-full max-w-full rounded-md border border-[#eeeeee] bg-white px-4 py-6 pb-2 text-sm text-gray-900 placeholder-gray-400 focus:outline-1 focus:outline-green-300'
+              className={`${icon ? 'py-2 pl-8 pr-4' : 'px-4 py-6 pb-2'} no-spinner block w-full max-w-full rounded-md border border-[#eeeeee] bg-primary-light text-15 text-gray-900 placeholder-gray-400 focus:outline-1 focus:outline-green-300`}
             />
           )}
         />
 
-        <p className='text-primaryDarkAccent absolute left-4 top-[20%] text-[11px]'>
-          {label}
-        </p>
+        {/* Render label or icon based on props */}
+        {icon ? (
+          <span className='absolute left-3 top-[35%] mr-5 text-gray-500'>
+            {icon}
+          </span>
+        ) : (
+          <p className='absolute left-4 top-[20%] text-10'>{label}</p>
+        )}
 
         {type === 'password' && (
           <span

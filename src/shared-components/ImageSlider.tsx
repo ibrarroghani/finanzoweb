@@ -12,7 +12,7 @@ const ImageSlider: React.FC<IImageSliderProps> = ({ images }) => {
   return (
     <Carousel autoplay dots={false}>
       {images.map((image, index) => (
-        <div key={index} className='h-screen pt-16'>
+        <div key={index} className='h-screen px-10 py-16'>
           <Image
             src={image.src}
             alt={image.alt}

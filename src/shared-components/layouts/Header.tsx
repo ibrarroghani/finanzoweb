@@ -45,7 +45,7 @@ const Header = () => {
   return (
     <>
       <nav className='min-h-20 w-full border-b pt-4'>
-        <div className='flex items-center justify-between'>
+        <div className='flex items-center justify-between px-6'>
           <div className='flex justify-center'>
             <button onClick={handleHomeClick}>
               <FinanzoLogo />

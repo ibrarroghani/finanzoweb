@@ -66,7 +66,7 @@ const Test = () => {
   };
 
   return (
-    <div className='flex h-screen justify-center bg-white'>
+    <div className='flex h-screen justify-center bg-primary-light'>
       <form
         onSubmit={handleSubmit(handleFormSubmit)}
         className='mx-6 flex w-full flex-col items-center justify-center gap-2'

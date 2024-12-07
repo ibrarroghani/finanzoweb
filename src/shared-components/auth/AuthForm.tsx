@@ -51,9 +51,9 @@ const AuthForm: React.FC<IAuthFormProps> = ({
   additionalLink,
 }) => {
   return (
-    <div className='flex h-screen bg-primaryDarkAccent'>
+    <div className='flex min-h-screen bg-primary-dark'>
       <AuthImageSlider images={images} />
-      <div className='flex w-full flex-col items-center bg-white pt-6 md:w-1/2 md:rounded-l-3xl'>
+      <div className='flex w-full flex-col items-center bg-primary-light px-10 pt-4 md:w-1/2 md:rounded-l-3xl md:px-0'>
         <div className='flex w-full flex-1 flex-col justify-center'>
           <FormHeader
             title={formTitle}
@@ -94,7 +94,7 @@ const AuthForm: React.FC<IAuthFormProps> = ({
           {additionalLink && <AdditionalLink {...additionalLink} />}
         </div>
 
-        <p className='mt-10 text-sm capitalize md:mb-2'>
+        <p className='m-10 mb-2 text-12 capitalize'>
           &copy; 2024 Finanzo. crafted by finanzo
         </p>
       </div>
@@ -120,13 +120,13 @@ const FormHeader: React.FC<{
   subDescription?: string;
 }> = ({ title, description, subDescription }) => (
   <div className='flex flex-col items-center justify-center'>
-    <h6 className='text-xl font-bold text-primaryDarkAccent'>{title}</h6>
-    <p className='mt-2 text-sm capitalize'>{description}</p>
+    <h6 className='text-25 font-black text-primary-dark'>{title}</h6>
+    <p className='mt-2 text-12 capitalize'>{description}</p>
     {subDescription && (
       <div className='mt-2 flex items-center gap-3'>
-        <div className='w-24 border-b border-b-borderAccent' />
-        <p className='text-sm capitalize'>{subDescription}</p>
-        <div className='w-24 border-b border-b-borderAccent' />
+        <div className='w-24 border-b border-b-border-primary' />
+        <p className='text-12 capitalize'>{subDescription}</p>
+        <div className='w-24 border-b border-b-border-primary' />
       </div>
     )}
   </div>
@@ -154,11 +154,10 @@ const InputFieldWrapper: React.FC<{
 
 const RememberMe: React.FC = () => (
   <div className='my-2 flex w-full justify-between md:w-1/2'>
-    <p>
-      <Checkbox />
-      <span className='ml-2'>Remember Me</span>
-    </p>
-    <Link href='/forget-password'>Forget Password?</Link>
+    <Checkbox className='text-12'>Remember Me</Checkbox>
+    <Link className='text-12' href='/forget-password'>
+      Forget Password?
+    </Link>
   </div>
 );
 
@@ -168,8 +167,8 @@ const AdditionalLink: React.FC<{
   linkText: string;
 }> = ({ text, href, linkText }) => (
   <div className='mt-2 flex items-center justify-center'>
-    <p className='text-sm capitalize'>{text}</p>
-    <Link href={href} className='text-sm font-bold'>
+    <p className='text-12 capitalize'>{text}</p>
+    <Link href={href} className='ml-1 text-12 font-bold'>
       {linkText}
     </Link>
   </div>

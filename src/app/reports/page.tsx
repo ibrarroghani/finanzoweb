@@ -1,14 +1,12 @@
 import React from 'react';
 import Report from './components/Report';
-import Header from '@/shared-components/layouts/Header';
-import ProtectedRoute from '@/shared-components/auth/ProtectedRoute';
+import DashboardLayout from '@/shared-components/layouts/DashboardLayout';
 
 const page = () => {
   return (
-    <ProtectedRoute>
-      <Header />
+    <DashboardLayout>
       <Report />
-    </ProtectedRoute>
+    </DashboardLayout>
   );
 };
 
