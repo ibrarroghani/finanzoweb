@@ -10,6 +10,9 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      screens: {
+        md: '796px',
+      },
       colors: {
         content: 'var(--color-bg-content)',
         card: 'var(--color-bg-card)',

@@ -51,10 +51,10 @@ const Dashboard = () => {
             <div className='w-full rounded-3 bg-primary-light px-2 py-4 lg:w-1/2'>
               <div className='custom-scrollbar flex h-[500px] w-full flex-col gap-2 overflow-y-auto px-3'>
                 <p>Goals</p>
-                <GoalCard />
-                <GoalCard />
-                <GoalCard />
-                <GoalCard />
+                <GoalCard title='SIP Goals' />
+                <GoalCard title='SIP Goals' />
+                <GoalCard title='SIP Goals' />
+                <GoalCard title='SIP Goals' />
               </div>
             </div>
           </div>
