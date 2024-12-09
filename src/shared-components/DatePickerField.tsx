@@ -24,7 +24,7 @@ const DatePickerField: React.FC<IDatePickerFieldProps> = ({
           control={control}
           render={({ field: { onChange } }) => (
             <DatePicker
-              className='w-full px-4 py-6 pb-2'
+              className='w-full cursor-pointer px-4 py-6 pb-2'
               onChange={onChange}
               placeholder={placeholder}
             />
