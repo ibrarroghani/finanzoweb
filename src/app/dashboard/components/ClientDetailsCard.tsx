@@ -4,15 +4,16 @@ import Image from 'next/image';
 
 const ClientDetailsCard: React.FC = () => {
   return (
-    <div className='flex items-center rounded-5 bg-primary-light p-4'>
-      <div className='flex w-1/2 items-center justify-between border-r border-r-border-primary'>
+    <div className='flex flex-col items-center rounded-5 bg-primary-light p-4 lg:flex-row'>
+      <div className='flex flex-col lg:w-1/2 lg:flex-row lg:items-center lg:justify-between lg:border-r lg:border-r-border-primary'>
         <div className='flex gap-4'>
-          <div className='h-16 w-16 rounded-full'>
+          <div className='h-16 w-16 overflow-hidden rounded-full'>
             <Image
               src='/images/user-image.png'
               alt='user image'
-              width={100}
-              height={100}
+              width={64}
+              height={64}
+              className='object-cover'
             />
           </div>
           <div className='flex flex-col items-start gap-1.5'>
@@ -20,16 +21,14 @@ const ClientDetailsCard: React.FC = () => {
             <CustomBadge text='Active' color='bg-success' />
           </div>
         </div>
-        <div className='flex flex-col pr-8 text-15 font-medium'>
+        <div className='mt-2 flex flex-col text-15 font-medium lg:mt-0 lg:pr-8'>
           <p>Phone: +3840595859959</p>
           <p>Email: client@gmail.com</p>
         </div>
       </div>
-      <div className='w-1/2 pl-8 text-15 font-medium'>
-        <p className='capitalize'>address:</p>
-        <p>
-          Lorem ipsum dolor, sit amet consectetur adipisicing elit.asperiore
-        </p>
+      <div className='flex gap-1 text-15 lg:w-1/2 lg:flex-col lg:pl-8'>
+        <p className='font-medium capitalize'>address:</p>
+        <p>Lorem ipsum dolor, sit amet consectetur adipisicing</p>
       </div>
     </div>
   );

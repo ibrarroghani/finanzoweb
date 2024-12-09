@@ -1,4 +1,4 @@
-import { DonutIcon, EditIcon } from '@/assets/icons/bussiness-panel-icons';
+import { EditIcon } from '@/assets/icons/bussiness-panel-icons';
 import React from 'react';
 import CustomBadge from './CustomBadge';
 import Image from 'next/image';
