@@ -5,7 +5,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { Modal, Radio, RadioChangeEvent, Switch } from 'antd';
 import React from 'react';
 import { useForm, Control, FieldValues } from 'react-hook-form';
-import { goalCreateValidationSchema } from './validations/goal-create-validation-schema';
+import { goalCreateValidationSchema } from '../validations/goal-create-validation-schema';
 
 interface IGoalModalProps {
   title: string;
@@ -112,9 +112,20 @@ const GoalModal: React.FC<IGoalModalProps> = ({
                 onChange={handleRadioButtonChange}
                 defaultValue='Active'
                 buttonStyle='solid'
+                className='flex'
               >
-                <Radio.Button value='Active'>Active</Radio.Button>
-                <Radio.Button value='Pause'>Pause</Radio.Button>
+                <Radio.Button
+                  className='px-4 first:rounded-l-full'
+                  value='Active'
+                >
+                  Active
+                </Radio.Button>
+                <Radio.Button
+                  className='px-4 last:rounded-r-full'
+                  value='Pause'
+                >
+                  Pause
+                </Radio.Button>
               </Radio.Group>
             </div>
           </div>

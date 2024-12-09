@@ -16,9 +16,7 @@ const GoalCard: React.FC<IGoalCardProps> = ({ edit, title }) => {
       <div className='flex items-center justify-between border-b border-border-primary py-2'>
         <p className='text-18 font-bold text-primary-dark'>{title}</p>
         <div className='flex gap-3'>
-          <p>
-            <CustomBadge text='Active' color='bg-success' />
-          </p>
+          <CustomBadge text='Active' color='bg-success' />
           {edit && (
             <p className='cursor-pointer'>
               <EditIcon />
