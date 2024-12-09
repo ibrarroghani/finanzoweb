@@ -11,11 +11,7 @@ import Chat from './Chat';
 const Dashboard = () => {
   return (
     <div className='p-4'>
-      <ClientDetailsCard
-        name='client name'
-        address='Lorem ipsum dolor, sit amet consectetur adipisicing elit.asperiore'
-        image='/images/user-image.png'
-      />
+      <ClientDetailsCard />
       <div className='mt-6 flex gap-4'>
         <div className='w-[65%]'>
           <div className='flex gap-4'>

@@ -51,3 +51,8 @@ input[type='number'] {
     border-radius: 9999px;
   }
 }
+
+.ant-radio-button-wrapper-checked {
+  background-color: #202020 !important; /* Set your desired background color */
+  color: white !important; /* Optional: Change text color */
+}
