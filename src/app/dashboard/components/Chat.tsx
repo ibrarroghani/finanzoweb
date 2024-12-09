@@ -51,7 +51,7 @@ const Chat = () => {
             <input
               type='text'
               placeholder='Enter Your Message'
-              className='w-full max-w-full rounded-3 border border-border-primary py-4 pl-4 pr-24 text-sm focus:outline-none'
+              className='w-full max-w-full rounded-3 border border-border-primary pb-8 pl-4 pr-24 pt-2 text-sm focus:outline-none'
             />
 
             {/* Send Icon */}
