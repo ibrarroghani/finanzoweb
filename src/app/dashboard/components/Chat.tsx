@@ -21,7 +21,7 @@ const Chat = () => {
 
   return (
     <div className='min-h-screen w-[35%]'>
-      <div className='sticky top-0 flex h-[calc(100vh-200px)] w-full flex-col justify-between rounded-3 bg-primary-light py-6 pr-2'>
+      <div className='sticky top-0 flex h-[calc(100vh-200px)] w-full flex-col justify-between rounded-3 bg-primary-light py-6'>
         {/* Chat Messages Section */}
         <div
           ref={messagesEndRef}
