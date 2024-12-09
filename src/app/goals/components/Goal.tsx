@@ -8,6 +8,7 @@ import CustomButton from '@/shared-components/CustomButton';
 import React, { useState } from 'react';
 import GoalModal from './GoalModal';
 import GoalCard from '@/app/dashboard/components/GoalCard';
+import RecommendationCard from './RecommendationCard';
 
 const Goal = () => {
   const [showModal, setShowModal] = useState<boolean>(false);
@@ -19,6 +20,8 @@ const Goal = () => {
     { id: 5, title: 'SIP Goal 5' },
   ];
 
+  const recommendations = [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }];
+
   const handleCreateGoal = () => setShowModal(true);
   const handleToggleModal = () => {
     setShowModal((prev) => !prev);
@@ -28,6 +31,12 @@ const Goal = () => {
       <ClientDetailsCard />
       {goals.length > 0 ? (
         <>
+          <div className='mt-5 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3'>
+            {recommendations.length > 0 &&
+              recommendations.map((recommendation) => (
+                <RecommendationCard key={recommendation.id} />
+              ))}
+          </div>
           <div className='mt-6 flex justify-between'>
             <p className='text-18 font-semibold'>Goals</p>
             <div className='w-52'>
