@@ -30,33 +30,36 @@ input[type='number'] {
 }
 
 /* Start font size  */
-.text-extra-small {
-  @apply text-10;
+@layer utilities {
+  .text-extra-small {
+    @apply text-10;
+  }
+
+  .text-small {
+    @apply text-12;
+  }
+
+  .text-medium {
+    @apply text-15;
+  }
+
+  .text-large {
+    @apply text-18;
+  }
+
+  .text-extra-large {
+    @apply text-25;
+  }
+
+  .text-huge {
+    @apply text-28;
+  }
+
+  .text-giant {
+    @apply text-32;
+  }
 }
 
-.text-small {
-  @apply text-12;
-}
-
-.text-medium {
-  @apply text-15;
-}
-
-.text-large {
-  @apply text-18;
-}
-
-.text-extra-large {
-  @apply text-25;
-}
-
-.text-huge {
-  @apply text-28;
-}
-
-.text-giant {
-  @apply text-32;
-}
 /* End Card component  */
 
 /* start custom scrollbar  */
@@ -82,12 +85,12 @@ input[type='number'] {
 }
 /* End custom scrollbar  */
 
-/* antd design radio button */
+/* Start antd design radio button */
 .ant-radio-button-wrapper-checked {
   background-color: #202020 !important;
   color: white !important;
 }
-/* end custom scrollbar  */
+/* End antd design radio button */
 
 /* Start Card component  */
 @layer components {
@@ -114,70 +117,3 @@ input[type='number'] {
   }
 }
 /* End Card component  */
-
-/* Start Balance Card */
-.rate-badge {
-  @apply my-2 flex w-fit items-center rounded-3 bg-success-light px-2.5;
-}
-/* End Of Balance Card */
-
-/* Start Client Details Card */
-.client-card-container {
-  @apply card flex flex-col items-center lg:flex-row;
-}
-
-.client-info {
-  @apply flex flex-col lg:w-1/2 lg:flex-row lg:items-center lg:justify-between lg:border-r lg:border-r-border-primary;
-}
-
-.client-avatar {
-  @apply h-16 w-16 overflow-hidden rounded-full;
-}
-
-.client-details {
-  @apply flex flex-col items-start gap-1.5;
-}
-
-.client-contact {
-  @apply mt-2 flex flex-col text-15 font-medium lg:mt-0 lg:pr-8;
-}
-
-.address-info {
-  @apply flex gap-1 text-15 lg:w-1/2 lg:flex-col lg:pl-8;
-}
-
-.client-name {
-  @apply text-25 font-medium capitalize;
-}
-
-.address-title {
-  @apply font-medium capitalize;
-}
-
-.badge {
-  @apply flex items-center justify-center rounded-full px-3 text-10 uppercase text-primary-light;
-}
-/*End Client Details Card */
-
-/* Start Chat Card */
-.chat-body {
-  @apply sticky top-0 flex h-[calc(100vh-200px)] w-full flex-col justify-between rounded-3 bg-primary-light py-6;
-}
-
-.chat-message {
-  @apply custom-scrollbar flex flex-col overflow-y-auto px-4;
-}
-
-.chat-input {
-  @apply text-small w-full max-w-full rounded-3 border border-border-primary pb-8 pl-4 pr-24 pt-2 focus:outline-none;
-}
-
-.chat-send-button {
-  @apply absolute right-12 top-1/2 flex h-8 w-8 shrink-0 -translate-y-1/2 items-center justify-center;
-}
-
-.chat-upload-button {
-  @apply absolute right-2 top-1/2 flex h-8 w-8 shrink-0 -translate-y-1/2 items-center justify-center;
-}
-
-/* End Chat Card */

@@ -20,9 +20,12 @@ const Chat = () => {
   }, []);
 
   return (
-    <div className='chat-body'>
+    <div className='sticky top-0 flex h-[calc(100vh-200px)] w-full flex-col justify-between rounded-3 bg-primary-light py-6'>
       {/* Chat Messages Section */}
-      <div ref={messagesEndRef} className='chat-message'>
+      <div
+        ref={messagesEndRef}
+        className='custom-scrollbar flex flex-col overflow-y-auto px-4'
+      >
         {messages.map((message) => (
           <div
             key={message.id}
@@ -47,16 +50,16 @@ const Chat = () => {
           <input
             type='text'
             placeholder='Enter Your Message'
-            className='chat-input'
+            className='text-small w-full max-w-full rounded-3 border border-border-primary pb-8 pl-4 pr-24 pt-2 focus:outline-none'
           />
 
           {/* Send Icon */}
-          <button className='chat-send-button'>
+          <button className='absolute right-12 top-1/2 flex h-8 w-8 shrink-0 -translate-y-1/2 items-center justify-center'>
             <MessageSendIcon />
           </button>
 
           {/* Upload Icon */}
-          <button className='chat-upload-button'>
+          <button className='absolute right-2 top-1/2 flex h-8 w-8 shrink-0 -translate-y-1/2 items-center justify-center'>
             <ImageUploadIcon />
           </button>
         </div>
