@@ -18,19 +18,19 @@ const DatePickerField: React.FC<IDatePickerFieldProps> = ({
 }) => {
   return (
     <div className='flex flex-col'>
-      <div className='relative py-2'>
+      <div>
+        {label && <p className='my-1 text-12 capitalize'>{label}</p>}
         <Controller
           name={name}
           control={control}
           render={({ field: { onChange } }) => (
             <DatePicker
-              className='w-full cursor-pointer px-4 py-6 pb-2'
+              className='w-full cursor-pointer p-2.5'
               onChange={onChange}
               placeholder={placeholder}
             />
           )}
         />
-        {label && <p className='absolute left-4 top-[20%] text-10'>{label}</p>}
       </div>
       {error && (
         <p className='flex items-center gap-1 text-sm text-red-500'>{error}</p>
