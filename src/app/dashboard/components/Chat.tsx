@@ -20,50 +20,45 @@ const Chat = () => {
   }, []);
 
   return (
-    <div className='min-h-screen w-[35%]'>
-      <div className='sticky top-0 flex h-[calc(100vh-200px)] w-full flex-col justify-between rounded-3 bg-primary-light py-6'>
-        {/* Chat Messages Section */}
-        <div
-          ref={messagesEndRef}
-          className='custom-scrollbar flex flex-col overflow-y-auto px-4'
-        >
-          {messages.map((message) => (
-            <div
-              key={message.id}
-              className={`mb-4 flex ${
-                message.sender === 'system'
-                  ? 'items-end justify-end'
-                  : 'items-start'
-              }`}
-            >
-              <div className='max-w-[80%] rounded-lg bg-content p-4'>
-                <p className='text-12'>{message.text}</p>
-                <p className='text-10 text-gray-500'>{message.timestamp}</p>
-              </div>
+    <div className='chat-body'>
+      {/* Chat Messages Section */}
+      <div ref={messagesEndRef} className='chat-message'>
+        {messages.map((message) => (
+          <div
+            key={message.id}
+            className={`mb-4 flex ${
+              message.sender === 'system'
+                ? 'items-end justify-end'
+                : 'items-start'
+            }`}
+          >
+            <div className='max-w-[80%] rounded-lg bg-content p-4'>
+              <p className='text-small'>{message.text}</p>
+              <p className='text-extra-small'>{message.timestamp}</p>
             </div>
-          ))}
-        </div>
-
-        {/* Input Section */}
-        <div className='p-4'>
-          <div className='relative flex w-full items-center'>
-            {/* Input Field */}
-            <input
-              type='text'
-              placeholder='Enter Your Message'
-              className='w-full max-w-full rounded-3 border border-border-primary pb-8 pl-4 pr-24 pt-2 text-sm focus:outline-none'
-            />
-
-            {/* Send Icon */}
-            <button className='absolute right-12 top-1/2 flex h-8 w-8 shrink-0 -translate-y-1/2 items-center justify-center'>
-              <MessageSendIcon />
-            </button>
-
-            {/* Upload Icon */}
-            <button className='absolute right-2 top-1/2 flex h-8 w-8 shrink-0 -translate-y-1/2 items-center justify-center'>
-              <ImageUploadIcon />
-            </button>
           </div>
+        ))}
+      </div>
+
+      {/* Input Section */}
+      <div className='p-4'>
+        <div className='relative flex w-full items-center'>
+          {/* Input Field */}
+          <input
+            type='text'
+            placeholder='Enter Your Message'
+            className='chat-input'
+          />
+
+          {/* Send Icon */}
+          <button className='chat-send-button'>
+            <MessageSendIcon />
+          </button>
+
+          {/* Upload Icon */}
+          <button className='chat-upload-button'>
+            <ImageUploadIcon />
+          </button>
         </div>
       </div>
     </div>

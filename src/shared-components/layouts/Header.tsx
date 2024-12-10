@@ -63,7 +63,7 @@ const Header = () => {
           </div>
 
           <div className='flex justify-center'>
-            <div className='flex cursor-pointer items-center rounded-md text-sm font-medium'>
+            <div className='text-small flex cursor-pointer items-center rounded-md font-medium'>
               <div className='flex gap-4'>
                 <div className='relative flex h-9 w-9 items-center justify-center rounded-full bg-[#191F4B08]'>
                   <span className='absolute'>

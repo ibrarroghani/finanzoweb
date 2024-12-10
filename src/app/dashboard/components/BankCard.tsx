@@ -9,14 +9,12 @@ interface IBankCardProps {
 
 const BankCard: React.FC<IBankCardProps> = ({ title, account, card }) => {
   return (
-    <div className='w-full rounded-5 border border-border-primary bg-primary-light p-4'>
-      <p className='text-18 font-semibold capitalize text-primary-dark'>
-        {title}
-      </p>
-      <p className='text-12 text-muted'>Account: {account}</p>
-      <p className='text-12 text-muted'>Card: {card}</p>
+    <div className='card card-border w-full'>
+      <p className='card-title'>{title}</p>
+      <p className='card-subtitle'>account: {account}</p>
+      <p className='card-subtitle'>card: {card}</p>
       <p>
-        <Link href='#' className='text-12 capitalize text-success underline'>
+        <Link href='#' className='card-link text-success'>
           view statement
         </Link>
       </p>

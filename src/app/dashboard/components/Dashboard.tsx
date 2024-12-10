@@ -66,7 +66,9 @@ const Dashboard = () => {
           </div>
         </div>
 
-        <Chat />
+        <div className='min-h-screen w-[35%]'>
+          <Chat />
+        </div>
       </div>
     </div>
   );

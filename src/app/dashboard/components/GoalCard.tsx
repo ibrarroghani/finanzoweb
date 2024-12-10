@@ -10,11 +10,9 @@ interface IGoalCardProps {
 
 const GoalCard: React.FC<IGoalCardProps> = ({ edit, title }) => {
   return (
-    <div
-      className={`flex flex-col rounded-5 bg-primary-light px-4 ${edit ? '' : 'border border-border-primary'}`}
-    >
-      <div className='flex items-center justify-between border-b border-border-primary py-2'>
-        <p className='text-18 font-bold text-primary-dark'>{title}</p>
+    <div className={`card flex flex-col ${edit ? '' : 'card-border'}`}>
+      <div className='card-border-bottom flex items-center justify-between'>
+        <p className='card-title text-large'>{title}</p>
         <div className='flex gap-3'>
           <CustomBadge text='Active' color='bg-success' />
           {edit && (
@@ -26,12 +24,12 @@ const GoalCard: React.FC<IGoalCardProps> = ({ edit, title }) => {
       </div>
       <div className='flex py-2'>
         <div className='w-1/2'>
-          <p className='my-1 text-12 capitalize'>last payment</p>
-          <p className='my-1 text-18 font-bold text-success'>$200</p>
-          <p className='my-1 text-12 capitalize'>upcoming payment</p>
-          <p className='my-1 text-18 font-bold text-primary-dark'>$200</p>
-          <p className='my-1 text-12 capitalize'>Deadline</p>
-          <p className='my-1 text-15 font-semibold capitalize'>23 may, 2025</p>
+          <p className='card-subtitle'>last payment</p>
+          <p className='card-title text-large text-success'>$200</p>
+          <p className='card-subtitle'>upcoming payment</p>
+          <p className='card-title text-large text-primary-dark'>$200</p>
+          <p className='card-subtitle'>Deadline</p>
+          <p className='card-secondary-subtitle'>23 may, 2025</p>
         </div>
         <div className='reletive flex w-1/2 flex-col items-center justify-center'>
           <Image

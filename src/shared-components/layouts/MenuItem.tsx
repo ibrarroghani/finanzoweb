@@ -38,7 +38,7 @@ const MenuItem = ({ menu }: IMenuItemProps) => {
       className={`flex cursor-pointer items-center rounded-md px-4 py-1 ${active ? 'bg-primary-dark' : 'hover:bg-primary-dark hover:text-primary-light'}`}
     >
       <span
-        className={`text-[10px] lg:text-[14px] ${active && 'text-primary-light'}`}
+        className={`text-small lg:text-small ${active && 'text-primary-light'}`}
       >
         {title}
       </span>
