@@ -44,7 +44,7 @@ const SelectField: React.FC<ISelectFieldProps> = ({
       </div>
 
       {error && (
-        <p className='flex items-center gap-1 py-1 text-sm text-red-400'>
+        <p className='text-small flex items-center gap-1 py-1 text-danger'>
           {error}
         </p>
       )}

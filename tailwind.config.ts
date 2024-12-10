@@ -25,6 +25,7 @@ const config: Config = {
         'primary-dark': 'var(--color-primary-dark)',
         'primary-light': 'var(--color-primary-light)',
         'border-primary': 'var(--color-border)',
+        'border-light': 'var(--color-border-light)',
         'success-light': 'var(--color-success-light)',
       },
       fontSize: {

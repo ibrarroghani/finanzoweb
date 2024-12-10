@@ -19,7 +19,9 @@ const DatePickerField: React.FC<IDatePickerFieldProps> = ({
   return (
     <div className='flex flex-col'>
       <div>
-        {label && <p className='my-1 text-12 capitalize'>{label}</p>}
+        {label && (
+          <p className='text-small my-1 capitalize text-muted'>{label}</p>
+        )}
         <Controller
           name={name}
           control={control}
@@ -33,7 +35,9 @@ const DatePickerField: React.FC<IDatePickerFieldProps> = ({
         />
       </div>
       {error && (
-        <p className='flex items-center gap-1 text-sm text-red-500'>{error}</p>
+        <p className='text-small flex items-center gap-1 text-danger'>
+          {error}
+        </p>
       )}
     </div>
   );
