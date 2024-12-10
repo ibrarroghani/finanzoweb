@@ -76,6 +76,7 @@ const GoalModal: React.FC<IGoalModalProps> = ({
             control={control as unknown as Control<FieldValues>}
             error={formErrors.name?.message}
             label='Goal Name'
+            labelPosition='outside'
           />
           <InputField
             id='amount'
@@ -84,6 +85,7 @@ const GoalModal: React.FC<IGoalModalProps> = ({
             error={formErrors.amount?.message}
             label='Target Amount'
             type='number'
+            labelPosition='outside'
           />
           <InputField
             id='monthlyAmount'
@@ -92,6 +94,7 @@ const GoalModal: React.FC<IGoalModalProps> = ({
             error={formErrors.monthlyAmount?.message}
             label='Monthly Contributions'
             type='number'
+            labelPosition='outside'
           />
 
           <DatePickerField
@@ -101,7 +104,7 @@ const GoalModal: React.FC<IGoalModalProps> = ({
             error={formErrors.date?.message}
           />
 
-          <div className='flex justify-between py-2'>
+          <div className='flex justify-between py-4'>
             <p className='space-x-4'>
               <span className='font-light'>Progress Bar</span>
               <Switch onChange={handleSwitchButtonChange} />
@@ -129,7 +132,7 @@ const GoalModal: React.FC<IGoalModalProps> = ({
               </Radio.Group>
             </div>
           </div>
-          <div className='ml-auto w-32 pt-2'>
+          <div className='ml-auto w-32'>
             <CustomButton type='submit' title='save changes' />
           </div>
         </form>
