@@ -58,6 +58,18 @@ input[type='number'] {
   .text-giant {
     @apply text-32;
   }
+
+  .rounded-extra-small {
+    @apply rounded-3;
+  }
+
+  .rounded-small {
+    @apply rounded-5;
+  }
+
+  .rounded-medium {
+    @apply rounded-10;
+  }
 }
 
 /* End Card component  */
@@ -95,7 +107,7 @@ input[type='number'] {
 /* Start Card component  */
 @layer components {
   .card {
-    @apply rounded-5 bg-primary-light px-4 py-2;
+    @apply rounded-small bg-primary-light px-4 py-2;
   }
   .card-border {
     @apply border border-border-primary;

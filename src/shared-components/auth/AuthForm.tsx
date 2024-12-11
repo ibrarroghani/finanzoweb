@@ -94,7 +94,7 @@ const AuthForm: React.FC<IAuthFormProps> = ({
           {additionalLink && <AdditionalLink {...additionalLink} />}
         </div>
 
-        <p className='m-10 mb-2 text-12 capitalize'>
+        <p className='text-small m-10 mb-2 capitalize'>
           &copy; 2024 Finanzo. crafted by finanzo
         </p>
       </div>
@@ -120,12 +120,12 @@ const FormHeader: React.FC<{
   subDescription?: string;
 }> = ({ title, description, subDescription }) => (
   <div className='flex flex-col items-center justify-center'>
-    <h6 className='text-25 font-black text-primary-dark'>{title}</h6>
-    <p className='mt-2 text-12 capitalize'>{description}</p>
+    <h6 className='text-extra-large font-black text-primary-dark'>{title}</h6>
+    <p className='text-small mt-2 capitalize'>{description}</p>
     {subDescription && (
       <div className='mt-2 flex items-center gap-3'>
         <div className='w-24 border-b border-b-border-primary' />
-        <p className='text-12 capitalize'>{subDescription}</p>
+        <p className='text-small capitalize'>{subDescription}</p>
         <div className='w-24 border-b border-b-border-primary' />
       </div>
     )}
@@ -154,8 +154,8 @@ const InputFieldWrapper: React.FC<{
 
 const RememberMe: React.FC = () => (
   <div className='my-2 flex w-full justify-between md:w-1/2'>
-    <Checkbox className='text-12'>Remember Me</Checkbox>
-    <Link className='text-12' href='/forget-password'>
+    <Checkbox className='text-small'>Remember Me</Checkbox>
+    <Link className='text-small' href='/forget-password'>
       Forget Password?
     </Link>
   </div>
@@ -167,8 +167,8 @@ const AdditionalLink: React.FC<{
   linkText: string;
 }> = ({ text, href, linkText }) => (
   <div className='mt-2 flex items-center justify-center'>
-    <p className='text-12 capitalize'>{text}</p>
-    <Link href={href} className='ml-1 text-12 font-bold'>
+    <p className='text-small capitalize'>{text}</p>
+    <Link href={href} className='text-small ml-1 font-bold'>
       {linkText}
     </Link>
   </div>

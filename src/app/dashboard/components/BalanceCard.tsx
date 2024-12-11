@@ -13,11 +13,11 @@ const BalanceCard: React.FC<IBalanceCardProps> = ({ title, amount, rate }) => {
     <div className='card w-full'>
       <p className='card-secondary-subtitle text-muted'>{title}</p>
       <p className='card-title text-huge text-primary-dark'>{amount}</p>
-      <p className='my-2 flex w-fit items-center rounded-3 bg-success-light px-2.5'>
+      <p className='rounded-extra-small my-2 flex w-fit items-center bg-success-light px-2.5'>
         <span className='mr-1'>
           <UpArrowIcon />
         </span>
-        <span className='text-15'>{rate}</span>
+        <span className='text-medium'>{rate}</span>
       </p>
       <p>
         <Link href='#' className='card-link text-success'>

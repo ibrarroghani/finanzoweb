@@ -49,7 +49,7 @@ const Setting = () => {
     <div className='p-4'>
       <ClientDetailsCard />
       <div className='mt-6 flex justify-between'>
-        <p className='text-18 font-semibold capitalize'>settings</p>
+        <p className='text-large font-semibold capitalize'>settings</p>
         <div className='w-40'>
           <CustomButton
             onClick={handleSubmit(handleUpdateProfile)}
@@ -60,7 +60,7 @@ const Setting = () => {
 
       <div className='mt-6 flex flex-col gap-2 md:flex-row md:items-start'>
         <div className='md:flex-1'>
-          <div className='rounded-5 bg-primary-light p-4'>
+          <div className='rounded-small bg-primary-light p-4'>
             <p>Personal Information</p>
             <div className='md:flex md:gap-2'>
               <div className='md:w-1/2'>
@@ -107,7 +107,7 @@ const Setting = () => {
               ]}
             />
           </div>
-          <div className='mt-4 rounded-5 bg-primary-light p-4'>
+          <div className='rounded-small mt-4 bg-primary-light p-4'>
             <p>Contact Details</p>
             <InputField
               id='email'
@@ -128,7 +128,7 @@ const Setting = () => {
             />
           </div>
         </div>
-        <div className='rounded-5 bg-primary-light p-4'>
+        <div className='rounded-small bg-primary-light p-4'>
           <p className='capitalize'>broker license information</p>
           <InputField
             id='licenseKey'

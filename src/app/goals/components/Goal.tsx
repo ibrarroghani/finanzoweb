@@ -38,7 +38,7 @@ const Goal = () => {
               ))}
           </div>
           <div className='mt-6 flex justify-between'>
-            <p className='text-18 font-semibold'>Goals</p>
+            <p className='text-large font-semibold'>Goals</p>
             <div className='w-52'>
               <CustomButton
                 onClick={handleCreateGoal}
@@ -58,7 +58,9 @@ const Goal = () => {
           <p className='flex h-12 w-12 items-center justify-center rounded-full bg-primary-light'>
             <NoGoalsIcon />
           </p>
-          <p className='text-18 font-semibold capitalize'> no goals created</p>
+          <p className='text-large font-semibold capitalize'>
+            no goals created
+          </p>
           <p className='text-14 font-light'>
             start by creating a goal to see personalized insights
           </p>

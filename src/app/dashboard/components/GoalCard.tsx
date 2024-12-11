@@ -38,7 +38,7 @@ const GoalCard: React.FC<IGoalCardProps> = ({ edit, title }) => {
             height={100}
             width={100}
           />
-          <p className='pt-1 text-15'>
+          <p className='text-medium pt-1'>
             <span className='font-medium'>$450</span>
             <span>/$500</span>
           </p>

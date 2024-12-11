@@ -8,7 +8,7 @@ interface ICustomBadgeProps {
 const CustomBadge: React.FC<ICustomBadgeProps> = ({ text, color }) => {
   return (
     <div
-      className={`flex items-center justify-center rounded-full px-3 text-10 uppercase text-primary-light ${color}`}
+      className={`text-extra-small flex items-center justify-center rounded-full px-3 uppercase text-primary-light ${color}`}
     >
       {text}
     </div>

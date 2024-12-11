@@ -20,7 +20,7 @@ const CustomButton = ({
       onClick={onClick}
     >
       {icon && <span>{icon}</span>}
-      <span className='text-15'>{title}</span>
+      <span className='text-medium'>{title}</span>
     </button>
   );
 };

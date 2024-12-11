@@ -4,7 +4,7 @@ import { CloseIcon, IdeaIcon } from '@/assets/icons/bussiness-panel-icons';
 
 const RecommendationCard: React.FC = () => {
   return (
-    <div className='flex gap-4 rounded-5 bg-primary-light'>
+    <div className='rounded-small flex gap-4 bg-primary-light'>
       <div className='pl-4 pt-5'>
         <IdeaIcon />
       </div>

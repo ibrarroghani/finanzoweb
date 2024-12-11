@@ -20,7 +20,7 @@ const Chat = () => {
   }, []);
 
   return (
-    <div className='sticky top-0 flex h-[calc(100vh-200px)] w-full flex-col justify-between rounded-3 bg-primary-light py-6'>
+    <div className='rounded-extra-small sticky top-0 flex h-[calc(100vh-200px)] w-full flex-col justify-between bg-primary-light py-6'>
       {/* Chat Messages Section */}
       <div
         ref={messagesEndRef}
@@ -50,7 +50,7 @@ const Chat = () => {
           <input
             type='text'
             placeholder='Enter Your Message'
-            className='text-small w-full max-w-full rounded-3 border border-border-primary pb-8 pl-4 pr-24 pt-2 focus:outline-none'
+            className='text-small rounded-extra-small w-full max-w-full border border-border-primary pb-8 pl-4 pr-24 pt-2 focus:outline-none'
           />
 
           {/* Send Icon */}

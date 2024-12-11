@@ -38,9 +38,9 @@ const config: Config = {
         '32': '2rem',
       },
       borderRadius: {
-        '3': '3px',
-        '5': '5px',
-        '10': '10px',
+        '3': '0.1875rem',
+        '5': '0.3125rem',
+        '10': '0.625rem',
       },
     },
   },
