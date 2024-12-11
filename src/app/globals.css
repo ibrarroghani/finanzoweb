@@ -32,8 +32,8 @@ input[type='number'] {
   -moz-appearance: textfield; /* Firefox */
 }
 
-/* Start font size  */
 @layer utilities {
+  /* Start font size  */
   .text-extra-small {
     @apply text-10;
   }
@@ -62,6 +62,9 @@ input[type='number'] {
     @apply text-32;
   }
 
+  /*End font size  */
+
+  /* Start Border Radious  */
   .rounded-extra-small {
     @apply rounded-3;
   }
@@ -73,9 +76,9 @@ input[type='number'] {
   .rounded-medium {
     @apply rounded-10;
   }
-}
 
-/* End Card component  */
+  /* End Border Radious  */
+}
 
 /* start custom scrollbar  */
 .custom-scrollbar {
