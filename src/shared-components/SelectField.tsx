@@ -26,10 +26,14 @@ const SelectField: React.FC<ISelectFieldProps> = ({
   control,
   disabled,
   value,
+  label,
 }) => {
   return (
     <div className='flex flex-col'>
-      <div>
+      <div className='my-2'>
+        {label && (
+          <p className='text-small my-1 capitalize text-muted'>{label}</p>
+        )}
         <Controller
           name={name}
           control={control}
@@ -40,6 +44,7 @@ const SelectField: React.FC<ISelectFieldProps> = ({
               className='w-full'
               onChange={onChange}
               options={options}
+              size='large'
               defaultValue={value}
             />
           )}

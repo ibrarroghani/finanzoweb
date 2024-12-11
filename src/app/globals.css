@@ -18,6 +18,9 @@
   --color-border-light: #eeeeee;
 
   --color-text-muted: #989898;
+
+  --color-link-primary: #3fa75a;
+  --color-link-secondary: #155eef;
 }
 
 input[type='number']::-webkit-outer-spin-button,

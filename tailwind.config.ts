@@ -27,6 +27,8 @@ const config: Config = {
         'border-primary': 'var(--color-border)',
         'border-light': 'var(--color-border-light)',
         'success-light': 'var(--color-success-light)',
+        'link-primary': 'var(--color-link-primary)',
+        'link-secondary': 'var(--color-link-secondary)',
       },
       fontSize: {
         '10': '0.625rem',

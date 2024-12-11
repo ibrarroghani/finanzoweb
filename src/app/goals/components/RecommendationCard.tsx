@@ -9,12 +9,19 @@ const RecommendationCard: React.FC = () => {
         <IdeaIcon />
       </div>
       <div className='mt-3'>
-        <p>Recommendation</p>
+        <p className='text-medium font-semibold text-primary-dark'>
+          Recommendation
+        </p>
         <p>
-          Increase monthly savings by <strong>$200</strong> to meet target date
+          Increase monthly savings by{' '}
+          <span className='font-bold text-success'>$200</span> to meet target
+          date
         </p>
         <p className='my-3'>
-          <Link href='#' className='my-2 text-success'>
+          <Link
+            href='#'
+            className='text-link-secondary text-small my-2 font-medium capitalize'
+          >
             Learn More
           </Link>
         </p>

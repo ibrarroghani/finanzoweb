@@ -20,7 +20,7 @@ const BalanceCard: React.FC<IBalanceCardProps> = ({ title, amount, rate }) => {
         <span className='text-medium'>{rate}</span>
       </p>
       <p>
-        <Link href='#' className='card-link text-success'>
+        <Link href='#' className='card-link text-link-primary'>
           view statement
         </Link>
       </p>

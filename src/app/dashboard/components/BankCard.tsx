@@ -14,7 +14,7 @@ const BankCard: React.FC<IBankCardProps> = ({ title, account, card }) => {
       <p className='card-subtitle'>account: {account}</p>
       <p className='card-subtitle'>card: {card}</p>
       <p>
-        <Link href='#' className='card-link text-success'>
+        <Link href='#' className='card-link text-link-secondary'>
           view statement
         </Link>
       </p>
