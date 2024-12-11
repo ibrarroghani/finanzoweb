@@ -22,7 +22,7 @@ const ClientCard: React.FC<IClientCardProps> = ({ name, status, onClick }) => {
           <p className='truncate font-semibold text-primary-dark'>{name}</p>
           {status && (
             <div className='flex items-start'>
-              <CustomBadge text='Active' color='#3FA75A' />
+              <CustomBadge text='Active' color='bg-success' />
             </div>
           )}
         </div>

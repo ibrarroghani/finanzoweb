@@ -17,6 +17,7 @@ interface IInputFieldProps {
   control: Control<FieldValues>;
   readonly?: boolean;
   icon?: React.ReactNode;
+  labelPosition?: 'inside' | 'outside';
 }
 
 const InputField: React.FC<IInputFieldProps> = ({
@@ -29,6 +30,7 @@ const InputField: React.FC<IInputFieldProps> = ({
   label,
   readOnly,
   icon,
+  labelPosition = 'inside',
 }) => {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -39,6 +41,17 @@ const InputField: React.FC<IInputFieldProps> = ({
   return (
     <div className='relative flex flex-col'>
       <div className='relative py-2'>
+        {/* Render label or icon based on props */}
+        {icon ? (
+          <span className='absolute left-3 top-[35%] mr-5'>{icon}</span>
+        ) : labelPosition === 'inside' ? (
+          <p className='text-extra-small absolute left-4 top-[20%] text-muted'>
+            {label}
+          </p>
+        ) : (
+          <p className='text-small my-1 capitalize text-muted'>{label}</p>
+        )}
+
         <Controller
           name={name}
           control={control}
@@ -50,31 +63,24 @@ const InputField: React.FC<IInputFieldProps> = ({
               placeholder={placeholder}
               value={value}
               onChange={onChange}
-              className={`${icon ? 'py-2 pl-8 pr-4' : 'px-4 py-6 pb-2'} no-spinner block w-full max-w-full rounded-md border border-[#eeeeee] bg-primary-light text-15 text-gray-900 placeholder-gray-400 focus:outline-1 focus:outline-green-300`}
+              className={`${icon ? 'py-2 pl-8 pr-4' : labelPosition === 'outside' ? 'p-2.5' : 'px-4 py-6 pb-2'} no-spinner border-border-light text-medium block w-full max-w-full rounded-md border bg-primary-light text-primary-dark placeholder-muted focus:outline-1 focus:outline-success`}
             />
           )}
         />
 
-        {/* Render label or icon based on props */}
-        {icon ? (
-          <span className='absolute left-3 top-[35%] mr-5 text-gray-500'>
-            {icon}
-          </span>
-        ) : (
-          <p className='absolute left-4 top-[20%] text-10'>{label}</p>
-        )}
-
         {type === 'password' && (
           <span
             onClick={togglePasswordVisibility}
-            className='absolute inset-y-0 right-3 flex cursor-pointer items-center text-gray-600'
+            className='absolute inset-y-0 right-3 flex cursor-pointer items-center'
           >
             {showPassword ? <EyeOpenIcon /> : <EyeCloseIcon />}{' '}
           </span>
         )}
       </div>
       {error !== undefined ? (
-        <p className='flex items-center gap-1 text-sm text-red-400'>{error}</p>
+        <p className='text-small flex items-center gap-1 text-danger'>
+          {error}
+        </p>
       ) : (
         ''
       )}

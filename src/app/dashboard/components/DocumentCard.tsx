@@ -7,8 +7,10 @@ import React from 'react';
 
 const DocumentCard = () => {
   return (
-    <div className='mt-2 flex w-full justify-between rounded-5 border border-border-primary bg-primary-light p-4'>
-      <p className='text-18 font-semibold text-primary-dark'>Document Name</p>
+    <div className='rounded-small mt-2 flex w-full justify-between border border-border-primary bg-primary-light p-4'>
+      <p className='text-large font-semibold text-primary-dark'>
+        Document Name
+      </p>
       <div className='flex gap-4'>
         <span className='flex h-8 w-8 items-center justify-center rounded-full bg-content'>
           <EditIcon />

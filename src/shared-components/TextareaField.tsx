@@ -35,7 +35,9 @@ const TextareaField: React.FC<ITextareaFieldProps> = ({
         />
       </div>
       {error && (
-        <p className='flex items-center gap-1 text-sm text-red-500'>{error}</p>
+        <p className='text-small flex items-center gap-1 text-danger'>
+          {error}
+        </p>
       )}
     </div>
   );

@@ -10,6 +10,9 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      screens: {
+        md: '796px',
+      },
       colors: {
         content: 'var(--color-bg-content)',
         card: 'var(--color-bg-card)',
@@ -22,20 +25,24 @@ const config: Config = {
         'primary-dark': 'var(--color-primary-dark)',
         'primary-light': 'var(--color-primary-light)',
         'border-primary': 'var(--color-border)',
+        'border-light': 'var(--color-border-light)',
         'success-light': 'var(--color-success-light)',
+        'link-primary': 'var(--color-link-primary)',
+        'link-secondary': 'var(--color-link-secondary)',
       },
       fontSize: {
-        '10': '10px',
-        '12': '12px',
-        '15': '15px',
-        '18': '18px',
-        '25': '25px',
-        '28': '28px',
+        '10': '0.625rem',
+        '12': '0.75rem',
+        '15': '0.9375rem',
+        '18': '1.125rem',
+        '25': '1.5625rem',
+        '28': '1.75rem',
+        '32': '2rem',
       },
       borderRadius: {
-        '3': '3px',
-        '5': '5px',
-        '10': '10px',
+        '3': '0.1875rem',
+        '5': '0.3125rem',
+        '10': '0.625rem',
       },
     },
   },

@@ -6,6 +6,7 @@ interface IDatePickerFieldProps {
   name: string;
   error?: string;
   control: Control<FieldValues>;
+  label?: string;
 }
 
 const DatePickerField: React.FC<IDatePickerFieldProps> = ({
@@ -13,16 +14,20 @@ const DatePickerField: React.FC<IDatePickerFieldProps> = ({
   name,
   error,
   control,
+  label,
 }) => {
   return (
     <div className='flex flex-col'>
       <div>
+        {label && (
+          <p className='text-small my-1 capitalize text-muted'>{label}</p>
+        )}
         <Controller
           name={name}
           control={control}
           render={({ field: { onChange } }) => (
             <DatePicker
-              className='w-full'
+              className='w-full cursor-pointer p-2.5'
               onChange={onChange}
               placeholder={placeholder}
             />
@@ -30,7 +35,9 @@ const DatePickerField: React.FC<IDatePickerFieldProps> = ({
         />
       </div>
       {error && (
-        <p className='flex items-center gap-1 text-sm text-red-500'>{error}</p>
+        <p className='text-small flex items-center gap-1 text-danger'>
+          {error}
+        </p>
       )}
     </div>
   );

@@ -1,11 +1,14 @@
 import React from 'react';
 
-//eslint-disable-next-line
-const CustomBadge = ({ text, color }: any) => {
+interface ICustomBadgeProps {
+  text: string;
+  color: string;
+}
+
+const CustomBadge: React.FC<ICustomBadgeProps> = ({ text, color }) => {
   return (
     <div
-      style={{ backgroundColor: color }}
-      className='flex items-center justify-center rounded-full px-3 text-[10px] uppercase text-primary-light'
+      className={`text-extra-small flex items-center justify-center rounded-full px-3 uppercase text-primary-light ${color}`}
     >
       {text}
     </div>

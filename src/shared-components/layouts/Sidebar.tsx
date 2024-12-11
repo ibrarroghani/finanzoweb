@@ -35,8 +35,8 @@ const Sidebar = () => {
       <div className='-mx-2 mb-3 border-b border-b-border-primary'>
         <div className='flex flex-col px-6 py-2'>
           <div className='flex items-center justify-between'>
-            <p className='text-15 font-semibold'>Client List</p>
-            <p className='text-10'>Total Client: 10</p>
+            <p className='text-medium font-semibold'>Client List</p>
+            <p className='text-extra-small'>Total Client: 10</p>
           </div>
 
           <InputField

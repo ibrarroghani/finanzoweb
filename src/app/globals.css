@@ -15,8 +15,12 @@
   --color-success: #3fa75a;
   --color-success-light: #3fa75a1a;
   --color-border: #e6e6e6;
+  --color-border-light: #eeeeee;
 
   --color-text-muted: #989898;
+
+  --color-link-primary: #3fa75a;
+  --color-link-secondary: #155eef;
 }
 
 input[type='number']::-webkit-outer-spin-button,
@@ -29,25 +33,105 @@ input[type='number'] {
 }
 
 @layer utilities {
-  .custom-scrollbar {
-    @apply scrollbar-track-border-primary scrollbar-thumb-content scrollbar-track-rounded-full scrollbar-thumb-rounded-full;
-
-    /* Custom properties for thinner scrollbar */
-    scrollbar-width: 4px; /* For Firefox */
+  /* Start font size  */
+  .text-extra-small {
+    @apply text-10;
   }
 
-  .custom-scrollbar::-webkit-scrollbar {
-    width: 4px; /* For WebKit browsers */
-    height: 4px;
+  .text-small {
+    @apply text-12;
   }
 
-  .custom-scrollbar::-webkit-scrollbar-track {
-    background: var(--color-border-primary); /* Track color */
-    border-radius: 9999px;
+  .text-medium {
+    @apply text-15;
   }
 
-  .custom-scrollbar::-webkit-scrollbar-thumb {
-    background: var(--color-bg-content); /* Thumb color */
-    border-radius: 9999px;
+  .text-large {
+    @apply text-18;
+  }
+
+  .text-extra-large {
+    @apply text-25;
+  }
+
+  .text-huge {
+    @apply text-28;
+  }
+
+  .text-giant {
+    @apply text-32;
+  }
+
+  /*End font size  */
+
+  /* Start Border Radious  */
+  .rounded-extra-small {
+    @apply rounded-3;
+  }
+
+  .rounded-small {
+    @apply rounded-5;
+  }
+
+  .rounded-medium {
+    @apply rounded-10;
+  }
+
+  /* End Border Radious  */
+}
+
+/* start custom scrollbar  */
+.custom-scrollbar {
+  @apply scrollbar-track-border-primary scrollbar-thumb-content scrollbar-track-rounded-full scrollbar-thumb-rounded-full;
+  /* Custom properties for thinner scrollbar */
+  scrollbar-width: 4px; /* For Firefox */
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px; /* For WebKit browsers */
+  height: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: var(--color-border-primary); /* Track color */
+  border-radius: 9999px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--color-bg-content); /* Thumb color */
+  border-radius: 9999px;
+}
+/* End custom scrollbar  */
+
+/* Start antd design radio button */
+.ant-radio-button-wrapper-checked {
+  background-color: #202020 !important;
+  color: white !important;
+}
+/* End antd design radio button */
+
+/* Start Card component  */
+@layer components {
+  .card {
+    @apply rounded-small bg-primary-light px-4 py-2;
+  }
+  .card-border {
+    @apply border border-border-primary;
+  }
+  .card-border-bottom {
+    @apply border-b border-border-primary;
+  }
+  .card-title {
+    @apply my-1 font-bold capitalize;
+  }
+  .card-subtitle {
+    @apply text-small my-1 capitalize text-muted;
+  }
+  .card-secondary-subtitle {
+    @apply text-medium my-1 font-semibold capitalize;
+  }
+  .card-link {
+    @apply text-12 capitalize underline;
   }
 }
+/* End Card component  */
