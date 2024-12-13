@@ -28,7 +28,6 @@ const Sidebar = () => {
 
   const submitHandler = useCallback(
     (data: IFormData) => {
-      console.log('data', data);
       const results = users.filter((item) =>
         item.name.toLowerCase().includes(data?.search?.toLowerCase())
       );
