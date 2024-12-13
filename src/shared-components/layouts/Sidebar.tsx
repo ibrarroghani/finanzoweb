@@ -8,22 +8,10 @@ import {
   ClientAddIcon,
   SearchIcon,
 } from '@/assets/icons/bussiness-panel-icons';
+import { clientData } from '@/utils/dummy-data';
 
 const Sidebar = () => {
   const { control } = useForm();
-
-  const clients = [
-    { id: 1, name: 'mithun Rahman shikhon', status: true },
-    { id: 2, name: 'mithun', status: true },
-    { id: 3, name: 'mithun', status: true },
-    { id: 4, name: 'mithun', status: true },
-    { id: 5, name: 'mithun', status: true },
-    { id: 6, name: 'mithun', status: true },
-    { id: 7, name: 'mithun', status: true },
-    { id: 8, name: 'mithun', status: true },
-    { id: 9, name: 'mithun', status: true },
-    { id: 10, name: 'mithun', status: true },
-  ];
 
   const handleCard = () => {
     //eslint-disable-next-line
@@ -51,7 +39,7 @@ const Sidebar = () => {
       </div>
 
       <div className='custom-scrollbar h-[calc(100%-100px)] flex-1 overflow-y-auto px-3'>
-        {clients.map((client) => (
+        {clientData.map((client) => (
           <ClientCard
             key={client.id}
             name={client.name}
