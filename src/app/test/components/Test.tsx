@@ -7,6 +7,7 @@ import { useForm, Control, FieldValues } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import CustomButton from '@/shared-components/CustomButton';
+import DoughnutChart from '@/shared-components/chart/DoughnutChart';
 
 const testValidationSchema = yup.object().shape({
   firstName: yup
@@ -115,6 +116,13 @@ const Test = () => {
           <CustomButton title='submit' />
         </div>
       </form>
+
+      <div className='w-32'>
+        <DoughnutChart
+          data={[80, 20]}
+          backgroundColor={['#3fa75a', '#34A8531A']}
+        />
+      </div>
     </div>
   );
 };

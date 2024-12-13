@@ -3,10 +3,18 @@ import React from 'react';
 import ClientDetailsCard from './ClientDetailsCard';
 import BalanceCard from './BalanceCard';
 import BankCard from './BankCard';
-import GoalCard from './GoalCard';
+
+import {
+  goalData,
+  bankData,
+  balanceData,
+  documentData,
+} from '@/utils/dummy-data';
 
 import DocumentCard from './DocumentCard';
 import Chat from './Chat';
+import Section from './Section';
+import GoalCard from '@/app/goals/components/GoalCard';
 
 const Dashboard = () => {
   return (
@@ -14,56 +22,49 @@ const Dashboard = () => {
       <ClientDetailsCard />
       <div className='mt-6 flex gap-4'>
         <div className='w-[65%]'>
-          <div className='flex gap-4'>
-            <BalanceCard title='balance' amount='$12000' rate='12.5%' />
-            <BalanceCard title='income' amount='$12000' rate='12.5%' />
-            <BalanceCard title='expense' amount='$12000' rate='12.5%' />
-          </div>
-          <div className='mt-6 flex flex-col gap-4 lg:flex-row'>
+          {/* Balance Card */}
+          <Section className='grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3'>
+            {balanceData.map((balance) => (
+              <Section.Item key={balance.id}>
+                <BalanceCard balanceData={balance} />
+              </Section.Item>
+            ))}
+          </Section>
+
+          <div className='mt-2 flex flex-col gap-4 lg:flex-row'>
             {/* Linked Account */}
-            <div className='rounded-extra-small w-full bg-primary-light px-2 py-4 lg:w-1/2'>
-              <div className='custom-scrollbar flex h-[500px] w-full flex-col gap-2 overflow-y-auto px-3'>
-                <p>Linked Account</p>
-                <BankCard
-                  title='bank name'
-                  account='1234567890'
-                  card='123433332'
-                />
-                <BankCard
-                  title='bank name'
-                  account='1234567890'
-                  card='123433332'
-                />
-                <BankCard
-                  title='bank name'
-                  account='1234567890'
-                  card='123433332'
-                />
-                <BankCard
-                  title='bank name'
-                  account='1234567890'
-                  card='123433332'
-                />
-              </div>
-            </div>
+            <Section title='Linked Accounts' className='lg:w-1/2'>
+              <Section.Scrollable>
+                {bankData.map((bank) => (
+                  <Section.Item key={bank.id}>
+                    <BankCard bankData={bank} />
+                  </Section.Item>
+                ))}
+              </Section.Scrollable>
+            </Section>
 
             {/* Goals */}
-            <div className='rounded-extra-small w-full bg-primary-light px-2 py-4 lg:w-1/2'>
-              <div className='custom-scrollbar flex h-[500px] w-full flex-col gap-2 overflow-y-auto px-3'>
-                <p>Goals</p>
-                <GoalCard title='SIP Goals' />
-                <GoalCard title='SIP Goals' />
-                <GoalCard title='SIP Goals' />
-                <GoalCard title='SIP Goals' />
-              </div>
-            </div>
+            <Section title='Goals' className='lg:w-1/2'>
+              <Section.Scrollable>
+                {goalData.length > 0 &&
+                  goalData.map((goal) => (
+                    <Section.Item key={goal.id}>
+                      <GoalCard goal={goal} />
+                    </Section.Item>
+                  ))}
+              </Section.Scrollable>
+            </Section>
           </div>
-          <div className='rounded-extra-small mt-6 bg-primary-light p-2'>
-            <p>Client Documents</p>
-            <DocumentCard />
-            <DocumentCard />
-            <DocumentCard />
-          </div>
+
+          {/* Documents */}
+          <Section title='Client Documents' className='mt-6'>
+            {documentData.length > 0 &&
+              documentData.map((document) => (
+                <Section.Item key={document.id}>
+                  <DocumentCard data={document} />
+                </Section.Item>
+              ))}
+          </Section>
         </div>
 
         <div className='min-h-screen w-[35%]'>

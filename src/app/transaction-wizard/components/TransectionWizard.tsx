@@ -1,6 +1,6 @@
 import React from 'react';
 
-const TransectionWizard = () => {
+const TransactionWizard = () => {
   return (
     <div className='mt-10 flex items-center justify-center'>
       Under Development
@@ -8,4 +8,4 @@ const TransectionWizard = () => {
   );
 };
 
-export default TransectionWizard;
+export default TransactionWizard;

@@ -19,7 +19,7 @@ const ImageSlider: React.FC<IImageSliderProps> = ({ images }) => {
             width={defaultWidth}
             height={defaultHeight}
             className='h-full w-full'
-            priority={index === 0}
+            priority={true}
           />
         </div>
       ))}

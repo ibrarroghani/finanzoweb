@@ -1,11 +1,11 @@
 import React from 'react';
-import TransectionWizard from './components/TransectionWizard';
+import TransactionWizard from './components/TransectionWizard';
 import DashboardLayout from '@/shared-components/layouts/DashboardLayout';
 
 const page = () => {
   return (
     <DashboardLayout>
-      <TransectionWizard />
+      <TransactionWizard />
     </DashboardLayout>
   );
 };

@@ -2,13 +2,17 @@ import { UpArrowIcon } from '@/assets/icons/bussiness-panel-icons';
 import Link from 'next/link';
 import React from 'react';
 
-interface IBalanceCardProps {
+interface IBalance {
   title: string;
   amount: string;
   rate: string;
 }
+interface IBalanceCardProps {
+  balanceData: IBalance;
+}
 
-const BalanceCard: React.FC<IBalanceCardProps> = ({ title, amount, rate }) => {
+const BalanceCard: React.FC<IBalanceCardProps> = ({ balanceData }) => {
+  const { title, amount, rate } = balanceData;
   return (
     <div className='card w-full'>
       <p className='card-secondary-subtitle text-muted'>{title}</p>

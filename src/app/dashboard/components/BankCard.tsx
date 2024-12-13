@@ -1,13 +1,17 @@
 import Link from 'next/link';
 import React from 'react';
 
-interface IBankCardProps {
+interface IBankData {
   title: string;
   account: string;
   card: string;
 }
+interface IBankCardProps {
+  bankData: IBankData;
+}
 
-const BankCard: React.FC<IBankCardProps> = ({ title, account, card }) => {
+const BankCard: React.FC<IBankCardProps> = ({ bankData }) => {
+  const { title, account, card } = bankData;
   return (
     <div className='card card-border w-full'>
       <p className='card-title'>{title}</p>

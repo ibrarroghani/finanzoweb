@@ -5,20 +5,29 @@ import {
 } from '@/assets/icons/bussiness-panel-icons';
 import React from 'react';
 
-const DocumentCard = () => {
+interface IDocument {
+  id: number;
+  title: string;
+}
+
+interface IDocumentCardProps {
+  data: IDocument;
+}
+
+const DocumentCard: React.FC<IDocumentCardProps> = ({ data }) => {
+  const { title } = data;
+
   return (
-    <div className='rounded-small mt-2 flex w-full justify-between border border-border-primary bg-primary-light p-4'>
-      <p className='text-large font-semibold text-primary-dark'>
-        Document Name
-      </p>
+    <div className='card card-border mt-2 flex w-full justify-between p-4'>
+      <p className='text-large card-title'>{title}</p>
       <div className='flex gap-4'>
-        <span className='flex h-8 w-8 items-center justify-center rounded-full bg-content'>
+        <span className='document-icon'>
           <EditIcon />
         </span>
-        <span className='flex h-8 w-8 items-center justify-center rounded-full bg-content'>
+        <span className='document-icon'>
           <ReadingIcon />
         </span>
-        <span className='flex h-8 w-8 items-center justify-center rounded-full bg-content'>
+        <span className='document-icon'>
           <DownloadIcon />
         </span>
       </div>

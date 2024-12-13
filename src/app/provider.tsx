@@ -8,6 +8,7 @@ import { ConfigProvider } from 'antd';
 import { QueryClientProvider } from '@tanstack/react-query';
 import queryClient from '@/config/api/clients/query-client';
 import { PersistGate } from 'redux-persist/integration/react';
+import ChartProvider from '@/shared-components/chart/ChartProvider';
 
 const ProviderWrapper = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -16,7 +17,9 @@ const ProviderWrapper = ({ children }: { children: React.ReactNode }) => {
         <Provider store={store}>
           <PersistGate loading={null} persistor={persistStores}>
             <ConfigProvider wave={{ disabled: true }}>
-              <AntdRegistry>{children}</AntdRegistry>
+              <ChartProvider>
+                <AntdRegistry>{children}</AntdRegistry>
+              </ChartProvider>
             </ConfigProvider>
           </PersistGate>
         </Provider>

@@ -32,6 +32,18 @@ input[type='number'] {
   -moz-appearance: textfield; /* Firefox */
 }
 
+/* Disable the default "eye" icon Edge or Internet Explorer */
+input[type='password']::-ms-reveal,
+input[type='password']::-ms-clear {
+  display: none;
+}
+
+/* Disable the default "eye" icon in Safari */
+input[type='password'] {
+  -webkit-text-security: disc; /* Ensures Safari uses "dots" for password */
+  appearance: none; /* Removes default styling like the eye icon */
+}
+
 @layer utilities {
   /* Start font size  */
   .text-extra-small {
@@ -135,3 +147,11 @@ input[type='number'] {
   }
 }
 /* End Card component  */
+
+/* Start Document Card component  */
+
+.document-icon {
+  @apply flex h-8 w-8 items-center justify-center rounded-full bg-content;
+}
+
+/* End Document Card component  */

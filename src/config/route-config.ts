@@ -26,9 +26,9 @@ export const MENU_ITEM_ROUTE = [
   {
     id: 4,
     permission: [],
-    title: 'Transection Wizard',
+    title: 'Transaction Wizard',
     icon: '',
-    url: '/transection-wizard',
+    url: '/transaction-wizard',
     showable: true,
   },
   {
