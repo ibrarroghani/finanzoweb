@@ -15,10 +15,12 @@ import DocumentCard from './DocumentCard';
 import Chat from './Chat';
 import Section from './Section';
 import GoalCard from '@/app/goals/components/GoalCard';
+import CustomAlert from './CustomAlert';
 
 const Dashboard = () => {
   return (
     <div className='p-4'>
+      <CustomAlert />
       <ClientDetailsCard />
       <div className='mt-6 flex gap-4'>
         <div className='w-[65%]'>

@@ -20,7 +20,7 @@ const Chat = () => {
   }, []);
 
   return (
-    <div className='rounded-extra-small sticky top-0 flex h-[calc(100vh-200px)] w-full flex-col justify-between bg-primary-light py-6'>
+    <div className='rounded-extra-small sticky top-0 flex h-[calc(100vh-230px)] w-full flex-col justify-between bg-primary-light py-6'>
       {/* Chat Messages Section */}
       <div
         ref={messagesEndRef}
