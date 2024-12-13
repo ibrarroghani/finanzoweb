@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import ClientCard from '@/app/dashboard/components/ClientCard';
 import CustomButton from '../CustomButton';
 import InputField from '../InputField';
@@ -9,14 +9,48 @@ import {
   SearchIcon,
 } from '@/assets/icons/bussiness-panel-icons';
 import { clientData } from '@/utils/dummy-data';
+import { debounce } from 'lodash';
+
+interface IFormData {
+  search: string;
+}
 
 const Sidebar = () => {
-  const { control } = useForm();
+  const [users, setUsers] = useState(clientData);
+  const { control, handleSubmit } = useForm<IFormData>({
+    defaultValues: { search: '' },
+  });
 
   const handleCard = () => {
     //eslint-disable-next-line
     console.log('Card is clicked');
   };
+
+  const submitHandler = useCallback(
+    (data: IFormData) => {
+      console.log('data', data);
+      const results = users.filter((item) =>
+        item.name.toLowerCase().includes(data?.search?.toLowerCase())
+      );
+      setUsers(results);
+    },
+    //eslint-disable-next-line
+    []
+  );
+
+  const debouncedSubmit = useMemo(
+    () =>
+      debounce((data) => {
+        handleSubmit(submitHandler)(data);
+      }, 1000),
+    [handleSubmit, submitHandler]
+  );
+
+  useEffect(() => {
+    return () => {
+      debouncedSubmit.cancel(); // Debounce Cleanup on unmount
+    };
+  }, [debouncedSubmit]);
 
   return (
     <div className='flex w-64 flex-col border-r border-r-border-primary px-2'>
@@ -28,25 +62,30 @@ const Sidebar = () => {
           </div>
 
           <InputField
-            id='firstName'
-            name='firstName'
+            id='search'
+            name='search'
             control={control as unknown as Control<FieldValues>}
             icon={<SearchIcon />}
-            // error={formErrors.firstName?.message}
-            //label='Email'
+            onCustomChange={(value) => debouncedSubmit({ search: value })}
           />
         </div>
       </div>
 
       <div className='custom-scrollbar h-[calc(100%-100px)] flex-1 overflow-y-auto px-3'>
-        {clientData.map((client) => (
-          <ClientCard
-            key={client.id}
-            name={client.name}
-            status={client.status}
-            onClick={handleCard}
-          />
-        ))}
+        {users.length > 0 ? (
+          users.map((client) => (
+            <ClientCard
+              key={client.id}
+              name={client.name}
+              status={client.status}
+              onClick={handleCard}
+            />
+          ))
+        ) : (
+          <div className='text-small text-center font-bold capitalize text-primary-dark'>
+            no user matched
+          </div>
+        )}
       </div>
 
       <div className='-mx-2 border-t border-t-border-primary'>
