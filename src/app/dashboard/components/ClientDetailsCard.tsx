@@ -17,15 +17,13 @@ const ClientDetailsCard: React.FC = () => {
             />
           </div>
           <div className='flex flex-col items-start gap-1.5'>
-            <p className='text-extra-large font-medium capitalize'>
-              client name
-            </p>
+            <p className='text-extra-large font-medium capitalize'>Jhon Doe</p>
             <CustomBadge text='Active' color='bg-success' />
           </div>
         </div>
         <div className='text-medium mt-2 flex flex-col font-medium lg:mt-0 lg:pr-8'>
           <p>Phone: +3840595859959</p>
-          <p>Email: client@gmail.com</p>
+          <p>Email: jhondoe@gmail.com</p>
         </div>
       </div>
       <div className='text-medium flex gap-1 lg:w-1/2 lg:flex-col lg:pl-8'>

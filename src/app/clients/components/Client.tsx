@@ -1,9 +1,19 @@
-import React from 'react';
+'use client';
+import React, { useState } from 'react';
+import ClientModal from './ClientModal';
 
 const Client = () => {
+  const [showModal, setShowModal] = useState(true);
+  const handleToggleModal = () => {
+    setShowModal(!showModal);
+  };
   return (
-    <div className='mt-10 flex items-center justify-center'>
-      Under Development
+    <div className=''>
+      <ClientModal
+        showModal={showModal}
+        setShowModal={handleToggleModal}
+        title='Search Client'
+      />
     </div>
   );
 };

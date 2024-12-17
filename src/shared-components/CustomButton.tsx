@@ -1,7 +1,7 @@
 import React from 'react';
 
 interface IButtonProps {
-  title: string;
+  title?: string;
   icon?: React.ReactNode;
   type?: 'button' | 'submit' | 'reset';
   onClick?: () => void;
@@ -22,7 +22,7 @@ const CustomButton = ({
       onClick={onClick}
     >
       {icon && <span>{icon}</span>}
-      <span className='text-medium'>{title}</span>
+      {title && <span className='text-medium'>{title}</span>}
     </button>
   );
 };
