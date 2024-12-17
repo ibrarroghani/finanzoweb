@@ -18,7 +18,7 @@ const Header = () => {
 
   const items = [
     {
-      label: <Link href='#'>Logout</Link>,
+      label: <Link href='/login'>Logout</Link>,
       key: '1',
       onClick: handleLogout,
     },
