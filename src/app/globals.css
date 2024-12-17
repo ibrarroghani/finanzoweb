@@ -115,12 +115,62 @@ input[type='password'] {
 }
 /* End custom scrollbar  */
 
-/* Start antd design radio button */
+/* Start antd Custom Design */
 .ant-radio-button-wrapper-checked {
   background-color: #202020 !important;
   color: white !important;
 }
-/* End antd design radio button */
+
+.ant-select-selector {
+  border: 1px solid #eeeeee !important;
+  border-radius: 6px;
+}
+
+/* Target the hover state */
+.ant-select:hover {
+  border-color: #3fa75a !important;
+  box-shadow: 0 0 0 1px #3fa75a !important;
+  border-radius: 6px;
+}
+
+/* Target the focus state */
+.ant-select-focused {
+  border-color: #3fa75a !important;
+  box-shadow: 0 0 0 1px #3fa75a !important;
+  border-radius: 6px;
+}
+
+/* Default state */
+.ant-picker {
+  border: 1px solid #eeeeee !important;
+}
+
+.ant-picker:hover {
+  border-color: #3fa75a !important;
+  box-shadow: 0 0 0 1px #3fa75a !important;
+}
+
+/* Focus state */
+.ant-picker-focused {
+  border-color: #3fa75a !important;
+  box-shadow: 0 0 0 1px #3fa75a !important;
+}
+
+.ant-picker-active {
+  border-color: #3fa75a !important;
+  box-shadow: 0 0 0 1px #3fa75a !important;
+}
+
+.ant-picker:not(.ant-picker-focused):hover {
+  border-color: #3fa75a !important;
+  box-shadow: 0 0 0 1px #3fa75a !important;
+}
+
+.ant-picker:not(.ant-picker-focused):not(:hover) {
+  border-color: #eeeeee !important;
+}
+
+/* End antd Custom Design */
 
 /* Start Card component  */
 @layer components {

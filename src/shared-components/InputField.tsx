@@ -70,7 +70,7 @@ const InputField: React.FC<IInputFieldProps> = ({
                 onChange(newValue); // Update form state
                 onCustomChange?.(newValue); // Trigger custom logic
               }}
-              className={`${icon ? 'py-2 pl-8 pr-4' : labelPosition === 'outside' ? 'p-2.5' : 'px-4 py-6 pb-2'} no-spinner text-medium block w-full max-w-full rounded-md border border-border-light bg-primary-light text-primary-dark placeholder-muted focus:outline-1 focus:outline-success`}
+              className={`${icon ? 'py-2 pl-8 pr-4' : labelPosition === 'outside' ? 'p-2.5' : 'px-4 py-6 pb-2'} no-spinner text-medium block w-full max-w-full rounded-md border border-border-light bg-primary-light text-primary-dark placeholder-muted ring-offset-1 hover:ring-1 hover:ring-success focus:outline-1 focus:outline-success`}
             />
           )}
         />
