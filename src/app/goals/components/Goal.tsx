@@ -37,6 +37,7 @@ const Goal = () => {
                 onClick={handleCreateGoal}
                 title='create new goal'
                 icon={<ClientAddIcon />}
+                className='btn-gradient'
               />
             </div>
           </div>

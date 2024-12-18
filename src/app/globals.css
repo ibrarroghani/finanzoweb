@@ -5,6 +5,7 @@
 :root {
   --color-primary-dark: #202020;
   --color-primary-light: #ffffff;
+  --color-primary-gradient-dark: #4f4f4f;
 
   --color-bg-content: #f7f7f7;
   --color-bg-card: #f7f7f7;
@@ -90,6 +91,10 @@ input[type='password'] {
   }
 
   /* End Border Radious  */
+
+  .btn-gradient {
+    @apply to-primary-gradient-dark bg-gradient-to-r from-primary-dark text-primary-light;
+  }
 }
 
 /* start custom scrollbar  */
