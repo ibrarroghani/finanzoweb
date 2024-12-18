@@ -9,7 +9,7 @@ const apiService = axios.create({
 apiService.interceptors.request.use(
   async (config) => {
     try {
-      const token = sessionStorage.getItem('accessToken');
+      const token = 'user-3'; // dummy token
       config.headers['Authorization'] = `Bearer ${token}`;
       // const token = await getToken();
       // if (token) {
