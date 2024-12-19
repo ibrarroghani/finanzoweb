@@ -15,7 +15,7 @@ const AccountDetailsModal: React.FC<IClientModalProps> = ({
   setShowModal,
   data,
 }) => {
-  console.log('data', data);
+  //console.log('data', data);
   return (
     <div>
       <Modal

@@ -34,35 +34,29 @@ interface IBankCardProps {
   bankData: IBankData;
 }
 
-// const getAccountCount = (data: ICount[]) => {
-
-// }
-
 const BankCard: React.FC<IBankCardProps> = ({ bankData }) => {
   const [showModal, setShowModal] = useState(false);
   const [accountDetails, setAccountDetails] = useState(null);
 
   const { institution, counts } = bankData;
-  console.log('institution.slug', institution.slug);
 
   const handleToggleModal = () => {
     setShowModal((prev) => !prev);
   };
 
   const {
-    data: AccountDetailsResponse,
-    //isLoading:AccountListLoading,
-    //isError: AccountListError,
+    data: accountDetailsResponse,
+    //isLoading:isAccountListLoading,
+    //isError: isAccountListError,
   } = useGetBankAccountDetails(institution.slug, {
     force_initial_plaid_account_fetch: 'yes',
   });
 
   useEffect(() => {
-    if (AccountDetailsResponse && AccountDetailsResponse.data) {
-      console.log('accountDetails', AccountDetailsResponse.data);
-      setAccountDetails(AccountDetailsResponse.data?.accounts);
+    if (accountDetailsResponse && accountDetailsResponse.data) {
+      setAccountDetails(accountDetailsResponse.data?.accounts);
     }
-  }, [AccountDetailsResponse, institution.slug]);
+  }, [accountDetailsResponse]);
 
   return (
     <div className='card card-border w-full'>
