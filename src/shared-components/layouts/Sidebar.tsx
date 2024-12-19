@@ -17,13 +17,15 @@ interface IFormData {
 
 const Sidebar = () => {
   const [users, setUsers] = useState(clientData);
+  const [selectedCardId, setSelectedCardId] = useState<number>(users[0].id);
   const { control, handleSubmit } = useForm<IFormData>({
     defaultValues: { search: '' },
   });
 
-  const handleCard = () => {
+  const handleCard = (id: number) => {
     //eslint-disable-next-line
-    console.log('Card is clicked');
+    console.log('Card is clicked', id);
+    setSelectedCardId(id);
   };
 
   const submitHandler = useCallback(
@@ -75,9 +77,9 @@ const Sidebar = () => {
           users.map((client) => (
             <ClientCard
               key={client.id}
-              name={client.name}
-              status={client.status}
-              onClick={handleCard}
+              data={client}
+              isActive={client.id === selectedCardId}
+              onClick={() => handleCard(client.id)}
             />
           ))
         ) : (

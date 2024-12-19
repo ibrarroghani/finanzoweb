@@ -94,8 +94,7 @@ const ClientModal: React.FC<IClientModalProps> = ({
               users.map((client) => (
                 <ClientCard
                   key={client.id}
-                  name={client.name}
-                  status={client.status}
+                  data={client}
                   onClick={handleCard}
                 />
               ))
