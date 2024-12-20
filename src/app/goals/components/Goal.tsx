@@ -2,21 +2,33 @@
 import ClientDetailsCard from '@/app/dashboard/components/ClientDetailsCard';
 import { ClientAddIcon } from '@/assets/icons/bussiness-panel-icons';
 import CustomButton from '@/shared-components/CustomButton';
-import React, { useState } from 'react';
+import React from 'react';
 import GoalModal from './GoalModal';
 import RecommendationCard from './RecommendationCard';
 import { goalData, recommendationData } from '@/utils/dummy-data';
 import Section from '@/app/dashboard/components/Section';
 import GoalEmpty from './GoalEmpty';
 import GoalsSection from '@/app/dashboard/components/GoalsSection';
+import { useGoalPageContext } from '../context/GoalPageContext';
 
 const Goal = () => {
-  const [showModal, setShowModal] = useState<boolean>(false);
+  const {
+    showCreateModal,
+    setShowCreateModal,
+    showUpdateModal,
+    setShowUpdateModal,
+  } = useGoalPageContext();
+  // const [showGoalModal, setShowGoalModal] = useState<boolean>(false);
+  // const [showUpdateModal, setShowUpdateModal] = useState<boolean>(false);
 
-  const handleCreateGoal = () => setShowModal(true);
-  const handleToggleModal = () => {
-    setShowModal((prev) => !prev);
+  const handleCreateGoal = () => setShowCreateModal(true);
+  const handleCreateToggleModal = () => {
+    setShowCreateModal(!showCreateModal);
   };
+  const handleUpdateToggleModal = () => {
+    setShowUpdateModal(!showUpdateModal);
+  };
+
   return (
     <div className='p-4'>
       <ClientDetailsCard />
@@ -51,11 +63,20 @@ const Goal = () => {
         <GoalEmpty onClick={handleCreateGoal} />
       )}
 
-      {showModal && (
+      {showCreateModal && (
         <div>
           <GoalModal
-            showModal={showModal}
-            setShowModal={handleToggleModal}
+            showModal={showCreateModal}
+            setShowModal={handleCreateToggleModal}
+            title='Create New Goal'
+          />
+        </div>
+      )}
+      {showUpdateModal && (
+        <div>
+          <GoalModal
+            showModal={showUpdateModal}
+            setShowModal={handleUpdateToggleModal}
             title='Create New Goal'
           />
         </div>

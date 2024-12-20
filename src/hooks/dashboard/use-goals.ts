@@ -22,3 +22,24 @@ export const useGoals = () => {
 
   return { goals, isLoading };
 };
+
+export const useSingleGoal = () => {
+  const [goal, setGoal] = useState(null);
+  const { data, isLoading, isError, error } = useGetGoals({
+    force_initial_plaid_account_fetch: 'yes',
+  });
+
+  useEffect(() => {
+    if (data?.data) {
+      setGoal(data.data);
+    }
+  }, [data]);
+
+  useEffect(() => {
+    if (isError && error?.message) {
+      notification.error({ message: error.message, placement: 'topRight' });
+    }
+  }, [isError, error]);
+
+  return { goal, isLoading };
+};

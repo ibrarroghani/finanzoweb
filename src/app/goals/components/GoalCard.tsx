@@ -5,6 +5,7 @@ import DoughnutChart from '@/shared-components/chart/DoughnutChart';
 import { convertDateToString } from '@/utils/date-formatter';
 import { Tooltip } from 'antd';
 import { getChartColor } from '@/utils/color-picker';
+import { useGoalPageContext } from '../context/GoalPageContext';
 
 interface Igoal {
   progress_percentage: number;
@@ -28,7 +29,15 @@ interface IGoalCardProps {
 }
 
 const GoalCard: React.FC<IGoalCardProps> = ({ edit, goal }) => {
-  const { title, goal_amount, goal_status, target_date, current_amount } = goal;
+  const { showUpdateModal, setShowUpdateModal, setGoalSlug } =
+    useGoalPageContext();
+  const { title, goal_amount, goal_status, target_date, current_amount, slug } =
+    goal;
+
+  const handleUpdateModal = () => {
+    setShowUpdateModal(!showUpdateModal);
+    setGoalSlug(slug);
+  };
 
   return (
     <div className={`card flex flex-col ${edit ? '' : 'card-border'}`}>
@@ -47,7 +56,7 @@ const GoalCard: React.FC<IGoalCardProps> = ({ edit, goal }) => {
             }
           />
           {edit && (
-            <p className='cursor-pointer'>
+            <p className='cursor-pointer' onClick={handleUpdateModal}>
               <EditIcon />
             </p>
           )}
