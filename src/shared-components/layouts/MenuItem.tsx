@@ -35,7 +35,7 @@ const MenuItem = ({ menu }: IMenuItemProps) => {
   return (
     <div
       onClick={onSideClick}
-      className={`flex cursor-pointer items-center rounded-md px-4 py-1 ${active ? 'bg-primary-dark' : 'hover:bg-primary-dark hover:text-primary-light'}`}
+      className={`flex cursor-pointer items-center rounded-full px-4 py-1 ${active ? 'bg-primary-dark' : 'hover:bg-primary-dark hover:text-primary-light'}`}
     >
       <span
         className={`text-small lg:text-medium ${active && 'text-primary-light'}`}

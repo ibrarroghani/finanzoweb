@@ -1,6 +1,5 @@
 'use client';
 import React from 'react';
-import ClientDetailsCard from '@/app/dashboard/components/ClientDetailsCard';
 import CustomButton from '@/shared-components/CustomButton';
 import { useForm, Control, FieldValues } from 'react-hook-form';
 import InputField from '@/shared-components/InputField';
@@ -47,7 +46,6 @@ const Setting = () => {
 
   return (
     <div className='p-4'>
-      <ClientDetailsCard />
       <div className='mt-6 flex justify-between'>
         <p className='text-large font-semibold capitalize'>settings</p>
         <div className='w-40'>

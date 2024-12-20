@@ -24,6 +24,7 @@ const config: Config = {
         'card-dark': 'var(--color-bg-card-dark)',
         'primary-dark': 'var(--color-primary-dark)',
         'primary-light': 'var(--color-primary-light)',
+        'primary-gradient-dark': 'var(--color-primary-gradient-dark)',
         'border-primary': 'var(--color-border)',
         'border-light': 'var(--color-border-light)',
         'success-light': 'var(--color-success-light)',

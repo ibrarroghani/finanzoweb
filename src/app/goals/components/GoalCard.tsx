@@ -40,7 +40,7 @@ const GoalCard: React.FC<IGoalCardProps> = ({ edit, goal }) => {
           )}
         </div>
       </div>
-      <div className='flex py-2'>
+      <div className='-mr-2 flex py-2'>
         <div className='w-1/2'>
           <p className='card-subtitle'>last payment</p>
           <p className='card-title text-large text-success'>{lastPaidAmount}</p>
@@ -51,12 +51,15 @@ const GoalCard: React.FC<IGoalCardProps> = ({ edit, goal }) => {
           <p className='card-subtitle'>Deadline</p>
           <p className='card-secondary-subtitle'>{deadline}</p>
         </div>
-        <div className='reletive flex w-1/2 flex-col items-center justify-center'>
-          <DoughnutChart
-            data={[80, 20]}
-            backgroundColor={['#3fa75a', '#34A8531A']}
-          />
-          <p className='text-medium pt-1'>
+        <div className='flex w-1/2 flex-col justify-end'>
+          <div className='flex justify-end'>
+            <DoughnutChart
+              data={[80, 20]}
+              backgroundColor={['#3fa75a', '#34A8531A']}
+            />
+          </div>
+
+          <p className='text-medium mr-8 flex justify-end pt-1'>
             <span className='font-medium'>{totalPaidAmount}</span>
             <span>/{targetAmount}</span>
           </p>

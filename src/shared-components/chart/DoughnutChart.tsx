@@ -57,7 +57,9 @@ const DoughnutChart: React.FC<IDoughnutChartProps> = ({
   };
 
   return (
-    <Doughnut data={dData} options={options} plugins={[centerTextPlugin]} />
+    <div className='w-32'>
+      <Doughnut data={dData} options={options} plugins={[centerTextPlugin]} />
+    </div>
   );
 };
 

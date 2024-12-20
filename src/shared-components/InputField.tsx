@@ -18,6 +18,8 @@ interface IInputFieldProps {
   readonly?: boolean;
   icon?: React.ReactNode;
   labelPosition?: 'inside' | 'outside';
+  //eslint-disable-next-line no-unused-vars
+  onCustomChange?: (value: string) => void; // Custom change handler
 }
 
 const InputField: React.FC<IInputFieldProps> = ({
@@ -31,6 +33,7 @@ const InputField: React.FC<IInputFieldProps> = ({
   readOnly,
   icon,
   labelPosition = 'inside',
+  onCustomChange,
 }) => {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -62,8 +65,12 @@ const InputField: React.FC<IInputFieldProps> = ({
               type={showPassword ? 'text' : type}
               placeholder={placeholder}
               value={value}
-              onChange={onChange}
-              className={`${icon ? 'py-2 pl-8 pr-4' : labelPosition === 'outside' ? 'p-2.5' : 'px-4 py-6 pb-2'} no-spinner border-border-light text-medium block w-full max-w-full rounded-md border bg-primary-light text-primary-dark placeholder-muted focus:outline-1 focus:outline-success`}
+              onChange={(e) => {
+                const newValue = e.target.value;
+                onChange(newValue); // Update form state
+                onCustomChange?.(newValue); // Trigger custom logic
+              }}
+              className={`${icon ? 'py-2 pl-8 pr-4' : labelPosition === 'outside' ? 'p-2.5' : 'px-4 py-6 pb-2'} no-spinner text-medium block w-full max-w-full rounded-md border border-border-light bg-primary-light text-primary-dark placeholder-muted ring-offset-0 hover:ring-1 hover:ring-success focus:outline-1 focus:outline-success`}
             />
           )}
         />

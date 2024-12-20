@@ -24,6 +24,7 @@ const GoalEmpty: React.FC<IGoalEmpty> = ({ onClick }) => {
           onClick={onClick}
           title='create new goal'
           icon={<ClientAddIcon />}
+          className='btn-gradient'
         />
       </div>
     </div>

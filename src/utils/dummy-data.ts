@@ -26,6 +26,15 @@ export const goalData = [
     lastPaidAmount: '$200',
     deadline: '23 May 2025',
   },
+  {
+    id: 4,
+    title: 'SIP Goals4',
+    status: 'active',
+    targetAmount: '$500',
+    totalPaidAmount: '$400',
+    lastPaidAmount: '$200',
+    deadline: '23 May 2025',
+  },
 ];
 
 export const bankData = [
@@ -46,3 +55,18 @@ export const documentData = [
   { id: 2, title: 'Document Name' },
   { id: 3, title: 'Document Name' },
 ];
+
+export const clientData = [
+  { id: 1, name: 'Jhon Doe', status: true },
+  { id: 2, name: 'Jhon Doe1', status: true },
+  { id: 3, name: 'Jhon Doe2', status: true },
+  { id: 4, name: 'Jhon Doe3', status: true },
+  { id: 5, name: 'Jhon Doe4', status: true },
+  { id: 6, name: 'Jhon Doe5', status: true },
+  { id: 7, name: 'Jhon Doe6', status: true },
+  { id: 8, name: 'Jhon Doe7', status: true },
+  { id: 9, name: 'Jhon Doe8', status: true },
+  { id: 10, name: 'Jhon Doe9', status: true },
+];
+
+export const recommendationData = [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }];
