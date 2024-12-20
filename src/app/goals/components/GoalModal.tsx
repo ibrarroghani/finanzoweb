@@ -2,10 +2,12 @@ import CustomButton from '@/shared-components/CustomButton';
 import DatePickerField from '@/shared-components/DatePickerField';
 import InputField from '@/shared-components/InputField';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Modal, Radio, RadioChangeEvent, Switch } from 'antd';
+import { Modal, Radio, RadioChangeEvent } from 'antd';
 import React from 'react';
 import { useForm, Control, FieldValues } from 'react-hook-form';
 import { goalCreateValidationSchema } from '../validations/goal-create-validation-schema';
+import useCreateGoal from '@/hooks/data-hooks/goal/use-create-goal';
+import { convertDateApiFormat } from '@/utils/date-formatter';
 
 interface IGoalModalProps {
   title: string;
@@ -16,10 +18,10 @@ interface IGoalModalProps {
 interface IGoalFormData {
   name: string;
   amount: string;
-  monthlyAmount: string;
+  // monthlyAmount: string;
   date: Date;
-  status?: string;
-  progress?: boolean;
+  status: 'active' | 'paused';
+  //progress?: boolean;
 }
 
 const GoalModal: React.FC<IGoalModalProps> = ({
@@ -30,11 +32,13 @@ const GoalModal: React.FC<IGoalModalProps> = ({
   const initialValue: IGoalFormData = {
     name: '',
     amount: '',
-    monthlyAmount: '',
+    // monthlyAmount: '',
     date: new Date(0),
-    status: 'Active',
-    progress: false,
+    status: 'active',
+    //progress: false,
   };
+
+  const { mutate } = useCreateGoal();
 
   const {
     control,
@@ -46,17 +50,26 @@ const GoalModal: React.FC<IGoalModalProps> = ({
     resolver: yupResolver(goalCreateValidationSchema),
   });
 
-  const handleSwitchButtonChange = (checked: boolean) => {
-    setValue('progress', checked);
-  };
+  // const handleSwitchButtonChange = (checked: boolean) => {
+  //   setValue('progress', checked);
+  // };
 
   const handleRadioButtonChange = (e: RadioChangeEvent) => {
+    //console.log('e.target.value', e.target.value);
     setValue('status', e.target.value);
   };
 
   const handleGoalCreate = (data: IGoalFormData) => {
     //eslint-disable-next-line no-console
     console.log('data', data);
+    const formData = {
+      title: data.name,
+      description: 'this is a goal',
+      goal_amount: Number(data.amount),
+      target_date: convertDateApiFormat(data.date),
+      goal_status: data.status,
+    };
+    mutate(formData);
     setShowModal();
   };
 
@@ -87,7 +100,7 @@ const GoalModal: React.FC<IGoalModalProps> = ({
             type='number'
             labelPosition='outside'
           />
-          <InputField
+          {/* <InputField
             id='monthlyAmount'
             name='monthlyAmount'
             control={control as unknown as Control<FieldValues>}
@@ -95,7 +108,7 @@ const GoalModal: React.FC<IGoalModalProps> = ({
             label='Monthly Contributions'
             type='number'
             labelPosition='outside'
-          />
+          /> */}
 
           <DatePickerField
             control={control as unknown as Control<FieldValues>}
@@ -105,27 +118,27 @@ const GoalModal: React.FC<IGoalModalProps> = ({
           />
 
           <div className='flex justify-between py-4'>
-            <p className='space-x-4'>
+            {/* <p className='space-x-4'>
               <span className='font-light'>Progress Bar</span>
               <Switch onChange={handleSwitchButtonChange} />
-            </p>
-            <div className='flex gap-4'>
+            </p> */}
+            <div className='ml-auto flex gap-4'>
               <p className='font-light'>Goal Status</p>
               <Radio.Group
                 onChange={handleRadioButtonChange}
-                defaultValue='Active'
+                defaultValue='active'
                 buttonStyle='solid'
                 className='flex'
               >
                 <Radio.Button
                   className='px-4 first:rounded-l-full'
-                  value='Active'
+                  value='active'
                 >
                   Active
                 </Radio.Button>
                 <Radio.Button
                   className='px-4 last:rounded-r-full'
-                  value='Pause'
+                  value='paused'
                 >
                   Pause
                 </Radio.Button>

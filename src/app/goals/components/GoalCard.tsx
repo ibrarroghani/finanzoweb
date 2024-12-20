@@ -4,6 +4,7 @@ import CustomBadge from '../../dashboard/components/CustomBadge';
 import DoughnutChart from '@/shared-components/chart/DoughnutChart';
 import { convertDateToString } from '@/utils/date-formatter';
 import { Tooltip } from 'antd';
+import { getChartColor } from '@/utils/color-picker';
 
 interface Igoal {
   progress_percentage: number;
@@ -25,11 +26,6 @@ interface IGoalCardProps {
   goal: Igoal;
   edit?: boolean;
 }
-
-const getChartColor = (status: string) => {
-  if (status.toLowerCase() === 'active') return ['#3fa75a', '#34A8531A'];
-  else return ['#ea4335', '#34A8531A'];
-};
 
 const GoalCard: React.FC<IGoalCardProps> = ({ edit, goal }) => {
   const { title, goal_amount, goal_status, target_date, current_amount } = goal;
