@@ -1,7 +1,7 @@
 import React from 'react';
 
 interface ISectionProps {
-  title?: string;
+  title?: string | null;
   children: React.ReactNode;
   //eslint-disable-next-line
   data?: any[];

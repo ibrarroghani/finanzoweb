@@ -4,11 +4,11 @@ import { ClientAddIcon } from '@/assets/icons/bussiness-panel-icons';
 import CustomButton from '@/shared-components/CustomButton';
 import React, { useState } from 'react';
 import GoalModal from './GoalModal';
-import GoalCard from '@/app/goals/components/GoalCard';
 import RecommendationCard from './RecommendationCard';
 import { goalData, recommendationData } from '@/utils/dummy-data';
 import Section from '@/app/dashboard/components/Section';
 import GoalEmpty from './GoalEmpty';
+import GoalsSection from '@/app/dashboard/components/GoalsSection';
 
 const Goal = () => {
   const [showModal, setShowModal] = useState<boolean>(false);
@@ -41,13 +41,11 @@ const Goal = () => {
               />
             </div>
           </div>
-          <Section className='mt-5 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4'>
-            {goalData.map((goal) => (
-              <Section.Item key={goal.id}>
-                <GoalCard key={goal.id} edit={true} goal={goal} />
-              </Section.Item>
-            ))}
-          </Section>
+
+          <GoalsSection
+            className='mt-5 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4'
+            edit={true}
+          />
         </>
       ) : (
         <GoalEmpty onClick={handleCreateGoal} />
