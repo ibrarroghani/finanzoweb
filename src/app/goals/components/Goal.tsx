@@ -10,6 +10,7 @@ import Section from '@/app/dashboard/components/Section';
 import GoalEmpty from './GoalEmpty';
 import GoalsSection from '@/app/dashboard/components/GoalsSection';
 import { useGoalPageContext } from '../context/GoalPageContext';
+import UpdateGoalModal from './UpdateGoalModal';
 
 const Goal = () => {
   const {
@@ -21,13 +22,11 @@ const Goal = () => {
   // const [showGoalModal, setShowGoalModal] = useState<boolean>(false);
   // const [showUpdateModal, setShowUpdateModal] = useState<boolean>(false);
 
-  const handleCreateGoal = () => setShowCreateModal(true);
-  const handleCreateToggleModal = () => {
-    setShowCreateModal(!showCreateModal);
-  };
-  const handleUpdateToggleModal = () => {
-    setShowUpdateModal(!showUpdateModal);
-  };
+  const handleCreateGoal = () => setShowCreateModal(!showCreateModal);
+
+  const handleCreateToggleModal = () => setShowCreateModal(!showCreateModal);
+
+  const handleUpdateToggleModal = () => setShowUpdateModal(!showUpdateModal);
 
   return (
     <div className='p-4'>
@@ -74,10 +73,10 @@ const Goal = () => {
       )}
       {showUpdateModal && (
         <div>
-          <GoalModal
+          <UpdateGoalModal
             showModal={showUpdateModal}
             setShowModal={handleUpdateToggleModal}
-            title='Create New Goal'
+            title='Update Goal'
           />
         </div>
       )}

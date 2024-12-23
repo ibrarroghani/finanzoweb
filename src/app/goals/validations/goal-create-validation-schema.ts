@@ -1,12 +1,13 @@
+import { getTomorrowDate } from '@/utils/date-formatter';
 import * as yup from 'yup';
 
 export const goalCreateValidationSchema = yup.object().shape({
-  name: yup
+  title: yup
     .string()
     .trim()
     .min(2, 'Goal Name is required and must be at least 2 characters long')
     .required(),
-  amount: yup
+  goal_amount: yup
     .string()
     .trim()
     .test('is-positive', 'Amount must be greater than 0', (value) => {
@@ -39,18 +40,22 @@ export const goalCreateValidationSchema = yup.object().shape({
   //   )
   //   .required('Monthly Amount is required'),
 
-  date: yup
-    .date()
-    .nullable()
-    .default(null)
-    .required('Date is required')
-    .test(
-      'not-epoch',
-      'Date is required',
-      (value) => value?.getTime() !== new Date(0).getTime()
-    ),
+  // date: yup
+  //   .date()
+  //   .nullable()
+  //   .default(null)
+  //   .required('Date is required')
+  //   .test(
+  //     'not-epoch',
+  //     'Date is required',
+  //     (value) => value?.getTime() !== new Date(0).getTime()
+  //   ),
 
-  status: yup
+  target_date: yup
+    .date()
+    .required('Target date is required')
+    .min(getTomorrowDate(), 'Date cannot be today or in the past date'),
+  goal_status: yup
     .string()
     .oneOf(['active', 'paused'], 'Status must be either "active" or "paused"')
     .required('Status is required'),

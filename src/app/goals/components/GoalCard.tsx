@@ -52,7 +52,7 @@ const GoalCard: React.FC<IGoalCardProps> = ({ edit, goal }) => {
             color={
               goal_status.toLowerCase() === 'active'
                 ? 'bg-success'
-                : 'bg-card text-[#989898]'
+                : 'bg-[#EEEEEE] text-gray-400'
             }
           />
           {edit && (

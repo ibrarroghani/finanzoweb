@@ -22,7 +22,7 @@ export const goalAPIEndpoint = {
 
   //eslint-disable-next-line
   updateGoal: (data: any, goalSlug: string) =>
-    apiService.post(
+    apiService.put(
       `/goals/client/user-8abe9a22-a593-11ef-878e-6045bd08fbb0-8abe9a26-a593-11ef-878e-6045bd08fbb0/${goalSlug}`,
       data
     ),

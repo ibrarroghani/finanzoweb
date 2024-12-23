@@ -35,6 +35,12 @@ const useCreateGoal = () => {
         queryClient.invalidateQueries({ queryKey: ['getGoals'] }); // Invalidate the goals list query
       }, 1000); // 1000 milliseconds = 1 second
     },
+    onError: (error) => {
+      notification.error({
+        message: error.message,
+        placement: 'topRight',
+      });
+    },
   });
 };
 

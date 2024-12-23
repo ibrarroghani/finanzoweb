@@ -2,12 +2,12 @@ import CustomButton from '@/shared-components/CustomButton';
 import DatePickerField from '@/shared-components/DatePickerField';
 import InputField from '@/shared-components/InputField';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Modal, Radio, RadioChangeEvent } from 'antd';
+import { Modal, Radio } from 'antd';
 import React from 'react';
-import { useForm, Control, FieldValues } from 'react-hook-form';
+import { useForm, Control, FieldValues, Controller } from 'react-hook-form';
 import { goalCreateValidationSchema } from '../validations/goal-create-validation-schema';
 import useCreateGoal from '@/hooks/data-hooks/goal/use-create-goal';
-import { convertDateApiFormat } from '@/utils/date-formatter';
+import { convertDateApiFormat, getTomorrowDate } from '@/utils/date-formatter';
 
 interface IGoalModalProps {
   title: string;
@@ -16,11 +16,11 @@ interface IGoalModalProps {
 }
 
 interface IGoalFormData {
-  name: string;
-  amount: string;
+  title: string;
+  goal_amount: string;
   // monthlyAmount: string;
-  date: Date;
-  status: 'active' | 'paused';
+  target_date: Date;
+  goal_status: 'active' | 'paused';
   //progress?: boolean;
 }
 
@@ -30,21 +30,21 @@ const GoalModal: React.FC<IGoalModalProps> = ({
   setShowModal,
 }) => {
   const initialValue: IGoalFormData = {
-    name: '',
-    amount: '',
+    title: '',
+    goal_amount: '',
     // monthlyAmount: '',
-    date: new Date(0),
-    status: 'active',
+    target_date: getTomorrowDate(),
+    goal_status: 'active',
     //progress: false,
   };
 
-  const { mutate } = useCreateGoal();
+  const { mutate, isPending } = useCreateGoal();
 
   const {
     control,
     handleSubmit,
     formState: { errors: formErrors },
-    setValue,
+    //setValue,
   } = useForm<IGoalFormData>({
     defaultValues: initialValue,
     resolver: yupResolver(goalCreateValidationSchema),
@@ -54,20 +54,21 @@ const GoalModal: React.FC<IGoalModalProps> = ({
   //   setValue('progress', checked);
   // };
 
-  const handleRadioButtonChange = (e: RadioChangeEvent) => {
-    //console.log('e.target.value', e.target.value);
-    setValue('status', e.target.value);
-  };
+  // const handleRadioButtonChange = (e: RadioChangeEvent) => {
+  //   //console.log('e.target.value', e.target.value);
+  //   setValue('goal_status', e.target.value);
+  // };
 
   const handleGoalCreate = (data: IGoalFormData) => {
     //eslint-disable-next-line no-console
     console.log('data', data);
+    const { title, goal_amount, target_date, goal_status } = data;
     const formData = {
-      title: data.name,
+      title,
       description: 'this is a goal',
-      goal_amount: Number(data.amount),
-      target_date: convertDateApiFormat(data.date),
-      goal_status: data.status,
+      goal_amount: Number(goal_amount),
+      target_date: convertDateApiFormat(target_date),
+      goal_status,
     };
     mutate(formData);
     setShowModal();
@@ -84,18 +85,18 @@ const GoalModal: React.FC<IGoalModalProps> = ({
       >
         <form onSubmit={handleSubmit(handleGoalCreate)}>
           <InputField
-            id='name'
-            name='name'
+            id='title'
+            name='title'
             control={control as unknown as Control<FieldValues>}
-            error={formErrors.name?.message}
-            label='Goal Name'
+            error={formErrors.title?.message}
+            label='Goal Title'
             labelPosition='outside'
           />
           <InputField
-            id='amount'
-            name='amount'
+            id='goal_amount'
+            name='goal_amount'
             control={control as unknown as Control<FieldValues>}
-            error={formErrors.amount?.message}
+            error={formErrors.goal_amount?.message}
             label='Target Amount'
             type='number'
             labelPosition='outside'
@@ -112,9 +113,9 @@ const GoalModal: React.FC<IGoalModalProps> = ({
 
           <DatePickerField
             control={control as unknown as Control<FieldValues>}
-            name='date'
+            name='target_date'
             label='Target Date'
-            error={formErrors.date?.message}
+            error={formErrors.target_date?.message}
           />
 
           <div className='flex justify-between py-4'>
@@ -124,9 +125,29 @@ const GoalModal: React.FC<IGoalModalProps> = ({
             </p> */}
             <div className='ml-auto flex gap-4'>
               <p className='font-light'>Goal Status</p>
-              <Radio.Group
+              <Controller
+                control={control}
+                name='goal_status'
+                render={({ field }) => (
+                  <Radio.Group {...field} buttonStyle='solid' className='flex'>
+                    <Radio.Button
+                      className='px-4 first:rounded-l-full'
+                      value='active'
+                    >
+                      Active
+                    </Radio.Button>
+                    <Radio.Button
+                      className='px-4 last:rounded-r-full'
+                      value='paused'
+                    >
+                      Pause
+                    </Radio.Button>
+                  </Radio.Group>
+                )}
+              />
+              {/* <Radio.Group
                 onChange={handleRadioButtonChange}
-                defaultValue='active'
+                defaultValue={initialValue.goal_status}
                 buttonStyle='solid'
                 className='flex'
               >
@@ -142,11 +163,15 @@ const GoalModal: React.FC<IGoalModalProps> = ({
                 >
                   Pause
                 </Radio.Button>
-              </Radio.Group>
+              </Radio.Group> */}
             </div>
           </div>
           <div className='ml-auto w-32'>
-            <CustomButton type='submit' title='save changes' />
+            <CustomButton
+              type='submit'
+              title='save changes'
+              disable={isPending}
+            />
           </div>
         </form>
       </Modal>

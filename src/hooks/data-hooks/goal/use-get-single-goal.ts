@@ -5,7 +5,7 @@ import { handleApiError } from '@/utils/error/api-error-handler';
 //eslint-disable-next-line
 const useGetSingleGoal = (goalSlug: string) => {
   return useQuery({
-    queryKey: ['getGoals', goalSlug], // Unique key for the query
+    queryKey: ['getGoal', goalSlug], // Unique key for the query
     enabled: !!goalSlug,
     queryFn: async () => {
       try {

@@ -2,14 +2,16 @@ import CustomButton from '@/shared-components/CustomButton';
 import DatePickerField from '@/shared-components/DatePickerField';
 import InputField from '@/shared-components/InputField';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Modal, Radio, RadioChangeEvent } from 'antd';
-import React from 'react';
-import { useForm, Control, FieldValues } from 'react-hook-form';
+import { Modal, Radio } from 'antd';
+import React, { useEffect } from 'react';
+import { useForm, Control, FieldValues, Controller } from 'react-hook-form';
 import { goalCreateValidationSchema } from '../validations/goal-create-validation-schema';
 // import useCreateGoal from '@/hooks/data-hooks/goal/use-create-goal';
-import { convertDateApiFormat } from '@/utils/date-formatter';
+import { convertDateApiFormat, getTomorrowDate } from '@/utils/date-formatter';
 import { useGoalPageContext } from '../context/GoalPageContext';
 import useUpdateGoal from '@/hooks/data-hooks/goal/use-update-goal';
+import useGetSingleGoal from '@/hooks/data-hooks/goal/use-get-single-goal';
+import Spinner from '@/shared-components/Spinner';
 // import { useSingleGoal } from '@/hooks/dashboard/use-goals';
 
 interface IUpdateGoalModalProps {
@@ -19,11 +21,11 @@ interface IUpdateGoalModalProps {
 }
 
 interface IUpdateGoalFormData {
-  name: string;
-  amount: string;
+  title: string;
+  goal_amount: string;
   // monthlyAmount: string;
-  date: Date;
-  status: 'active' | 'paused';
+  target_date: Date;
+  goal_status: 'active' | 'paused';
   //progress?: boolean;
 }
 
@@ -34,51 +36,64 @@ const UpdateGoalModal: React.FC<IUpdateGoalModalProps> = ({
 }) => {
   const { goalSlug } = useGoalPageContext();
   const initialValue: IUpdateGoalFormData = {
-    name: '',
-    amount: '',
+    title: '',
+    goal_amount: '',
     // monthlyAmount: '',
-    date: new Date(0),
-    status: 'active',
+    target_date: getTomorrowDate(),
+    goal_status: 'active',
     //progress: false,
   };
 
   //   const { goal, isLoading } = useSingleGoal();
-
-  const { mutate } = useUpdateGoal(goalSlug);
-
   const {
     control,
     handleSubmit,
     formState: { errors: formErrors },
-    setValue,
-    //reset,
+    // setValue,
+    reset,
   } = useForm<IUpdateGoalFormData>({
     defaultValues: initialValue,
     resolver: yupResolver(goalCreateValidationSchema),
   });
 
+  const { data, isLoading } = useGetSingleGoal(goalSlug);
+  const { mutate } = useUpdateGoal(goalSlug);
+
   // const handleSwitchButtonChange = (checked: boolean) => {
   //   setValue('progress', checked);
   // };
 
-  const handleRadioButtonChange = (e: RadioChangeEvent) => {
-    //console.log('e.target.value', e.target.value);
-    setValue('status', e.target.value);
-  };
+  // const handleRadioButtonChange = (e: RadioChangeEvent) => {
+  //   //console.log('e.target.value', e.target.value);
+  //   setValue('status', e.target.value);
+  // };
 
   const handleGoalUpdate = (data: IUpdateGoalFormData) => {
     //eslint-disable-next-line no-console
     console.log('data', data);
+    const { title, goal_amount, target_date, goal_status } = data;
     const formData = {
-      title: data.name,
+      title,
       description: 'this is a goal',
-      goal_amount: Number(data.amount),
-      target_date: convertDateApiFormat(data.date),
-      goal_status: data.status,
+      goal_amount: Number(goal_amount),
+      target_date: convertDateApiFormat(target_date),
+      goal_status,
     };
     mutate(formData);
     setShowModal();
   };
+
+  useEffect(() => {
+    if (data?.data) {
+      const { title, goal_amount, target_date, goal_status } = data.data.goal;
+      reset({
+        title: title || '',
+        goal_amount: goal_amount || '',
+        target_date: target_date || getTomorrowDate(),
+        goal_status: goal_status || 'active',
+      });
+    }
+  }, [data, reset]);
 
   return (
     <>
@@ -89,25 +104,32 @@ const UpdateGoalModal: React.FC<IUpdateGoalModalProps> = ({
         onCancel={setShowModal}
         footer={null}
       >
-        <form onSubmit={handleSubmit(handleGoalUpdate)}>
-          <InputField
-            id='name'
-            name='name'
-            control={control as unknown as Control<FieldValues>}
-            error={formErrors.name?.message}
-            label='Goal Name'
-            labelPosition='outside'
-          />
-          <InputField
-            id='amount'
-            name='amount'
-            control={control as unknown as Control<FieldValues>}
-            error={formErrors.amount?.message}
-            label='Target Amount'
-            type='number'
-            labelPosition='outside'
-          />
-          {/* <InputField
+        <div className='flex min-h-[350px] flex-col'>
+          {isLoading ? (
+            <div className='flex flex-1 items-center justify-center'>
+              <Spinner />
+            </div>
+          ) : (
+            <form onSubmit={handleSubmit(handleGoalUpdate)} className='flex-1'>
+              <InputField
+                id='title'
+                name='title'
+                //value={initialValue.name}
+                control={control as unknown as Control<FieldValues>}
+                error={formErrors.title?.message}
+                label='Goal Title'
+                labelPosition='outside'
+              />
+              <InputField
+                id='goal_amount'
+                name='goal_amount'
+                control={control as unknown as Control<FieldValues>}
+                error={formErrors.goal_amount?.message}
+                label='Target Amount'
+                type='number'
+                labelPosition='outside'
+              />
+              {/* <InputField
             id='monthlyAmount'
             name='monthlyAmount'
             control={control as unknown as Control<FieldValues>}
@@ -117,45 +139,71 @@ const UpdateGoalModal: React.FC<IUpdateGoalModalProps> = ({
             labelPosition='outside'
           /> */}
 
-          <DatePickerField
-            control={control as unknown as Control<FieldValues>}
-            name='date'
-            label='Target Date'
-            error={formErrors.date?.message}
-          />
+              <DatePickerField
+                control={control as unknown as Control<FieldValues>}
+                name='target_date'
+                label='Target Date'
+                error={formErrors.target_date?.message}
+              />
 
-          <div className='flex justify-between py-4'>
-            {/* <p className='space-x-4'>
+              <div className='flex justify-between py-4'>
+                {/* <p className='space-x-4'>
               <span className='font-light'>Progress Bar</span>
               <Switch onChange={handleSwitchButtonChange} />
             </p> */}
-            <div className='ml-auto flex gap-4'>
-              <p className='font-light'>Goal Status</p>
-              <Radio.Group
-                onChange={handleRadioButtonChange}
-                defaultValue='active'
-                buttonStyle='solid'
-                className='flex'
-              >
-                <Radio.Button
-                  className='px-4 first:rounded-l-full'
-                  value='active'
-                >
-                  Active
-                </Radio.Button>
-                <Radio.Button
-                  className='px-4 last:rounded-r-full'
-                  value='paused'
-                >
-                  Pause
-                </Radio.Button>
-              </Radio.Group>
-            </div>
-          </div>
-          <div className='ml-auto w-32'>
-            <CustomButton type='submit' title='save changes' />
-          </div>
-        </form>
+                <div className='ml-auto flex gap-4'>
+                  <p className='font-light'>Goal Status</p>
+                  {/* <Radio.Group
+                    onChange={handleRadioButtonChange}
+                    value={control._formValues.status}
+                    buttonStyle='solid'
+                    className='flex'
+                  >
+                    <Radio.Button
+                      className='px-4 first:rounded-l-full'
+                      value='active'
+                    >
+                      Active
+                    </Radio.Button>
+                    <Radio.Button
+                      className='px-4 last:rounded-r-full'
+                      value='paused'
+                    >
+                      Pause
+                    </Radio.Button>
+                  </Radio.Group> */}
+                  <Controller
+                    control={control}
+                    name='goal_status'
+                    render={({ field }) => (
+                      <Radio.Group
+                        {...field}
+                        buttonStyle='solid'
+                        className='flex'
+                      >
+                        <Radio.Button
+                          className='px-4 first:rounded-l-full'
+                          value='active'
+                        >
+                          Active
+                        </Radio.Button>
+                        <Radio.Button
+                          className='px-4 last:rounded-r-full'
+                          value='paused'
+                        >
+                          Pause
+                        </Radio.Button>
+                      </Radio.Group>
+                    )}
+                  />
+                </div>
+              </div>
+              <div className='ml-auto w-32'>
+                <CustomButton type='submit' title='save changes' />
+              </div>
+            </form>
+          )}
+        </div>
       </Modal>
     </>
   );

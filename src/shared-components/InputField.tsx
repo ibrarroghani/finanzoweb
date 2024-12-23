@@ -11,6 +11,7 @@ interface IInputFieldProps {
   placeholder?: string;
   type?: string;
   name: string;
+  value?: string;
   error?: string;
   label?: string;
   readOnly?: boolean;

@@ -26,7 +26,7 @@ const useUpdateGoal = (goalSlug: string) => {
     },
     onSuccess: () => {
       notification.success({
-        message: 'Goal created successfully',
+        message: 'Goal Updated successfully',
         placement: 'topRight',
       });
 
