@@ -38,7 +38,7 @@ const GoalModal: React.FC<IGoalModalProps> = ({
     //progress: false,
   };
 
-  const { mutate, isPending } = useCreateGoal();
+  const { mutate: CreateGoal, isPending } = useCreateGoal();
 
   const {
     control,
@@ -70,8 +70,11 @@ const GoalModal: React.FC<IGoalModalProps> = ({
       target_date: convertDateApiFormat(target_date),
       goal_status,
     };
-    mutate(formData);
-    setShowModal();
+    CreateGoal(formData, {
+      onSuccess: () => {
+        setShowModal();
+      },
+    });
   };
 
   return (
