@@ -31,7 +31,7 @@ const Dashboard = () => {
             <AccountsSection />
 
             {/* Goals */}
-            <GoalsSection title='Linked Account' scroll={true} />
+            <GoalsSection title='Goals' scroll={true} />
           </div>
 
           {/* Documents */}

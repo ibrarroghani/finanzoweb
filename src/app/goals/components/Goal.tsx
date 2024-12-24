@@ -5,12 +5,13 @@ import CustomButton from '@/shared-components/CustomButton';
 import React from 'react';
 import GoalModal from './GoalModal';
 import RecommendationCard from './RecommendationCard';
-import { goalData, recommendationData } from '@/utils/dummy-data';
+import { recommendationData } from '@/utils/dummy-data';
 import Section from '@/app/dashboard/components/Section';
 import GoalEmpty from './GoalEmpty';
 import GoalsSection from '@/app/dashboard/components/GoalsSection';
 import { useGoalPageContext } from '../context/GoalPageContext';
 import UpdateGoalModal from './UpdateGoalModal';
+import useGetGoals from '@/hooks/data-hooks/goal/use-get-goals';
 
 const Goal = () => {
   const {
@@ -19,8 +20,10 @@ const Goal = () => {
     showUpdateModal,
     setShowUpdateModal,
   } = useGoalPageContext();
-  // const [showGoalModal, setShowGoalModal] = useState<boolean>(false);
-  // const [showUpdateModal, setShowUpdateModal] = useState<boolean>(false);
+
+  const { data } = useGetGoals({
+    force_initial_plaid_account_fetch: 'yes',
+  });
 
   const handleCreateGoal = () => setShowCreateModal(!showCreateModal);
 
@@ -31,7 +34,7 @@ const Goal = () => {
   return (
     <div className='p-4'>
       <ClientDetailsCard />
-      {goalData.length > 0 ? (
+      {data?.data.length > 0 ? (
         <>
           <Section className='mt-5 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4'>
             {recommendationData.length > 0 &&
