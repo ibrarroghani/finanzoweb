@@ -54,7 +54,7 @@ const UpdateGoalModal: React.FC<IUpdateGoalModalProps> = ({
   });
 
   const { data, isLoading } = useGetSingleGoal(goalSlug);
-  const { mutate: updateGoal } = useUpdateGoal(goalSlug);
+  const { mutate: updateGoal, isPending } = useUpdateGoal(goalSlug);
 
   const handleGoalUpdate = (data: IUpdateGoalFormData) => {
     //eslint-disable-next-line no-console
@@ -166,7 +166,11 @@ const UpdateGoalModal: React.FC<IUpdateGoalModalProps> = ({
                 </div>
               </div>
               <div className='ml-auto w-32'>
-                <CustomButton type='submit' title='save changes' />
+                <CustomButton
+                  type='submit'
+                  title='save changes'
+                  disable={isPending}
+                />
               </div>
             </form>
           )}

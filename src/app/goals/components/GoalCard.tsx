@@ -50,9 +50,7 @@ const GoalCard: React.FC<IGoalCardProps> = ({ edit, goal }) => {
           <CustomBadge
             text={goal_status}
             color={
-              goal_status.toLowerCase() === 'active'
-                ? 'bg-success'
-                : 'bg-[#EEEEEE] text-gray-400'
+              goal_status.toLowerCase() === 'active' ? 'bg-success' : 'bg-muted'
             }
           />
           {edit && (

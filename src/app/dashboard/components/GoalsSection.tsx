@@ -4,6 +4,7 @@ import DataSection from './DataSection';
 import GoalCard from '@/app/goals/components/GoalCard';
 import useGetGoals from '@/hooks/data-hooks/goal/use-get-goals';
 import { notification } from 'antd';
+import { useIsFetching } from '@tanstack/react-query';
 
 interface IGoalsSection {
   scroll?: boolean;
@@ -22,9 +23,13 @@ const GoalsSection: React.FC<IGoalsSection> = ({
     force_initial_plaid_account_fetch: 'yes',
   });
 
+  const isFetching = useIsFetching({ queryKey: ['getGoals'] });
+
   if (isError && error?.message) {
     notification.error({ message: error.message, placement: 'topRight' });
   }
+
+  const isLoadingState = isLoading || isFetching > 0;
 
   return (
     <>
@@ -32,7 +37,7 @@ const GoalsSection: React.FC<IGoalsSection> = ({
         {scroll ? (
           <Section.Scrollable>
             <DataSection
-              isLoading={isLoading}
+              isLoading={isLoadingState}
               data={data?.data || []}
               //eslint-disable-next-line
               renderItem={(goal: any, index: any) => (
@@ -45,7 +50,7 @@ const GoalsSection: React.FC<IGoalsSection> = ({
           </Section.Scrollable>
         ) : (
           <DataSection
-            isLoading={isLoading}
+            isLoading={isLoadingState}
             data={data?.data || []}
             //eslint-disable-next-line
             renderItem={(goal: any, index: any) => (

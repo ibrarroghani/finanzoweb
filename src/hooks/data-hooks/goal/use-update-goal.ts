@@ -37,10 +37,7 @@ const useUpdateGoal = (goalSlug: string) => {
         placement: 'topRight',
       });
 
-      // Add a delay before invalidating the query
-      setTimeout(() => {
-        queryClient.invalidateQueries({ queryKey: ['getGoals'] }); // Invalidate the goals list query
-      }, 1000); // 1000 milliseconds = 1 second
+      queryClient.invalidateQueries({ queryKey: ['getGoals'] }); // Invalidate the goals list query
     },
     onError: (error) => {
       // console.log('error', error);
