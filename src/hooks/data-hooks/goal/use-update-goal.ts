@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { goalAPIEndpoint } from '@/config/api/api-endpoints/goal-api-endpoint';
 import { handleApiError } from '@/utils/error/api-error-handler';
 import { notification } from 'antd';
+import { checkInternetConnection } from '@/utils/error/check-internet-connection';
 
 interface IData {
   title: string;
@@ -16,10 +17,16 @@ interface IData {
 const useUpdateGoal = (goalSlug: string) => {
   const queryClient = useQueryClient();
   return useMutation({
+    mutationKey: ['updateGoalMutation'],
     mutationFn: async (data: IData) => {
+      if (!checkInternetConnection()) {
+        throw new Error(
+          'Network error. Please check your internet connection.'
+        );
+      }
       try {
         const response = await goalAPIEndpoint.updateGoal(data, goalSlug);
-        return response; // Assuming `data` contains the access token
+        return response;
       } catch (error) {
         throw handleApiError(error);
       }
@@ -34,6 +41,13 @@ const useUpdateGoal = (goalSlug: string) => {
       setTimeout(() => {
         queryClient.invalidateQueries({ queryKey: ['getGoals'] }); // Invalidate the goals list query
       }, 1000); // 1000 milliseconds = 1 second
+    },
+    onError: (error) => {
+      // console.log('error', error);
+      notification.error({
+        message: error.message,
+        placement: 'topRight',
+      });
     },
   });
 };

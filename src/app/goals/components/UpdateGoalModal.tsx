@@ -6,13 +6,11 @@ import { Modal, Radio } from 'antd';
 import React, { useEffect } from 'react';
 import { useForm, Control, FieldValues, Controller } from 'react-hook-form';
 import { goalCreateValidationSchema } from '../validations/goal-create-validation-schema';
-// import useCreateGoal from '@/hooks/data-hooks/goal/use-create-goal';
 import { convertDateApiFormat, getTomorrowDate } from '@/utils/date-formatter';
 import { useGoalPageContext } from '../context/GoalPageContext';
 import useUpdateGoal from '@/hooks/data-hooks/goal/use-update-goal';
 import useGetSingleGoal from '@/hooks/data-hooks/goal/use-get-single-goal';
 import Spinner from '@/shared-components/Spinner';
-// import { useSingleGoal } from '@/hooks/dashboard/use-goals';
 
 interface IUpdateGoalModalProps {
   title: string;
@@ -44,7 +42,6 @@ const UpdateGoalModal: React.FC<IUpdateGoalModalProps> = ({
     //progress: false,
   };
 
-  //   const { goal, isLoading } = useSingleGoal();
   const {
     control,
     handleSubmit,
@@ -57,16 +54,7 @@ const UpdateGoalModal: React.FC<IUpdateGoalModalProps> = ({
   });
 
   const { data, isLoading } = useGetSingleGoal(goalSlug);
-  const { mutate } = useUpdateGoal(goalSlug);
-
-  // const handleSwitchButtonChange = (checked: boolean) => {
-  //   setValue('progress', checked);
-  // };
-
-  // const handleRadioButtonChange = (e: RadioChangeEvent) => {
-  //   //console.log('e.target.value', e.target.value);
-  //   setValue('status', e.target.value);
-  // };
+  const { mutate: updateGoal } = useUpdateGoal(goalSlug);
 
   const handleGoalUpdate = (data: IUpdateGoalFormData) => {
     //eslint-disable-next-line no-console
@@ -79,8 +67,11 @@ const UpdateGoalModal: React.FC<IUpdateGoalModalProps> = ({
       target_date: convertDateApiFormat(target_date),
       goal_status,
     };
-    mutate(formData);
-    setShowModal();
+    updateGoal(formData, {
+      onSuccess: () => {
+        setShowModal();
+      },
+    });
   };
 
   useEffect(() => {
@@ -114,7 +105,6 @@ const UpdateGoalModal: React.FC<IUpdateGoalModalProps> = ({
               <InputField
                 id='title'
                 name='title'
-                //value={initialValue.name}
                 control={control as unknown as Control<FieldValues>}
                 error={formErrors.title?.message}
                 label='Goal Title'
@@ -147,31 +137,8 @@ const UpdateGoalModal: React.FC<IUpdateGoalModalProps> = ({
               />
 
               <div className='flex justify-between py-4'>
-                {/* <p className='space-x-4'>
-              <span className='font-light'>Progress Bar</span>
-              <Switch onChange={handleSwitchButtonChange} />
-            </p> */}
                 <div className='ml-auto flex gap-4'>
                   <p className='font-light'>Goal Status</p>
-                  {/* <Radio.Group
-                    onChange={handleRadioButtonChange}
-                    value={control._formValues.status}
-                    buttonStyle='solid'
-                    className='flex'
-                  >
-                    <Radio.Button
-                      className='px-4 first:rounded-l-full'
-                      value='active'
-                    >
-                      Active
-                    </Radio.Button>
-                    <Radio.Button
-                      className='px-4 last:rounded-r-full'
-                      value='paused'
-                    >
-                      Pause
-                    </Radio.Button>
-                  </Radio.Group> */}
                   <Controller
                     control={control}
                     name='goal_status'

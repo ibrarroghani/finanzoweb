@@ -1,11 +1,18 @@
 import React from 'react';
 import Section from './Section';
-import { useAccounts } from '@/hooks/dashboard/use-accounts';
 import BankCard from './BankCard';
 import DataSection from './DataSection';
+import { notification } from 'antd';
+import useGetBankAccounts from '@/hooks/data-hooks/account/use-get-bank-accounts';
 
 const AccountsSection = () => {
-  const { accounts, isLoading } = useAccounts();
+  const { data, isLoading, isError, error } = useGetBankAccounts({
+    force_initial_plaid_account_fetch: 'yes',
+  });
+
+  if (isError && error?.message) {
+    notification.error({ message: error.message, placement: 'topRight' });
+  }
 
   return (
     <>
@@ -13,7 +20,7 @@ const AccountsSection = () => {
         <Section.Scrollable>
           <DataSection
             isLoading={isLoading}
-            data={accounts}
+            data={data?.data || []}
             //eslint-disable-next-line
             renderItem={(bank: any, index: any) => (
               <Section.Item key={index}>

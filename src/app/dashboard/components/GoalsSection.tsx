@@ -2,7 +2,8 @@ import React from 'react';
 import Section from './Section';
 import DataSection from './DataSection';
 import GoalCard from '@/app/goals/components/GoalCard';
-import { useGoals } from '@/hooks/dashboard/use-goals';
+import useGetGoals from '@/hooks/data-hooks/goal/use-get-goals';
+import { notification } from 'antd';
 
 interface IGoalsSection {
   scroll?: boolean;
@@ -17,7 +18,13 @@ const GoalsSection: React.FC<IGoalsSection> = ({
   edit = false,
   className = 'lg:w-1/2',
 }) => {
-  const { goals, isLoading } = useGoals();
+  const { data, isLoading, isError, error } = useGetGoals({
+    force_initial_plaid_account_fetch: 'yes',
+  });
+
+  if (isError && error?.message) {
+    notification.error({ message: error.message, placement: 'topRight' });
+  }
 
   return (
     <>
@@ -26,7 +33,7 @@ const GoalsSection: React.FC<IGoalsSection> = ({
           <Section.Scrollable>
             <DataSection
               isLoading={isLoading}
-              data={goals}
+              data={data?.data || []}
               //eslint-disable-next-line
               renderItem={(goal: any, index: any) => (
                 <Section.Item key={index}>
@@ -39,7 +46,7 @@ const GoalsSection: React.FC<IGoalsSection> = ({
         ) : (
           <DataSection
             isLoading={isLoading}
-            data={goals}
+            data={data?.data || []}
             //eslint-disable-next-line
             renderItem={(goal: any, index: any) => (
               <Section.Item key={index}>

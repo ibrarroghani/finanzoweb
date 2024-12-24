@@ -50,15 +50,6 @@ const GoalModal: React.FC<IGoalModalProps> = ({
     resolver: yupResolver(goalCreateValidationSchema),
   });
 
-  // const handleSwitchButtonChange = (checked: boolean) => {
-  //   setValue('progress', checked);
-  // };
-
-  // const handleRadioButtonChange = (e: RadioChangeEvent) => {
-  //   //console.log('e.target.value', e.target.value);
-  //   setValue('goal_status', e.target.value);
-  // };
-
   const handleGoalCreate = (data: IGoalFormData) => {
     //eslint-disable-next-line no-console
     console.log('data', data);
@@ -122,10 +113,6 @@ const GoalModal: React.FC<IGoalModalProps> = ({
           />
 
           <div className='flex justify-between py-4'>
-            {/* <p className='space-x-4'>
-              <span className='font-light'>Progress Bar</span>
-              <Switch onChange={handleSwitchButtonChange} />
-            </p> */}
             <div className='ml-auto flex gap-4'>
               <p className='font-light'>Goal Status</p>
               <Controller
@@ -148,25 +135,6 @@ const GoalModal: React.FC<IGoalModalProps> = ({
                   </Radio.Group>
                 )}
               />
-              {/* <Radio.Group
-                onChange={handleRadioButtonChange}
-                defaultValue={initialValue.goal_status}
-                buttonStyle='solid'
-                className='flex'
-              >
-                <Radio.Button
-                  className='px-4 first:rounded-l-full'
-                  value='active'
-                >
-                  Active
-                </Radio.Button>
-                <Radio.Button
-                  className='px-4 last:rounded-r-full'
-                  value='paused'
-                >
-                  Pause
-                </Radio.Button>
-              </Radio.Group> */}
             </div>
           </div>
           <div className='ml-auto w-32'>

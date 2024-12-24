@@ -50,8 +50,6 @@ const useCreateGoal = () => {
         placement: 'topRight',
       });
     },
-    //retry: false, // Disable automatic retries
-    //networkMode: 'always',
   });
 };
 
