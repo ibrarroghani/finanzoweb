@@ -2,25 +2,39 @@
 import ClientDetailsCard from '@/app/dashboard/components/ClientDetailsCard';
 import { ClientAddIcon } from '@/assets/icons/bussiness-panel-icons';
 import CustomButton from '@/shared-components/CustomButton';
-import React, { useState } from 'react';
+import React from 'react';
 import GoalModal from './GoalModal';
-import GoalCard from '@/app/goals/components/GoalCard';
 import RecommendationCard from './RecommendationCard';
-import { goalData, recommendationData } from '@/utils/dummy-data';
+import { recommendationData } from '@/utils/dummy-data';
 import Section from '@/app/dashboard/components/Section';
 import GoalEmpty from './GoalEmpty';
+import GoalsSection from '@/app/dashboard/components/GoalsSection';
+import { useGoalPageContext } from '../context/GoalPageContext';
+import UpdateGoalModal from './UpdateGoalModal';
+import useGetGoals from '@/hooks/data-hooks/goal/use-get-goals';
 
 const Goal = () => {
-  const [showModal, setShowModal] = useState<boolean>(false);
+  const {
+    showCreateModal,
+    setShowCreateModal,
+    showUpdateModal,
+    setShowUpdateModal,
+  } = useGoalPageContext();
 
-  const handleCreateGoal = () => setShowModal(true);
-  const handleToggleModal = () => {
-    setShowModal((prev) => !prev);
-  };
+  const { data } = useGetGoals({
+    force_initial_plaid_account_fetch: 'yes',
+  });
+
+  const handleCreateGoal = () => setShowCreateModal(!showCreateModal);
+
+  const handleCreateToggleModal = () => setShowCreateModal(!showCreateModal);
+
+  const handleUpdateToggleModal = () => setShowUpdateModal(!showUpdateModal);
+
   return (
     <div className='p-4'>
       <ClientDetailsCard />
-      {goalData.length > 0 ? (
+      {data?.data.length > 0 ? (
         <>
           <Section className='mt-5 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4'>
             {recommendationData.length > 0 &&
@@ -41,24 +55,31 @@ const Goal = () => {
               />
             </div>
           </div>
-          <Section className='mt-5 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4'>
-            {goalData.map((goal) => (
-              <Section.Item key={goal.id}>
-                <GoalCard key={goal.id} edit={true} goal={goal} />
-              </Section.Item>
-            ))}
-          </Section>
+
+          <GoalsSection
+            className='mt-5 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4'
+            edit={true}
+          />
         </>
       ) : (
         <GoalEmpty onClick={handleCreateGoal} />
       )}
 
-      {showModal && (
+      {showCreateModal && (
         <div>
           <GoalModal
-            showModal={showModal}
-            setShowModal={handleToggleModal}
+            showModal={showCreateModal}
+            setShowModal={handleCreateToggleModal}
             title='Create New Goal'
+          />
+        </div>
+      )}
+      {showUpdateModal && (
+        <div>
+          <UpdateGoalModal
+            showModal={showUpdateModal}
+            setShowModal={handleUpdateToggleModal}
+            title='Update Goal'
           />
         </div>
       )}

@@ -2,13 +2,13 @@
 import React from 'react';
 import ClientDetailsCard from './ClientDetailsCard';
 import BalanceCard from './BalanceCard';
-import { goalData, balanceData, documentData } from '@/utils/dummy-data';
+import { balanceData, documentData } from '@/utils/dummy-data';
 import DocumentCard from './DocumentCard';
 import Chat from './Chat';
 import Section from './Section';
-import GoalCard from '@/app/goals/components/GoalCard';
 import CustomAlert from './CustomAlert';
 import AccountsSection from './AccountsSection';
+import GoalsSection from './GoalsSection';
 
 const Dashboard = () => {
   return (
@@ -31,16 +31,7 @@ const Dashboard = () => {
             <AccountsSection />
 
             {/* Goals */}
-            <Section title='Goals' className='lg:w-1/2'>
-              <Section.Scrollable>
-                {goalData.length > 0 &&
-                  goalData.map((goal) => (
-                    <Section.Item key={goal.id}>
-                      <GoalCard goal={goal} />
-                    </Section.Item>
-                  ))}
-              </Section.Scrollable>
-            </Section>
+            <GoalsSection title='Goals' scroll={true} />
           </div>
 
           {/* Documents */}

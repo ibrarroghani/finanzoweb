@@ -9,6 +9,7 @@ import { QueryClientProvider } from '@tanstack/react-query';
 import queryClient from '@/config/api/clients/query-client';
 import { PersistGate } from 'redux-persist/integration/react';
 import ChartProvider from '@/shared-components/chart/ChartProvider';
+//import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 const ProviderWrapper = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -23,6 +24,7 @@ const ProviderWrapper = ({ children }: { children: React.ReactNode }) => {
             </ConfigProvider>
           </PersistGate>
         </Provider>
+        {/* <ReactQueryDevtools initialIsOpen={false} /> */}
       </QueryClientProvider>
     </>
   );

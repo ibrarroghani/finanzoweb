@@ -1,5 +1,6 @@
 import { Controller, Control, FieldValues } from 'react-hook-form';
 import { DatePicker } from 'antd';
+import dayjs from 'dayjs';
 
 interface IDatePickerFieldProps {
   placeholder?: string;
@@ -25,11 +26,12 @@ const DatePickerField: React.FC<IDatePickerFieldProps> = ({
         <Controller
           name={name}
           control={control}
-          render={({ field: { onChange } }) => (
+          render={({ field: { onChange, value } }) => (
             <DatePicker
               className='w-full cursor-pointer p-2.5'
               onChange={onChange}
               placeholder={placeholder}
+              value={value ? dayjs(value) : null} // Convert Date to dayjs
             />
           )}
         />

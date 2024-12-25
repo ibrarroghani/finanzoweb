@@ -6,7 +6,7 @@ interface IDataSectionProps {
   data: any;
   //eslint-disable-next-line
   renderItem: any;
-  emptyMessage: string;
+  emptyMessage?: string;
 }
 
 const DataSection: React.FC<IDataSectionProps> = ({
@@ -22,7 +22,7 @@ const DataSection: React.FC<IDataSectionProps> = ({
       </div>
     );
   }
-  if (data.length === 0) {
+  if (data.length === 0 && emptyMessage) {
     return <div className='p-4'>{emptyMessage}</div>;
   }
   return data.map(renderItem);

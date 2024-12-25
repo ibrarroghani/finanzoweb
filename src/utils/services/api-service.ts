@@ -23,7 +23,9 @@ apiService.interceptors.request.use(
     config.headers['Content-Type'] = 'application/json';
     return config;
   },
-  (error) => Promise.reject(error)
+  (error) => {
+    return Promise.reject(error);
+  }
 );
 
 apiService.interceptors.response.use(

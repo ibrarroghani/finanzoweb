@@ -2,10 +2,12 @@ import CustomButton from '@/shared-components/CustomButton';
 import DatePickerField from '@/shared-components/DatePickerField';
 import InputField from '@/shared-components/InputField';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Modal, Radio, RadioChangeEvent, Switch } from 'antd';
+import { Modal, Radio } from 'antd';
 import React from 'react';
-import { useForm, Control, FieldValues } from 'react-hook-form';
+import { useForm, Control, FieldValues, Controller } from 'react-hook-form';
 import { goalCreateValidationSchema } from '../validations/goal-create-validation-schema';
+import useCreateGoal from '@/hooks/data-hooks/goal/use-create-goal';
+import { convertDateApiFormat, getTomorrowDate } from '@/utils/date-formatter';
 
 interface IGoalModalProps {
   title: string;
@@ -14,12 +16,12 @@ interface IGoalModalProps {
 }
 
 interface IGoalFormData {
-  name: string;
-  amount: string;
-  monthlyAmount: string;
-  date: Date;
-  status?: string;
-  progress?: boolean;
+  title: string;
+  goal_amount: string;
+  // monthlyAmount: string;
+  target_date: Date;
+  goal_status: 'active' | 'paused';
+  //progress?: boolean;
 }
 
 const GoalModal: React.FC<IGoalModalProps> = ({
@@ -28,36 +30,42 @@ const GoalModal: React.FC<IGoalModalProps> = ({
   setShowModal,
 }) => {
   const initialValue: IGoalFormData = {
-    name: '',
-    amount: '',
-    monthlyAmount: '',
-    date: new Date(0),
-    status: 'Active',
-    progress: false,
+    title: '',
+    goal_amount: '',
+    // monthlyAmount: '',
+    target_date: getTomorrowDate(),
+    goal_status: 'active',
+    //progress: false,
   };
+
+  const { mutate: CreateGoal, isPending } = useCreateGoal();
 
   const {
     control,
     handleSubmit,
     formState: { errors: formErrors },
-    setValue,
+    //setValue,
   } = useForm<IGoalFormData>({
     defaultValues: initialValue,
     resolver: yupResolver(goalCreateValidationSchema),
   });
 
-  const handleSwitchButtonChange = (checked: boolean) => {
-    setValue('progress', checked);
-  };
-
-  const handleRadioButtonChange = (e: RadioChangeEvent) => {
-    setValue('status', e.target.value);
-  };
-
   const handleGoalCreate = (data: IGoalFormData) => {
     //eslint-disable-next-line no-console
     console.log('data', data);
-    setShowModal();
+    const { title, goal_amount, target_date, goal_status } = data;
+    const formData = {
+      title,
+      description: 'this is a goal',
+      goal_amount: Number(goal_amount),
+      target_date: convertDateApiFormat(target_date),
+      goal_status,
+    };
+    CreateGoal(formData, {
+      onSuccess: () => {
+        setShowModal();
+      },
+    });
   };
 
   return (
@@ -71,23 +79,23 @@ const GoalModal: React.FC<IGoalModalProps> = ({
       >
         <form onSubmit={handleSubmit(handleGoalCreate)}>
           <InputField
-            id='name'
-            name='name'
+            id='title'
+            name='title'
             control={control as unknown as Control<FieldValues>}
-            error={formErrors.name?.message}
-            label='Goal Name'
+            error={formErrors.title?.message}
+            label='Goal Title'
             labelPosition='outside'
           />
           <InputField
-            id='amount'
-            name='amount'
+            id='goal_amount'
+            name='goal_amount'
             control={control as unknown as Control<FieldValues>}
-            error={formErrors.amount?.message}
+            error={formErrors.goal_amount?.message}
             label='Target Amount'
             type='number'
             labelPosition='outside'
           />
-          <InputField
+          {/* <InputField
             id='monthlyAmount'
             name='monthlyAmount'
             control={control as unknown as Control<FieldValues>}
@@ -95,45 +103,46 @@ const GoalModal: React.FC<IGoalModalProps> = ({
             label='Monthly Contributions'
             type='number'
             labelPosition='outside'
-          />
+          /> */}
 
           <DatePickerField
             control={control as unknown as Control<FieldValues>}
-            name='date'
+            name='target_date'
             label='Target Date'
-            error={formErrors.date?.message}
+            error={formErrors.target_date?.message}
           />
 
           <div className='flex justify-between py-4'>
-            <p className='space-x-4'>
-              <span className='font-light'>Progress Bar</span>
-              <Switch onChange={handleSwitchButtonChange} />
-            </p>
-            <div className='flex gap-4'>
+            <div className='ml-auto flex gap-4'>
               <p className='font-light'>Goal Status</p>
-              <Radio.Group
-                onChange={handleRadioButtonChange}
-                defaultValue='Active'
-                buttonStyle='solid'
-                className='flex'
-              >
-                <Radio.Button
-                  className='px-4 first:rounded-l-full'
-                  value='Active'
-                >
-                  Active
-                </Radio.Button>
-                <Radio.Button
-                  className='px-4 last:rounded-r-full'
-                  value='Pause'
-                >
-                  Pause
-                </Radio.Button>
-              </Radio.Group>
+              <Controller
+                control={control}
+                name='goal_status'
+                render={({ field }) => (
+                  <Radio.Group {...field} buttonStyle='solid' className='flex'>
+                    <Radio.Button
+                      className='px-4 first:rounded-l-full'
+                      value='active'
+                    >
+                      Active
+                    </Radio.Button>
+                    <Radio.Button
+                      className='px-4 last:rounded-r-full'
+                      value='paused'
+                    >
+                      Pause
+                    </Radio.Button>
+                  </Radio.Group>
+                )}
+              />
             </div>
           </div>
           <div className='ml-auto w-32'>
-            <CustomButton type='submit' title='save changes' />
+            <CustomButton
+              type='submit'
+              title='save changes'
+              disable={isPending}
+            />
           </div>
         </form>
       </Modal>
