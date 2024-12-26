@@ -10,6 +10,39 @@ export interface IMessage {
   files?: { file: File; url: string }[];
 }
 
+const Chat = () => {
+  const [messages, setMessages] = useState<IMessage[]>(initialMessages);
+
+  const addMessage = (message: IMessage) => {
+    setMessages((prev) => [...prev, message]);
+  };
+
+  const deleteMessageFile = (messageId: string, fileName: string) => {
+    setMessages((prev) =>
+      prev.map((message) =>
+        message.id === messageId
+          ? {
+              ...message,
+              files: message.files?.filter(
+                ({ file }) => file.name !== fileName
+              ),
+            }
+          : message
+      )
+    );
+  };
+
+  return (
+    <ChatContainer
+      messages={messages}
+      onSendMessage={addMessage}
+      onDeleteFile={deleteMessageFile}
+    />
+  );
+};
+
+export default Chat;
+
 const initialMessages: IMessage[] = [
   {
     id: '1',
@@ -47,36 +80,3 @@ const initialMessages: IMessage[] = [
     receiver: 'user',
   },
 ];
-
-const Chat = () => {
-  const [messages, setMessages] = useState<IMessage[]>(initialMessages);
-
-  const addMessage = (message: IMessage) => {
-    setMessages((prev) => [...prev, message]);
-  };
-
-  const deleteMessageFile = (messageId: string, fileName: string) => {
-    setMessages((prev) =>
-      prev.map((message) =>
-        message.id === messageId
-          ? {
-              ...message,
-              files: message.files?.filter(
-                ({ file }) => file.name !== fileName
-              ),
-            }
-          : message
-      )
-    );
-  };
-
-  return (
-    <ChatContainer
-      messages={messages}
-      onSendMessage={addMessage}
-      onDeleteFile={deleteMessageFile}
-    />
-  );
-};
-
-export default Chat;
