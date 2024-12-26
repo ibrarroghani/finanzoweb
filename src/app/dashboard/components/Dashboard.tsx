@@ -4,7 +4,7 @@ import ClientDetailsCard from './ClientDetailsCard';
 import BalanceCard from './BalanceCard';
 import { balanceData, documentData } from '@/utils/dummy-data';
 import DocumentCard from './DocumentCard';
-import Chat from './Chat';
+import Chat from './chat/Chat';
 import Section from './Section';
 import CustomAlert from './CustomAlert';
 import AccountsSection from './AccountsSection';
