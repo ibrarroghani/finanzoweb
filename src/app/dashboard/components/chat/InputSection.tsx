@@ -34,7 +34,7 @@ const InputSection: React.FC<InputSectionProps> = ({ onSendMessage }) => {
     onSendMessage({
       id: String(Date.now()),
       text: message.trim(),
-      timestamp: new Date().toLocaleTimeString(),
+      timestamp: new Date().toLocaleString(),
       sender: 'user',
       receiver: 'system',
       files: selectedFiles,
@@ -59,6 +59,10 @@ const InputSection: React.FC<InputSectionProps> = ({ onSendMessage }) => {
   const handleRemoveFile = (fileToRemove: { file: File; url: string }) => {
     setSelectedFiles((prev) =>
       prev.filter(({ file }) => file !== fileToRemove.file)
+    );
+    setFileList((prev) =>
+      //eslint-disable-next-line
+      prev.filter((file: any) => file.originFileObj !== fileToRemove.file)
     );
     URL.revokeObjectURL(fileToRemove.url);
   };

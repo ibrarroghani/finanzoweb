@@ -15,7 +15,7 @@ const MessageItem: React.FC<MessageItemProps> = ({ message, onDeleteFile }) => {
     <div
       className={`message mb-4 flex ${isSystemMessage ? 'justify-end' : 'justify-start'}`}
     >
-      <div className='content max-w-[80%] rounded-lg bg-content p-4'>
+      <div className='max-w-[80%] rounded-lg bg-content p-4'>
         {/* Text Message */}
         {message.text && <p className='text-small'>{message.text}</p>}
 
@@ -30,7 +30,7 @@ const MessageItem: React.FC<MessageItemProps> = ({ message, onDeleteFile }) => {
         ))}
 
         {/* Timestamp */}
-        <p className='timestamp text-extra-small'>{message.timestamp}</p>
+        <p className='timestamp text-extra-small mt-1'>{message.timestamp}</p>
       </div>
     </div>
   );
