@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Upload, Dropdown, Menu, Button } from 'antd';
+import { Upload, Dropdown, Button } from 'antd';
 import {
   MessageSendIcon,
   ImageUploadIcon,
@@ -67,21 +67,23 @@ const InputSection: React.FC<InputSectionProps> = ({ onSendMessage }) => {
     URL.revokeObjectURL(fileToRemove.url);
   };
 
-  const fileUploadMenu = (
-    <Menu>
-      <Menu.Item key='1'>
+  const fileUploadMenu = [
+    {
+      key: '1',
+      label: (
         <Upload
           beforeUpload={() => false}
           onChange={handleFileChange}
           showUploadList={false}
+          multiple
           accept='image/*,application/pdf'
           fileList={fileList}
         >
           <Button>Select Image or File</Button>
         </Upload>
-      </Menu.Item>
-    </Menu>
-  );
+      ),
+    },
+  ];
 
   return (
     <div className='input-section flex items-center justify-between px-4'>
@@ -135,7 +137,7 @@ const InputSection: React.FC<InputSectionProps> = ({ onSendMessage }) => {
         >
           <MessageSendIcon />
         </button>
-        <Dropdown overlay={fileUploadMenu} trigger={['click']}>
+        <Dropdown menu={{ items: fileUploadMenu }} trigger={['click']}>
           <button className='upload-button absolute right-2 top-7'>
             <ImageUploadIcon />
           </button>
