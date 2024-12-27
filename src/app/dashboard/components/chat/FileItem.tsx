@@ -5,13 +5,18 @@ import { DownloadIconTwo } from '@/assets/icons/bussiness-panel-icons';
 interface FileItemProps {
   file: { file: File; url: string };
   messageStatus: string;
+  className?: string;
 }
 
-const FileItem: React.FC<FileItemProps> = ({ file, messageStatus }) => {
+const FileItem: React.FC<FileItemProps> = ({
+  className,
+  file,
+  messageStatus,
+}) => {
   const isImage = file.file.type.startsWith('image/');
 
   return (
-    <div className='mt-2'>
+    <div className={`mb-2 ${className} rounded-medium`}>
       {messageStatus === 'deleted' ? (
         <p className='text-small'>This file is deleted</p>
       ) : (
@@ -20,8 +25,8 @@ const FileItem: React.FC<FileItemProps> = ({ file, messageStatus }) => {
             <Image
               src={file.url}
               alt='preview'
-              width={150}
-              height={150}
+              height={250}
+              width={250}
               className='rounded object-cover p-2'
             />
           ) : (

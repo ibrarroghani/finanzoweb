@@ -57,6 +57,7 @@ const MessageItem: React.FC<MessageItemProps> = ({
                 key={index}
                 file={fileItem}
                 messageStatus={message.status}
+                className='-m-4'
               />
             ))}
 
