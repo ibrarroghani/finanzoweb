@@ -7,17 +7,11 @@ import {
 } from '@/assets/icons/bussiness-panel-icons';
 import TextArea from 'antd/es/input/TextArea';
 import Image from 'next/image';
+import { IMessage } from './Chat';
 
 interface InputSectionProps {
   //eslint-disable-next-line
-  onSendMessage: (message: {
-    id: string;
-    text: string;
-    timestamp: string;
-    sender: string;
-    receiver: string;
-    files?: { file: File; url: string }[];
-  }) => void;
+  onSendMessage: (message: IMessage) => void;
 }
 
 const InputSection: React.FC<InputSectionProps> = ({ onSendMessage }) => {
@@ -31,12 +25,25 @@ const InputSection: React.FC<InputSectionProps> = ({ onSendMessage }) => {
   const handleSendMessage = () => {
     if (!message.trim() && selectedFiles.length === 0) return;
 
+    // onSendMessage({
+    //   id: String(Date.now()),
+    //   text: message.trim(),
+    //   timestamp: new Date().toLocaleString(),
+    //   sender: 'user',
+    //   receiver: 'system',
+    //   files: selectedFiles,
+    // });
+
     onSendMessage({
       id: String(Date.now()),
-      text: message.trim(),
-      timestamp: new Date().toLocaleString(),
-      sender: 'user',
-      receiver: 'system',
+      message: message.trim(),
+      dateTime: new Date(),
+      type: 'text',
+      sender: 'client',
+      senderName: 'Dan Koa',
+      senderImage: '',
+      senderImageType: 'source',
+      status: 'read',
       files: selectedFiles,
     });
 

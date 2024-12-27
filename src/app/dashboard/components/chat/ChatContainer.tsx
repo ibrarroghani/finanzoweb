@@ -8,13 +8,17 @@ interface ChatContainerProps {
   //eslint-disable-next-line
   onSendMessage: (message: IMessage) => void;
   //eslint-disable-next-line
-  onDeleteFile: (messageId: string, fileName: string) => void;
+  //onDeleteFile: (messageId: string, fileName: string) => void;
+
+  //eslint-disable-next-line
+  onDeleteMessage: (messageId: string) => void;
 }
 
 const ChatContainer: React.FC<ChatContainerProps> = ({
   messages,
   onSendMessage,
-  onDeleteFile,
+  //onDeleteFile,
+  onDeleteMessage,
 }) => {
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
@@ -31,7 +35,11 @@ const ChatContainer: React.FC<ChatContainerProps> = ({
         ref={messagesEndRef}
         className='custom-scrollbar flex flex-col overflow-y-auto px-4'
       >
-        <MessageList messages={messages} onDeleteFile={onDeleteFile} />
+        <MessageList
+          messages={messages}
+          // onDeleteFile={onDeleteFile}
+          onDeleteMessage={onDeleteMessage}
+        />
       </div>
       <InputSection onSendMessage={onSendMessage} />
     </div>
