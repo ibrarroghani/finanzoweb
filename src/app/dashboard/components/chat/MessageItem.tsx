@@ -49,7 +49,9 @@ const MessageItem: React.FC<MessageItemProps> = ({
         ) : (
           <>
             {/* Text Message */}
-            {message.message && <p className='text-small'>{message.message}</p>}
+            {message.message && (
+              <p className='text-small mb-4'>{message.message}</p>
+            )}
 
             {/* File Previews */}
             {message.files?.map((fileItem, index) => (

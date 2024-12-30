@@ -30,7 +30,7 @@ const FileItem: React.FC<FileItemProps> = ({
               className='rounded object-cover p-2'
             />
           ) : (
-            <div className='flex flex-col gap-2'>
+            <div className='flex flex-col gap-2 px-3'>
               <div className=''>
                 <span className='text-large'>{file.file.name}</span>
               </div>

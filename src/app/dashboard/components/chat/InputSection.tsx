@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { Upload, Dropdown, Button } from 'antd';
+import { Upload, Dropdown, Button, Input } from 'antd';
 import {
   MessageSendIcon,
   ImageUploadIcon,
   CloseIcon,
 } from '@/assets/icons/bussiness-panel-icons';
-import TextArea from 'antd/es/input/TextArea';
+
+const { TextArea } = Input;
 import Image from 'next/image';
 import { IMessage } from './Chat';
 
