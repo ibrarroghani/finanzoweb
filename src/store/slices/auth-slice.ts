@@ -4,16 +4,22 @@ interface IUser {
   name: string;
   email: string;
   user_type: string;
+  slug: string;
 }
 
-interface IAuthState {
-  user: IUser | null;
+export interface IAuthState {
+  user: IUser;
   isAuthenticated: boolean;
   loading: boolean;
 }
 
 const initialState: IAuthState = {
-  user: null,
+  user: {
+    name: '',
+    email: '',
+    user_type: '',
+    slug: 'user-1ee15520-a58e-11ef-878e-6045bd08fbb0-1ee15525-a58e-11ef-878e-6045bd08fbb0',
+  },
   isAuthenticated: false,
   loading: false,
 };

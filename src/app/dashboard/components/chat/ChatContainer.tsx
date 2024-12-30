@@ -6,19 +6,22 @@ import { IMessage } from './Chat';
 interface ChatContainerProps {
   messages: IMessage[];
   //eslint-disable-next-line
-  onSendMessage: (message: IMessage) => void;
+  onSendMessage: (message: string) => void;
   //eslint-disable-next-line
   //onDeleteFile: (messageId: string, fileName: string) => void;
 
   //eslint-disable-next-line
-  onDeleteMessage: (messageId: string) => void;
+  //onDeleteMessage: (messageId: string) => void;
+
+  isLoading: boolean;
 }
 
 const ChatContainer: React.FC<ChatContainerProps> = ({
   messages,
   onSendMessage,
   //onDeleteFile,
-  onDeleteMessage,
+  // onDeleteMessage,
+  isLoading,
 }) => {
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
@@ -38,10 +41,10 @@ const ChatContainer: React.FC<ChatContainerProps> = ({
         <MessageList
           messages={messages}
           // onDeleteFile={onDeleteFile}
-          onDeleteMessage={onDeleteMessage}
+          //onDeleteMessage={onDeleteMessage}
         />
       </div>
-      <InputSection onSendMessage={onSendMessage} />
+      <InputSection onSendMessage={onSendMessage} isLoading={isLoading} />
     </div>
   );
 };

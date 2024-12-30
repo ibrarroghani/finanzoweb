@@ -8,23 +8,24 @@ interface MessageListProps {
   //onDeleteFile: (messageId: string, fileName: string) => void;
 
   //eslint-disable-next-line
-  onDeleteMessage: (messageId: string) => void;
+  // onDeleteMessage: (messageId: string) => void;
 }
 
 const MessageList: React.FC<MessageListProps> = ({
   messages,
   // onDeleteFile,
-  onDeleteMessage,
+  //onDeleteMessage,
 }) => (
   <>
-    {messages.map((message) => (
-      <MessageItem
-        key={message.id}
-        message={message}
-        // onDeleteFile={onDeleteFile}
-        onDeleteMessage={onDeleteMessage}
-      />
-    ))}
+    {messages.length > 0 &&
+      messages.map((message) => (
+        <MessageItem
+          key={message.id}
+          message={message}
+          // onDeleteFile={onDeleteFile}
+          //onDeleteMessage={onDeleteMessage}
+        />
+      ))}
   </>
 );
 

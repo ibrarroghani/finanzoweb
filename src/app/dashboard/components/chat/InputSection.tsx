@@ -8,14 +8,18 @@ import {
 
 const { TextArea } = Input;
 import Image from 'next/image';
-import { IMessage } from './Chat';
+// import { IMessage } from './Chat';
 
 interface InputSectionProps {
   //eslint-disable-next-line
-  onSendMessage: (message: IMessage) => void;
+  onSendMessage: (message: string) => void;
+  isLoading?: boolean;
 }
 
-const InputSection: React.FC<InputSectionProps> = ({ onSendMessage }) => {
+const InputSection: React.FC<InputSectionProps> = ({
+  onSendMessage,
+  isLoading,
+}) => {
   const [message, setMessage] = useState('');
   const [selectedFiles, setSelectedFiles] = useState<
     { file: File; url: string }[]
@@ -35,18 +39,20 @@ const InputSection: React.FC<InputSectionProps> = ({ onSendMessage }) => {
     //   files: selectedFiles,
     // });
 
-    onSendMessage({
-      id: String(Date.now()),
-      message: message.trim(),
-      dateTime: new Date(),
-      type: 'text',
-      sender: 'client',
-      senderName: 'Dan Koa',
-      senderImage: '',
-      senderImageType: 'source',
-      status: 'read',
-      files: selectedFiles,
-    });
+    // onSendMessage({
+    //   id: String(Date.now()),
+    //   message: message.trim(),
+    //   dateTime: new Date(),
+    //   type: 'text',
+    //   sender: 'client',
+    //   senderName: 'Dan Koa',
+    //   senderImage: '',
+    //   senderImageType: 'source',
+    //   status: 'read',
+    //   files: selectedFiles,
+    // });
+
+    onSendMessage(message);
 
     setMessage('');
     setSelectedFiles([]);
@@ -142,6 +148,7 @@ const InputSection: React.FC<InputSectionProps> = ({ onSendMessage }) => {
         <button
           className='send-button absolute right-12 top-7'
           onClick={handleSendMessage}
+          disabled={isLoading}
         >
           <MessageSendIcon />
         </button>
