@@ -77,11 +77,22 @@ export default Chat;
 const initialMessages: IMessage[] = [
   {
     id: '1',
-    message: 'Hello, how can I help you?',
+    message: 'Hi',
     dateTime: new Date(),
     type: 'text',
     sender: 'client',
     senderName: 'John Doe (Client)',
+    senderImage: '',
+    senderImageType: 'source',
+    status: 'unread',
+  },
+  {
+    id: '2',
+    message: 'Hello, how can I help you?',
+    dateTime: new Date(),
+    type: 'text',
+    sender: 'broker',
+    senderName: 'John Doe2 (Broker)',
     senderImage: '',
     senderImageType: 'source',
     status: 'unread',

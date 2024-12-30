@@ -18,6 +18,7 @@ const MessageItem: React.FC<MessageItemProps> = ({
   onDeleteMessage,
 }) => {
   const isSystemMessage = message.sender === 'client';
+  const isFileMessage = (message.files ?? [])?.length > 0;
 
   const showDeleteConfirm = (messageId: string) => {
     if (message.sender !== 'client') return;
@@ -39,7 +40,7 @@ const MessageItem: React.FC<MessageItemProps> = ({
       className={`message mb-4 flex ${isSystemMessage ? 'justify-end' : 'justify-start'}`}
     >
       <div
-        className='max-w-[80%] rounded-lg bg-content p-4'
+        className='max-w-[80%] rounded-lg bg-content p-2'
         {...(message.status !== 'deleted' && {
           onClick: () => showDeleteConfirm(message.id),
         })}
@@ -50,7 +51,9 @@ const MessageItem: React.FC<MessageItemProps> = ({
           <>
             {/* Text Message */}
             {message.message && (
-              <p className='text-small mb-4'>{message.message}</p>
+              <p className={`text-small ${isFileMessage ? 'mb-4' : ''}`}>
+                {message.message}
+              </p>
             )}
 
             {/* File Previews */}
@@ -59,7 +62,7 @@ const MessageItem: React.FC<MessageItemProps> = ({
                 key={index}
                 file={fileItem}
                 messageStatus={message.status}
-                className='-m-4'
+                className='-m-2'
               />
             ))}
 
