@@ -1,8 +1,9 @@
 import React from 'react';
 import CustomBadge from './CustomBadge';
-import { ThreeDotIcon, UserIcon } from '@/assets/icons/bussiness-panel-icons';
-import { IClient } from '@/shared-components/layouts/Sidebar';
+import { ThreeDotIcon } from '@/assets/icons/bussiness-panel-icons';
+import { IClient } from '@/shared-components/layouts/sidebar/Sidebar';
 import { Tooltip } from 'antd';
+import Image from 'next/image';
 
 // interface IClient {
 //   id: number;
@@ -20,15 +21,23 @@ const ClientCard: React.FC<IClientCardProps> = ({
   data,
   onClick,
 }) => {
-  const { name, is_active } = data;
+  const fallbackImageUrl = '/images/user-image.png';
+  const { name, is_active, profile_picture_url } = data;
   return (
     <div
       onClick={onClick}
       className={`mb-2 flex h-20 cursor-pointer items-center justify-between gap-4 rounded-md px-4 ${isActive ? 'bg-primary-dark' : 'bg-card'}`}
     >
       <div className='flex items-center gap-2 overflow-hidden'>
-        <div className='h-12 w-12 flex-shrink-0 rounded-full'>
-          <UserIcon />
+        <div className='h-12 w-12 flex-shrink-0'>
+          {/* <UserIcon /> */}
+          <Image
+            src={profile_picture_url || fallbackImageUrl}
+            alt='profile'
+            width={48}
+            height={48}
+            className='0bject-cover rounded-full'
+          />
         </div>
         <div className='flex max-w-full flex-col gap-2 overflow-hidden'>
           <Tooltip title={name}>

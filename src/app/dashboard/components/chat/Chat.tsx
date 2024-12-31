@@ -73,7 +73,7 @@ const Chat = () => {
   // );
 
   const connectionSlugId =
-    'message-thread-5ec4cf91-8e9f-4fa2-9145-67730090da1d-8db6a520-f6b3-4b7f-a053-0f0d178cc892';
+    'message-thread-0e90905a-b136-40bb-9a52-d18eaa0113f5-2b266330-a5cb-46fa-be38-17c6f3b79210';
 
   const { mutate: sendMessage, isPending } = useSendMessage(connectionSlugId);
   // const {

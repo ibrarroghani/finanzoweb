@@ -25,8 +25,7 @@ const Header = () => {
   ];
 
   const handleHomeClick = () => {
-    //eslint-disable-next-line no-console
-    console.log('home is clicked');
+    window.location.reload();
   };
 
   const menuItems: MenuProps['items'] = [

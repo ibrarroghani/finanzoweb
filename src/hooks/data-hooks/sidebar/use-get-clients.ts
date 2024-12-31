@@ -5,7 +5,7 @@ import { handleApiError } from '@/utils/error/api-error-handler';
 //eslint-disable-next-line
 const useGetClients = (params?: any) => {
   return useQuery({
-    queryKey: ['getGoals', params], // Unique key for the query
+    queryKey: ['getClients', params], // Unique key for the query
     queryFn: async () => {
       try {
         const response = await sidebarAPIEndpoint.getClients(params);
