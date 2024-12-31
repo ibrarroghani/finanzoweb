@@ -1,12 +1,14 @@
 import React from 'react';
 import CustomBadge from './CustomBadge';
 import { ThreeDotIcon, UserIcon } from '@/assets/icons/bussiness-panel-icons';
+import { IClient } from '@/shared-components/layouts/Sidebar';
+import { Tooltip } from 'antd';
 
-interface IClient {
-  id: number;
-  name: string;
-  status: boolean;
-}
+// interface IClient {
+//   id: number;
+//   name: string;
+//   status: boolean;
+// }
 interface IClientCardProps {
   data: IClient;
   isActive?: boolean;
@@ -18,7 +20,7 @@ const ClientCard: React.FC<IClientCardProps> = ({
   data,
   onClick,
 }) => {
-  const { name, status } = data;
+  const { name, is_active } = data;
   return (
     <div
       onClick={onClick}
@@ -29,16 +31,25 @@ const ClientCard: React.FC<IClientCardProps> = ({
           <UserIcon />
         </div>
         <div className='flex max-w-full flex-col gap-2 overflow-hidden'>
-          <p
-            className={`truncate font-semibold ${isActive ? 'text-primary-light' : 'text-primary-dark'}`}
-          >
-            {name}
-          </p>
-          {status && (
+          <Tooltip title={name}>
+            <p
+              className={`truncate font-semibold ${isActive ? 'text-primary-light' : 'text-primary-dark'}`}
+            >
+              {name}
+            </p>
+          </Tooltip>
+
+          {/* {is_active && (
             <div className='flex items-start'>
               <CustomBadge text='Active' color='bg-success' />
             </div>
-          )}
+          )} */}
+          <div className='flex items-start'>
+            <CustomBadge
+              text={is_active ? 'Active' : 'Inactive'}
+              color={is_active ? 'bg-success' : 'bg-muted'}
+            />
+          </div>
         </div>
       </div>
       <div
