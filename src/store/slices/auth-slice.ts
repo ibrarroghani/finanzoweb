@@ -8,6 +8,7 @@ interface IUser {
 }
 
 interface IClient {
+  id: number;
   name: string;
   email: string;
   image: string;
@@ -32,6 +33,7 @@ const initialState: IAuthState = {
     slug: 'user-1ee15520-a58e-11ef-878e-6045bd08fbb0-1ee15525-a58e-11ef-878e-6045bd08fbb0',
   },
   client: {
+    id: 0,
     name: '',
     email: '',
     image: '',

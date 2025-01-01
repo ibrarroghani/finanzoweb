@@ -5,6 +5,8 @@ import GoalCard from '@/app/goals/components/GoalCard';
 import useGetGoals from '@/hooks/data-hooks/goal/use-get-goals';
 import { notification } from 'antd';
 import { useIsFetching } from '@tanstack/react-query';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store';
 
 interface IGoalsSection {
   scroll?: boolean;
@@ -19,7 +21,9 @@ const GoalsSection: React.FC<IGoalsSection> = ({
   edit = false,
   className = 'lg:w-1/2',
 }) => {
-  const { data, isLoading, isError, error } = useGetGoals({
+  const slug = useSelector((state: RootState) => state.auth.client.slug);
+
+  const { data, isLoading, isError, error } = useGetGoals(slug, {
     force_initial_plaid_account_fetch: 'yes',
   });
 

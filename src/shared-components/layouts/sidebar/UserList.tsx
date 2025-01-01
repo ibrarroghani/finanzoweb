@@ -9,7 +9,7 @@ interface IUserListProps {
   isLoading: boolean;
   fetchMoreData: () => void;
   hasMore: boolean;
-  selectedCard: IClient | undefined;
+  slectedClientId: number;
   //eslint-disable-next-line
   onCardSelect: (id: number) => void;
   scrollableDivRef: React.RefObject<HTMLDivElement>;
@@ -21,7 +21,7 @@ const UserList = ({
   isLoading,
   fetchMoreData,
   hasMore,
-  selectedCard,
+  slectedClientId,
   onCardSelect,
   scrollableDivRef,
   isSearching,
@@ -59,7 +59,7 @@ const UserList = ({
             <ClientCard
               key={client.id}
               data={client}
-              isActive={client.id === selectedCard?.id}
+              isActive={client.id === slectedClientId}
               onClick={() => onCardSelect(client.id)}
             />
           ))

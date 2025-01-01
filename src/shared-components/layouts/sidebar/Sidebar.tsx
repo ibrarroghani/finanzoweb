@@ -12,8 +12,9 @@ import useGetClients from '@/hooks/data-hooks/sidebar/use-get-clients';
 import SidebarFooter from './SidebarFooter';
 import UserList from './UserList';
 import SidebarHeader from './SidebarHeader';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setClient, setLoading } from '@/store/slices/auth-slice';
+import { RootState } from '@/store';
 
 interface IFormData {
   search: string;
@@ -41,9 +42,7 @@ export interface IClient {
 const Sidebar = () => {
   const [users, setUsers] = useState<IClient[]>([]);
   const [allUsers, setAllUsers] = useState<IClient[]>([]);
-  const [selectedCard, setSelectedCard] = useState<IClient | undefined>(
-    undefined
-  );
+  const slectedClient = useSelector((state: RootState) => state.auth.client);
 
   const dispatch = useDispatch();
 
@@ -84,13 +83,13 @@ const Sidebar = () => {
         return Array.from(uniqueUsers);
       }); // Append new data to existing users without duplicates
 
-      setSelectedCard((prev) => prev || data.data[0]); // Select the first card by default
       setHasMore(clientData.meta.currentPage < clientData.meta.totalPages); // Check if more data is available
       // Dispatch the first user when the component mounts
-      if (!selectedCard && data.data.length > 0) {
+      if (!slectedClient.id && data.data.length > 0) {
         const selectedUser = data.data[0];
         dispatch(
           setClient({
+            id: selectedUser.id,
             name: selectedUser.name,
             email: selectedUser.email,
             image: selectedUser.profile_picture_url,
@@ -102,17 +101,18 @@ const Sidebar = () => {
         );
       }
     }
-  }, [data, dispatch, selectedCard]);
+  }, [data, dispatch, slectedClient]);
 
   const handleCardSelection = useCallback(
     (id: number) => {
       const selectedUser = users.find((user) => user.id === id);
-      setSelectedCard(selectedUser);
+      // setSelectedCard(selectedUser);
 
       // Dispatch the selected user
       if (selectedUser) {
         dispatch(
           setClient({
+            id: selectedUser.id,
             name: selectedUser.name,
             email: selectedUser.email,
             image: selectedUser.profile_picture_url,
@@ -185,7 +185,7 @@ const Sidebar = () => {
         isLoading={isLoading}
         fetchMoreData={fetchMoreData}
         hasMore={hasMore}
-        selectedCard={selectedCard}
+        slectedClientId={slectedClient.id}
         onCardSelect={handleCardSelection}
         scrollableDivRef={scrollableDivRef}
         isSearching={!!searchValue}
