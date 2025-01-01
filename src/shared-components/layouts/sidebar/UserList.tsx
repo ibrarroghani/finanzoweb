@@ -44,14 +44,16 @@ const UserList = ({
           )
         }
         endMessage={
-          <div className='text-small text-center font-bold capitalize text-primary-dark'>
-            No more clients
-          </div>
+          isLoading || isSearching ? null : (
+            <div className='text-small text-center font-bold capitalize text-primary-dark'>
+              No more clients
+            </div>
+          )
         }
         scrollableTarget='scrollableDiv'
       >
         {isLoading ? (
-          <div className='mt-8 flex justify-center overflow-hidden'>
+          <div className='mt-7 flex justify-center overflow-hidden'>
             <Spinner />
           </div>
         ) : users.length > 0 ? (

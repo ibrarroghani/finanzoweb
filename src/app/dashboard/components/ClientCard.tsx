@@ -2,7 +2,7 @@ import React from 'react';
 import CustomBadge from './CustomBadge';
 import { ThreeDotIcon } from '@/assets/icons/bussiness-panel-icons';
 import { IClient } from '@/shared-components/layouts/sidebar/Sidebar';
-import { Tooltip } from 'antd';
+//import { Tooltip } from 'antd';
 import Image from 'next/image';
 
 // interface IClient {
@@ -40,13 +40,12 @@ const ClientCard: React.FC<IClientCardProps> = ({
           />
         </div>
         <div className='flex max-w-full flex-col gap-2 overflow-hidden'>
-          <Tooltip title={name}>
-            <p
-              className={`truncate font-semibold ${isActive ? 'text-primary-light' : 'text-primary-dark'}`}
-            >
-              {name}
-            </p>
-          </Tooltip>
+          <p
+            title={name}
+            className={`truncate font-semibold ${isActive ? 'text-primary-light' : 'text-primary-dark'}`}
+          >
+            {name}
+          </p>
 
           {/* {is_active && (
             <div className='flex items-start'>

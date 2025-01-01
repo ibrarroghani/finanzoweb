@@ -39,6 +39,11 @@ export interface IClient {
   profile_picture_url: string;
 }
 
+const deduplicateById = (clients: IClient[]) =>
+  clients.filter(
+    (item, index, self) => self.findIndex((i) => i.id === item.id) === index
+  );
+
 const Sidebar = () => {
   const [users, setUsers] = useState<IClient[]>([]);
   const [allUsers, setAllUsers] = useState<IClient[]>([]);
@@ -56,16 +61,21 @@ const Sidebar = () => {
 
   const searchValue = watch('search');
 
-  const { data, refetch } = useGetClients({ page: page, limit: 5 });
-  const { data: allClients, isLoading } = useGetClients({
-    limit: 100,
+  const { data, refetch, isLoading } = useGetClients({
+    page: page,
+    limit: 5,
+    search: { name: searchValue },
   });
 
-  useEffect(() => {
-    if (allClients && allClients.data) {
-      setAllUsers(allClients.data);
-    }
-  }, [allClients]);
+  // const { data: allClients, isLoading } = useGetClients({
+  //   limit: 100,
+  // });
+
+  // useEffect(() => {
+  //   if (allClients && allClients.data) {
+  //     setAllUsers(allClients.data);
+  //   }
+  // }, [allClients]);
 
   useEffect(() => {
     dispatch(setLoading(true)); // Set loading to true before fetching data
@@ -78,11 +88,8 @@ const Sidebar = () => {
     if (data && data.data) {
       //eslint-disable-next-line
       const clientData = data as any;
-      setUsers((prev) => {
-        const uniqueUsers = new Set([...prev, ...clientData.data]);
-        return Array.from(uniqueUsers);
-      }); // Append new data to existing users without duplicates
-
+      setUsers((prev) => deduplicateById([...prev, ...clientData.data]));
+      setAllUsers((prev) => deduplicateById([...prev, ...clientData.data]));
       setHasMore(clientData.meta.currentPage < clientData.meta.totalPages); // Check if more data is available
       // Dispatch the first user when the component mounts
       if (!slectedClient.id && data.data.length > 0) {
@@ -129,7 +136,8 @@ const Sidebar = () => {
 
   // Reset Users to Initial State
   const resetUsers = useCallback(() => {
-    setUsers(allUsers.slice(0, page * 5));
+    const deduplicatedUsers = deduplicateById(allUsers);
+    setUsers(deduplicatedUsers.slice(0, page * 5));
     if (scrollableDivRef.current) {
       scrollableDivRef.current.scrollTop = 0;
     }
