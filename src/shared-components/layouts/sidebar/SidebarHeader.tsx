@@ -28,7 +28,7 @@ const SidebarHeader = ({
           name='search'
           control={control as unknown as Control<FieldValues>}
           icon={<SearchIcon />}
-          onCustomChange={(value) => onSearch({ search: value || '' })}
+          onCustomChange={(value) => onSearch({ search: value })}
         />
       </div>
     </div>

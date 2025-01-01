@@ -145,7 +145,7 @@ const Sidebar = () => {
 
   const submitHandler = useCallback(
     (data: IFormData) => {
-      if (data.search) {
+      if (data.search.trim()) {
         const results = allUsers.filter((item) =>
           item.name.toLowerCase().includes(data?.search?.toLowerCase())
         );
@@ -164,6 +164,12 @@ const Sidebar = () => {
       }, 500),
     [handleSubmit, submitHandler]
   );
+
+  useEffect(() => {
+    if (searchValue) {
+      debouncedSubmit({ search: searchValue });
+    }
+  }, [searchValue, debouncedSubmit]);
 
   useEffect(() => {
     return () => {
