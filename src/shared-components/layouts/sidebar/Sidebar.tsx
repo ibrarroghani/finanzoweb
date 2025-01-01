@@ -12,6 +12,8 @@ import useGetClients from '@/hooks/data-hooks/sidebar/use-get-clients';
 import SidebarFooter from './SidebarFooter';
 import UserList from './UserList';
 import SidebarHeader from './SidebarHeader';
+import { useDispatch } from 'react-redux';
+import { setClient, setLoading } from '@/store/slices/auth-slice';
 
 interface IFormData {
   search: string;
@@ -43,6 +45,8 @@ const Sidebar = () => {
     undefined
   );
 
+  const dispatch = useDispatch();
+
   const [page, setPage] = useState(1); // Current page for pagination
   const [hasMore, setHasMore] = useState(false); // Track if more data is available
   const scrollableDivRef = useRef<HTMLDivElement>(null);
@@ -65,20 +69,58 @@ const Sidebar = () => {
   }, [allClients]);
 
   useEffect(() => {
+    dispatch(setLoading(true)); // Set loading to true before fetching data
+    refetch().finally(() => {
+      dispatch(setLoading(false)); // Set loading to false after data is fetched
+    });
+  }, [dispatch, refetch]);
+
+  useEffect(() => {
     if (data && data.data) {
       //eslint-disable-next-line
       const clientData = data as any;
       setUsers((prev) => [...prev, ...clientData.data]); // Append new data to existing users
       setSelectedCard((prev) => prev || data.data[0]); // Select the first card by default
       setHasMore(clientData.meta.currentPage < clientData.meta.totalPages); // Check if more data is available
+      // Dispatch the first user when the component mounts
+      if (!selectedCard && data.data.length > 0) {
+        const selectedUser = data.data[0];
+        dispatch(
+          setClient({
+            name: selectedUser.name,
+            email: selectedUser.email,
+            image: selectedUser.profile_picture_url,
+            slug: selectedUser.slug,
+            address: selectedUser.address,
+            phone: selectedUser.phone_number,
+            status: selectedUser.is_active,
+          })
+        );
+      }
     }
-  }, [data]);
+  }, [data, dispatch, selectedCard]);
 
   const handleCardSelection = useCallback(
     (id: number) => {
-      setSelectedCard(users.find((user) => user.id === id));
+      const selectedUser = users.find((user) => user.id === id);
+      setSelectedCard(selectedUser);
+
+      // Dispatch the selected user
+      if (selectedUser) {
+        dispatch(
+          setClient({
+            name: selectedUser.name,
+            email: selectedUser.email,
+            image: selectedUser.profile_picture_url,
+            slug: selectedUser.slug,
+            address: selectedUser.address,
+            phone: selectedUser.phone_number,
+            status: selectedUser.is_active,
+          })
+        );
+      }
     },
-    [users]
+    [users, dispatch]
   );
 
   // Reset Users to Initial State

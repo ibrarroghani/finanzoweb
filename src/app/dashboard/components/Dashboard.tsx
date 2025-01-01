@@ -9,12 +9,16 @@ import Section from './Section';
 import CustomAlert from './CustomAlert';
 import AccountsSection from './AccountsSection';
 import GoalsSection from './GoalsSection';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store';
 
 const Dashboard = () => {
+  const { client, loading } = useSelector((state: RootState) => state.auth);
+
   return (
     <div className='p-4'>
       <CustomAlert />
-      <ClientDetailsCard />
+      <ClientDetailsCard data={client} isLoading={loading} />
       <div className='mt-6 flex gap-4'>
         <div className='w-[65%]'>
           {/* Balance Card */}

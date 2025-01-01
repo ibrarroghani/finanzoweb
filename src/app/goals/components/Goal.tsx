@@ -12,6 +12,8 @@ import GoalsSection from '@/app/dashboard/components/GoalsSection';
 import { useGoalPageContext } from '../context/GoalPageContext';
 import UpdateGoalModal from './UpdateGoalModal';
 import useGetGoals from '@/hooks/data-hooks/goal/use-get-goals';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store';
 
 const Goal = () => {
   const {
@@ -20,6 +22,8 @@ const Goal = () => {
     showUpdateModal,
     setShowUpdateModal,
   } = useGoalPageContext();
+
+  const { client, loading } = useSelector((state: RootState) => state.auth);
 
   const { data } = useGetGoals({
     force_initial_plaid_account_fetch: 'yes',
@@ -33,7 +37,7 @@ const Goal = () => {
 
   return (
     <div className='p-4'>
-      <ClientDetailsCard />
+      <ClientDetailsCard data={client} isLoading={loading} />
       {data?.data.length > 0 ? (
         <>
           <Section className='mt-5 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4'>
