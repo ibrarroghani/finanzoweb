@@ -8,6 +8,7 @@ import { RootState } from '@/store';
 
 interface MessageItemProps {
   message: IMessage;
+
   //eslint-disable-next-line
   //onDeleteFile: (messageId: string, fileName: string) => void;
 

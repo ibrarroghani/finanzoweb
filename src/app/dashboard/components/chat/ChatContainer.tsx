@@ -7,6 +7,7 @@ interface ChatContainerProps {
   messages: IMessage[];
   //eslint-disable-next-line
   onSendMessage: (message: string) => void;
+
   //eslint-disable-next-line
   //onDeleteFile: (messageId: string, fileName: string) => void;
 

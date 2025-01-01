@@ -6,33 +6,10 @@ import useSendMessage from '@/hooks/data-hooks/chat/use-send-message';
 import Spinner from '@/shared-components/Spinner';
 import { useIsFetching } from '@tanstack/react-query';
 
-// export interface IMessage {
-//   id: string;
-//   text: string;
-//   timestamp: string;
-//   sender: string;
-//   receiver: string;
-//   files?: { file: File; url: string }[];
-// }
-
 export type MessageType = 'text' | 'image' | 'file';
 export type SenderType = 'client' | 'broker';
 export type SenderImageType = 'source' | 'uri';
 export type StatusType = 'sending' | 'unread' | 'read' | 'edited' | 'deleted';
-
-// export interface IMessage {
-//   id: string;
-//   message: string;
-//   dateTime: Date;
-//   type: MessageType;
-//   sender: SenderType;
-//   senderName: string;
-//   //eslint-disable-next-line
-//   senderImage: any;
-//   senderImageType: SenderImageType;
-//   status: StatusType;
-//   files?: { file: File; url: string }[];
-// }
 
 export interface Sender {
   id: number;
@@ -76,25 +53,22 @@ const Chat = () => {
     'message-thread-0e90905a-b136-40bb-9a52-d18eaa0113f5-2b266330-a5cb-46fa-be38-17c6f3b79210';
 
   const { mutate: sendMessage, isPending } = useSendMessage(connectionSlugId);
+
   // const {
   //   data: chatConnectMessageData,
   //   //isLoading:isAccountListLoading,
   //   //isError: isAccountListError,
   // } = useGetConnectMessage();
 
-  const {
-    data: messagesData,
-    isLoading: isMessageLoading,
-    //refetch,
-    //isError: isAccountListError,
-  } = useGetMessages(connectionSlugId, { limit: 100 });
+  const { data: messagesData, isLoading: isMessageLoading } = useGetMessages(
+    connectionSlugId,
+    { limit: 100 }
+  );
 
   const isFetching = useIsFetching({ queryKey: ['getMessages'] });
 
   //eslint-disable-next-line
   const addMessage = (message: any) => {
-    //console.log('addMessage', message);
-    // setMessages((prev) => [...prev, message]);
     if (isPending) return;
     sendMessage({
       message,
@@ -162,28 +136,3 @@ const Chat = () => {
 };
 
 export default Chat;
-
-// const initialMessages: IMessage[] = [
-//   {
-//     id: '1',
-//     message: 'Hi',
-//     dateTime: new Date(),
-//     type: 'text',
-//     sender: 'client',
-//     senderName: 'John Doe (Client)',
-//     senderImage: '',
-//     senderImageType: 'source',
-//     status: 'unread',
-//   },
-//   {
-//     id: '2',
-//     message: 'Hello, how can I help you?',
-//     dateTime: new Date(),
-//     type: 'text',
-//     sender: 'broker',
-//     senderName: 'John Doe2 (Broker)',
-//     senderImage: '',
-//     senderImageType: 'source',
-//     status: 'unread',
-//   },
-// ];

@@ -32,15 +32,6 @@ const InputSection: React.FC<InputSectionProps> = ({
 
     // onSendMessage({
     //   id: String(Date.now()),
-    //   text: message.trim(),
-    //   timestamp: new Date().toLocaleString(),
-    //   sender: 'user',
-    //   receiver: 'system',
-    //   files: selectedFiles,
-    // });
-
-    // onSendMessage({
-    //   id: String(Date.now()),
     //   message: message.trim(),
     //   dateTime: new Date(),
     //   type: 'text',

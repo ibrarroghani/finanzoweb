@@ -4,6 +4,7 @@ import MessageItem from './MessageItem';
 
 interface MessageListProps {
   messages: IMessage[];
+
   //eslint-disable-next-line
   //onDeleteFile: (messageId: string, fileName: string) => void;
 
