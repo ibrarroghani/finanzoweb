@@ -11,6 +11,8 @@ import { useGoalPageContext } from '../context/GoalPageContext';
 import useUpdateGoal from '@/hooks/data-hooks/goal/use-update-goal';
 import useGetSingleGoal from '@/hooks/data-hooks/goal/use-get-single-goal';
 import Spinner from '@/shared-components/Spinner';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store';
 
 interface IUpdateGoalModalProps {
   title: string;
@@ -32,6 +34,7 @@ const UpdateGoalModal: React.FC<IUpdateGoalModalProps> = ({
   showModal,
   setShowModal,
 }) => {
+  const slug = useSelector((state: RootState) => state.auth.client.slug);
   const { goalSlug } = useGoalPageContext();
   const initialValue: IUpdateGoalFormData = {
     title: '',
@@ -53,8 +56,8 @@ const UpdateGoalModal: React.FC<IUpdateGoalModalProps> = ({
     resolver: yupResolver(goalCreateValidationSchema),
   });
 
-  const { data, isLoading } = useGetSingleGoal(goalSlug);
-  const { mutate: updateGoal, isPending } = useUpdateGoal(goalSlug);
+  const { data, isLoading } = useGetSingleGoal(slug, goalSlug);
+  const { mutate: updateGoal, isPending } = useUpdateGoal(slug, goalSlug);
 
   const handleGoalUpdate = (data: IUpdateGoalFormData) => {
     //eslint-disable-next-line no-console

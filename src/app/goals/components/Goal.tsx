@@ -25,7 +25,7 @@ const Goal = () => {
 
   const { client, loading } = useSelector((state: RootState) => state.auth);
 
-  const { data } = useGetGoals({
+  const { data } = useGetGoals(client.slug, {
     force_initial_plaid_account_fetch: 'yes',
   });
 

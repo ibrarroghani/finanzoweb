@@ -14,7 +14,7 @@ interface IData {
   // progress?: boolean;
 }
 
-const useUpdateGoal = (goalSlug: string) => {
+const useUpdateGoal = (userSlug: string, goalSlug: string) => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationKey: ['updateGoalMutation'],
@@ -25,7 +25,11 @@ const useUpdateGoal = (goalSlug: string) => {
         );
       }
       try {
-        const response = await goalAPIEndpoint.updateGoal(data, goalSlug);
+        const response = await goalAPIEndpoint.updateGoal(
+          userSlug,
+          goalSlug,
+          data
+        );
         return response;
       } catch (error) {
         throw handleApiError(error);

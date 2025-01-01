@@ -9,16 +9,10 @@ export const goalAPIEndpoint = {
     apiService.get(`/goals/client/${slug}/${goalSlug}`),
 
   //eslint-disable-next-line
-  createGoal: (data: any) =>
-    apiService.post(
-      '/goals/client/user-8abe9a22-a593-11ef-878e-6045bd08fbb0-8abe9a26-a593-11ef-878e-6045bd08fbb0',
-      data
-    ),
+  createGoal: (slug: string, data: any) =>
+    apiService.post(`/goals/client/${slug}`, data),
 
   //eslint-disable-next-line
-  updateGoal: (data: any, goalSlug: string) =>
-    apiService.put(
-      `/goals/client/user-8abe9a22-a593-11ef-878e-6045bd08fbb0-8abe9a26-a593-11ef-878e-6045bd08fbb0/${goalSlug}`,
-      data
-    ),
+  updateGoal: (userSlug: string, goalSlug: string, data: any) =>
+    apiService.put(`/goals/client/${userSlug}/${goalSlug}`, data),
 };

@@ -14,7 +14,7 @@ interface IData {
   // progress?: boolean;
 }
 
-const useCreateGoal = () => {
+const useCreateGoal = (slug: string) => {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -26,7 +26,7 @@ const useCreateGoal = () => {
         );
       }
       try {
-        const response = await goalAPIEndpoint.createGoal(data);
+        const response = await goalAPIEndpoint.createGoal(slug, data);
         return response; // Assuming `data` contains the access token
       } catch (error) {
         throw handleApiError(error);

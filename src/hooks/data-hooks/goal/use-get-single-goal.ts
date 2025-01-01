@@ -3,13 +3,13 @@ import { goalAPIEndpoint } from '@/config/api/api-endpoints/goal-api-endpoint';
 import { handleApiError } from '@/utils/error/api-error-handler';
 
 //eslint-disable-next-line
-const useGetSingleGoal = (goalSlug: string) => {
+const useGetSingleGoal = (slug: string, goalSlug: string) => {
   return useQuery({
-    queryKey: ['getGoal', goalSlug], // Unique key for the query
-    enabled: !!goalSlug,
+    queryKey: ['getGoal', slug, goalSlug], // Unique key for the query
+    enabled: !!slug && !!goalSlug,
     queryFn: async () => {
       try {
-        const response = await goalAPIEndpoint.getSingleGoal(goalSlug);
+        const response = await goalAPIEndpoint.getSingleGoal(slug, goalSlug);
         return response;
       } catch (error) {
         throw handleApiError(error);
