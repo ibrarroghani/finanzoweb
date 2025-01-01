@@ -4,9 +4,13 @@ import BankCard from './BankCard';
 import DataSection from './DataSection';
 import { notification } from 'antd';
 import useGetBankAccounts from '@/hooks/data-hooks/account/use-get-bank-accounts';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store';
 
 const AccountsSection = () => {
-  const { data, isLoading, isError, error } = useGetBankAccounts({
+  const slug = useSelector((state: RootState) => state.auth.client.slug);
+
+  const { data, isLoading, isError, error } = useGetBankAccounts(slug, {
     force_initial_plaid_account_fetch: 'yes',
   });
 

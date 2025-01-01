@@ -43,11 +43,11 @@ const UserList = ({
             </div>
           )
         }
-        // endMessage={
-        //   <div className='text-small text-center font-bold capitalize text-primary-dark'>
-        //     No more clients
-        //   </div>
-        // }
+        endMessage={
+          <div className='text-small text-center font-bold capitalize text-primary-dark'>
+            No more clients
+          </div>
+        }
         scrollableTarget='scrollableDiv'
       >
         {isLoading ? (

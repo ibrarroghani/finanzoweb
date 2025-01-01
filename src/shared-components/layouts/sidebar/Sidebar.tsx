@@ -79,7 +79,11 @@ const Sidebar = () => {
     if (data && data.data) {
       //eslint-disable-next-line
       const clientData = data as any;
-      setUsers((prev) => [...prev, ...clientData.data]); // Append new data to existing users
+      setUsers((prev) => {
+        const uniqueUsers = new Set([...prev, ...clientData.data]);
+        return Array.from(uniqueUsers);
+      }); // Append new data to existing users without duplicates
+
       setSelectedCard((prev) => prev || data.data[0]); // Select the first card by default
       setHasMore(clientData.meta.currentPage < clientData.meta.totalPages); // Check if more data is available
       // Dispatch the first user when the component mounts

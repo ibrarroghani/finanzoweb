@@ -3,12 +3,13 @@ import { accountAPIEndpoint } from '@/config/api/api-endpoints/account-api-endpo
 import { handleApiError } from '@/utils/error/api-error-handler';
 
 //eslint-disable-next-line
-const useGetBankAccounts = (params: any) => {
+const useGetBankAccounts = (slug: string, params: any) => {
   return useQuery({
-    queryKey: ['getBankAccounts', params], // Unique key for the query
+    queryKey: ['getBankAccounts', slug, params], // Unique key for the query
+    enabled: !!slug,
     queryFn: async () => {
       try {
-        const response = await accountAPIEndpoint.getBankAccounts(params);
+        const response = await accountAPIEndpoint.getBankAccounts(slug, params);
         return response;
       } catch (error) {
         throw handleApiError(error);
