@@ -113,9 +113,6 @@ const Sidebar = () => {
   const handleCardSelection = useCallback(
     (id: number) => {
       const selectedUser = users.find((user) => user.id === id);
-      // setSelectedCard(selectedUser);
-
-      // Dispatch the selected user
       if (selectedUser) {
         dispatch(
           setClient({
@@ -136,12 +133,15 @@ const Sidebar = () => {
 
   // Reset Users to Initial State
   const resetUsers = useCallback(() => {
-    const deduplicatedUsers = deduplicateById(allUsers);
-    setUsers(deduplicatedUsers.slice(0, page * 5));
+    setPage(1);
+    setUsers([]);
+    refetch();
+    // const deduplicatedUsers = deduplicateById(allUsers);
+    // setUsers(deduplicatedUsers.slice(0, page * 5));
     if (scrollableDivRef.current) {
       scrollableDivRef.current.scrollTop = 0;
     }
-  }, [allUsers, page]);
+  }, [refetch]);
 
   const submitHandler = useCallback(
     (data: IFormData) => {
