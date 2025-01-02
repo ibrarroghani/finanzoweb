@@ -14,6 +14,7 @@ import UpdateGoalModal from './UpdateGoalModal';
 import useGetGoals from '@/hooks/data-hooks/goal/use-get-goals';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store';
+import Spinner from '@/shared-components/Spinner';
 
 const Goal = () => {
   const {
@@ -25,7 +26,7 @@ const Goal = () => {
 
   const { client, loading } = useSelector((state: RootState) => state.auth);
 
-  const { data } = useGetGoals(client.slug, {
+  const { data, isLoading } = useGetGoals(client.slug, {
     force_initial_plaid_account_fetch: 'yes',
   });
 
@@ -35,6 +36,12 @@ const Goal = () => {
 
   const handleUpdateToggleModal = () => setShowUpdateModal(!showUpdateModal);
 
+  if (isLoading)
+    return (
+      <div className='flex h-screen items-center justify-center'>
+        <Spinner />
+      </div>
+    );
   return (
     <div className='p-4'>
       <ClientDetailsCard data={client} isLoading={loading} />
