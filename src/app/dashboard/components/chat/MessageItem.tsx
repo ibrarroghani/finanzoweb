@@ -44,8 +44,6 @@ const MessageItem: React.FC<MessageItemProps> = ({
   //   });
   // };
 
-  console.log('message', message);
-
   return (
     <div
       className={`message mb-4 flex ${isSystemMessage ? 'justify-end' : 'justify-start'}`}

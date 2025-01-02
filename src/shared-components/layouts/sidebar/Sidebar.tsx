@@ -47,18 +47,16 @@ const deduplicateById = (clients: IClient[]) =>
 const Sidebar = () => {
   const [users, setUsers] = useState<IClient[]>([]);
   const [allUsers, setAllUsers] = useState<IClient[]>([]);
-  const slectedClient = useSelector((state: RootState) => state.auth.client);
-
-  const dispatch = useDispatch();
-
-  const [page, setPage] = useState(1); // Current page for pagination
-  const [hasMore, setHasMore] = useState(false); // Track if more data is available
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(false);
   const scrollableDivRef = useRef<HTMLDivElement>(null);
+
+  const slectedClient = useSelector((state: RootState) => state.auth.client);
+  const dispatch = useDispatch();
 
   const { control, handleSubmit, watch } = useForm<IFormData>({
     defaultValues: { search: '' },
   });
-
   const searchValue = watch('search');
 
   const { data, refetch, isLoading } = useGetClients({
@@ -66,16 +64,6 @@ const Sidebar = () => {
     limit: 5,
     search: { name: searchValue },
   });
-
-  // const { data: allClients, isLoading } = useGetClients({
-  //   limit: 100,
-  // });
-
-  // useEffect(() => {
-  //   if (allClients && allClients.data) {
-  //     setAllUsers(allClients.data);
-  //   }
-  // }, [allClients]);
 
   useEffect(() => {
     dispatch(setLoading(true)); // Set loading to true before fetching data
@@ -88,10 +76,16 @@ const Sidebar = () => {
     if (data && data.data) {
       //eslint-disable-next-line
       const clientData = data as any;
-      setUsers((prev) => deduplicateById([...prev, ...clientData.data]));
-      setAllUsers((prev) => deduplicateById([...prev, ...clientData.data]));
+      if (searchValue.trim()) {
+        // When searching, replace the user list
+        setUsers(clientData.data);
+      } else {
+        // Append new data for pagination
+        setUsers((prev) => deduplicateById([...prev, ...clientData.data]));
+        setAllUsers((prev) => deduplicateById([...prev, ...clientData.data]));
+      }
+
       setHasMore(clientData.meta.currentPage < clientData.meta.totalPages); // Check if more data is available
-      // Dispatch the first user when the component mounts
       if (!slectedClient.id && data.data.length > 0) {
         const selectedUser = data.data[0];
         dispatch(
@@ -108,7 +102,7 @@ const Sidebar = () => {
         );
       }
     }
-  }, [data, dispatch, slectedClient]);
+  }, [data, dispatch, slectedClient.id, searchValue]);
 
   const handleCardSelection = useCallback(
     (id: number) => {
@@ -131,51 +125,35 @@ const Sidebar = () => {
     [users, dispatch]
   );
 
-  // Reset Users to Initial State
-  const resetUsers = useCallback(() => {
-    setPage(1);
-    setUsers([]);
-    refetch();
-    // const deduplicatedUsers = deduplicateById(allUsers);
-    // setUsers(deduplicatedUsers.slice(0, page * 5));
-    if (scrollableDivRef.current) {
-      scrollableDivRef.current.scrollTop = 0;
-    }
-  }, [refetch]);
-
   const submitHandler = useCallback(
     (data: IFormData) => {
-      if (data.search.trim()) {
+      const searchTerm = data.search.trim().toLowerCase();
+      if (searchTerm) {
         const results = allUsers.filter((item) =>
           item.name.toLowerCase().includes(data?.search?.toLowerCase())
         );
         setUsers(results);
       } else {
-        resetUsers();
+        setUsers(allUsers);
       }
     },
-    [allUsers, resetUsers]
+    [allUsers]
   );
 
   const debouncedSubmit = useMemo(
     () =>
       debounce((data) => {
-        handleSubmit(submitHandler)(data);
+        if (data.search.trim()) {
+          handleSubmit(submitHandler)(data);
+        }
       }, 500),
     [handleSubmit, submitHandler]
   );
 
   useEffect(() => {
-    if (searchValue) {
-      debouncedSubmit({ search: searchValue });
-    }
+    debouncedSubmit({ search: searchValue });
+    return () => debouncedSubmit.cancel();
   }, [searchValue, debouncedSubmit]);
-
-  useEffect(() => {
-    return () => {
-      debouncedSubmit.cancel(); // Debounce Cleanup on unmount
-    };
-  }, [debouncedSubmit]);
 
   // Fetch More Data for Pagination
   const fetchMoreData = useCallback(() => {
@@ -183,8 +161,6 @@ const Sidebar = () => {
     setPage((prevPage) => prevPage + 1);
     refetch();
   }, [refetch, searchValue]);
-
-  //const isLoadingState = isLoading || allClientsLoading;
 
   return (
     <div className='flex w-64 flex-col border-r border-r-border-primary px-2'>
