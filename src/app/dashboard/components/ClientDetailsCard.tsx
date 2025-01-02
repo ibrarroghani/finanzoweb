@@ -34,7 +34,7 @@ const ClientDetailsCard: React.FC<IClientDetailsProps> = ({
       ) : (
         <>
           <div className='flex flex-col lg:w-1/2 lg:flex-row lg:items-center lg:justify-between lg:border-r lg:border-r-border-primary'>
-            <div className='flex gap-4'>
+            <div className='flex items-center gap-4'>
               <div className='h-16 w-16 overflow-hidden'>
                 <Image
                   src={image || fallbackImageUrl}
