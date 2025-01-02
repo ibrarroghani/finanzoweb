@@ -8,6 +8,8 @@ import { useForm, Control, FieldValues, Controller } from 'react-hook-form';
 import { goalCreateValidationSchema } from '../validations/goal-create-validation-schema';
 import useCreateGoal from '@/hooks/data-hooks/goal/use-create-goal';
 import { convertDateApiFormat, getTomorrowDate } from '@/utils/date-formatter';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store';
 
 interface IGoalModalProps {
   title: string;
@@ -29,6 +31,8 @@ const GoalModal: React.FC<IGoalModalProps> = ({
   showModal,
   setShowModal,
 }) => {
+  const slug = useSelector((state: RootState) => state.auth.client.slug);
+
   const initialValue: IGoalFormData = {
     title: '',
     goal_amount: '',
@@ -38,7 +42,7 @@ const GoalModal: React.FC<IGoalModalProps> = ({
     //progress: false,
   };
 
-  const { mutate: CreateGoal, isPending } = useCreateGoal();
+  const { mutate: CreateGoal, isPending } = useCreateGoal(slug);
 
   const {
     control,

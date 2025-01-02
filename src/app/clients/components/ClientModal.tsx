@@ -7,6 +7,7 @@ import { debounce } from 'lodash';
 import { FilterIcon, SearchIcon } from '@/assets/icons/bussiness-panel-icons';
 import ClientCard from '@/app/dashboard/components/ClientCard';
 import CustomButton from '@/shared-components/CustomButton';
+import { IClient } from '@/shared-components/layouts/sidebar/Sidebar';
 
 interface IFormData {
   search: string;
@@ -23,7 +24,7 @@ const ClientModal: React.FC<IClientModalProps> = ({
   showModal,
   setShowModal,
 }) => {
-  const [users, setUsers] = useState(clientData);
+  const [users, setUsers] = useState<IClient[]>(clientData);
   const { control, handleSubmit } = useForm<IFormData>({
     defaultValues: { search: '' },
   });

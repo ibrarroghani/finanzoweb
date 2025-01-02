@@ -16,3 +16,7 @@ export const getTomorrowDate = () => {
   tomorrow.setHours(0, 0, 0, 0); // Reset time to avoid time mismatch
   return tomorrow;
 };
+
+export const getDateAndTime = (date: Date) => {
+  return format(date, 'h:mm a, M/d/yyyy');
+};

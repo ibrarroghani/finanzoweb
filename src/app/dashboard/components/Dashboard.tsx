@@ -4,17 +4,21 @@ import ClientDetailsCard from './ClientDetailsCard';
 import BalanceCard from './BalanceCard';
 import { balanceData, documentData } from '@/utils/dummy-data';
 import DocumentCard from './DocumentCard';
-import Chat from './Chat';
+import Chat from './chat/Chat';
 import Section from './Section';
 import CustomAlert from './CustomAlert';
 import AccountsSection from './AccountsSection';
 import GoalsSection from './GoalsSection';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store';
 
 const Dashboard = () => {
+  const { client, loading } = useSelector((state: RootState) => state.auth);
+
   return (
     <div className='p-4'>
       <CustomAlert />
-      <ClientDetailsCard />
+      <ClientDetailsCard data={client} isLoading={loading} />
       <div className='mt-6 flex gap-4'>
         <div className='w-[65%]'>
           {/* Balance Card */}

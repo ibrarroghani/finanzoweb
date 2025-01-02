@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react';
 import AccountDetailsModal from './AccountDetailsModal';
 import Link from 'next/link';
 import useGetBankAccountDetails from '@/hooks/data-hooks/account/use-get-bank-account-details';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store';
 
 // interface IBankData {
 //   title: string;
@@ -35,6 +37,8 @@ interface IBankCardProps {
 }
 
 const BankCard: React.FC<IBankCardProps> = ({ bankData }) => {
+  const slug = useSelector((state: RootState) => state.auth.client.slug);
+
   const [showModal, setShowModal] = useState(false);
   const [accountDetails, setAccountDetails] = useState(null);
 
@@ -48,7 +52,7 @@ const BankCard: React.FC<IBankCardProps> = ({ bankData }) => {
     data: accountDetailsResponse,
     //isLoading:isAccountListLoading,
     //isError: isAccountListError,
-  } = useGetBankAccountDetails(institution.slug, {
+  } = useGetBankAccountDetails(slug, institution.slug, {
     force_initial_plaid_account_fetch: 'yes',
   });
 
@@ -66,7 +70,6 @@ const BankCard: React.FC<IBankCardProps> = ({ bankData }) => {
           {count.name}: {count.count}
         </p>
       ))}
-      {/* <p className='card-subtitle'>card: 38484994</p> */}
       <p
         onClick={() => setShowModal(true)}
         className='text-small rounded-extra-small w-full cursor-pointer bg-card p-1'

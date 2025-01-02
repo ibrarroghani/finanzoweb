@@ -34,7 +34,7 @@ const Section: React.FC<ISectionProps> & {
 );
 
 Section.Scrollable = ({ children }) => (
-  <div className='custom-scrollbar h-[500px] w-full overflow-y-auto px-3'>
+  <div className='custom-scrollbar h-[300px] w-full overflow-y-auto px-3'>
     {children}
   </div>
 );

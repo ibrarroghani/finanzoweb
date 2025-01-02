@@ -1,3 +1,4 @@
+'use client';
 import ClientDetailsCard from '@/app/dashboard/components/ClientDetailsCard';
 import {
   DownloadIconTwo,
@@ -5,14 +6,17 @@ import {
 } from '@/assets/icons/bussiness-panel-icons';
 import BarChart from '@/shared-components/chart/BarChart';
 import CustomButton from '@/shared-components/CustomButton';
+import { RootState } from '@/store';
 import React from 'react';
+import { useSelector } from 'react-redux';
 
 const Report = () => {
   const data: number[] = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60];
+  const { client, loading } = useSelector((state: RootState) => state.auth);
 
   return (
     <div className='p-4'>
-      <ClientDetailsCard />
+      <ClientDetailsCard data={client} isLoading={loading} />
       <div className='rounded-extra-small mt-2 bg-primary-light p-4'>
         <div className='flex justify-between p-4'>
           <p className='text-large font-semibold'>Reports</p>

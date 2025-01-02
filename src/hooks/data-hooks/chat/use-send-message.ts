@@ -1,23 +1,18 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { goalAPIEndpoint } from '@/config/api/api-endpoints/goal-api-endpoint';
+import { chatAPIEndpoint } from '@/config/api/api-endpoints/chat-api-endpoint';
 import { handleApiError } from '@/utils/error/api-error-handler';
 import { notification } from 'antd';
 import { checkInternetConnection } from '@/utils/error/check-internet-connection';
 
 interface IData {
-  title: string;
-  description: string;
-  goal_amount: number;
-  // monthlyAmount: string;
-  target_date: string;
-  goal_status: 'active' | 'paused';
-  // progress?: boolean;
+  message: string;
 }
 
-const useUpdateGoal = (userSlug: string, goalSlug: string) => {
+const useSendMessage = (connection_slug_id: string) => {
   const queryClient = useQueryClient();
+
   return useMutation({
-    mutationKey: ['updateGoalMutation'],
+    mutationKey: ['sendMessageMutation'],
     mutationFn: async (data: IData) => {
       if (!checkInternetConnection()) {
         throw new Error(
@@ -25,23 +20,24 @@ const useUpdateGoal = (userSlug: string, goalSlug: string) => {
         );
       }
       try {
-        const response = await goalAPIEndpoint.updateGoal(
-          userSlug,
-          goalSlug,
-          data
+        const response = await chatAPIEndpoint.sendMessage(
+          data,
+          connection_slug_id
         );
-        return response;
+        return response; // Assuming `data` contains the access token
       } catch (error) {
         throw handleApiError(error);
       }
     },
     onSuccess: () => {
-      notification.success({
-        message: 'Goal Updated successfully',
-        placement: 'topRight',
-      });
+      //   notification.success({
+      //     message: 'Goal created successfully',
+      //     placement: 'topRight',
+      //   });
 
-      queryClient.invalidateQueries({ queryKey: ['getGoals'] }); // Invalidate the goals list query
+      // Add a delay before invalidating the query
+
+      queryClient.invalidateQueries({ queryKey: ['getMessages'] }); // Invalidate the goals list query
     },
     onError: (error) => {
       // console.log('error', error);
@@ -53,4 +49,4 @@ const useUpdateGoal = (userSlug: string, goalSlug: string) => {
   });
 };
 
-export default useUpdateGoal;
+export default useSendMessage;
