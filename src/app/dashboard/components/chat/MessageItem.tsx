@@ -4,6 +4,7 @@ import { IMessage } from './Chat';
 import { getDateAndTime } from '@/utils/date-formatter';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store';
+import { MessageSeenIcon } from '@/assets/icons/bussiness-panel-icons';
 //import { Modal } from 'antd';
 
 interface MessageItemProps {
@@ -43,6 +44,8 @@ const MessageItem: React.FC<MessageItemProps> = ({
   //   });
   // };
 
+  console.log('message', message);
+
   return (
     <div
       className={`message mb-4 flex ${isSystemMessage ? 'justify-end' : 'justify-start'}`}
@@ -75,9 +78,16 @@ const MessageItem: React.FC<MessageItemProps> = ({
             ))} */}
 
             {/* Timestamp */}
-            <p className='timestamp text-extra-small mt-1'>
-              {getDateAndTime(message.created_at)}
-            </p>
+            <div className='mt-1 flex justify-between gap-2'>
+              <p className='timestamp text-extra-small'>
+                {getDateAndTime(message.created_at)}
+              </p>
+              {message.seen_at && (
+                <p>
+                  <MessageSeenIcon />
+                </p>
+              )}
+            </div>
           </>
         )}
       </div>
