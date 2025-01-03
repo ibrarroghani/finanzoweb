@@ -21,10 +21,6 @@ const connectSocket = () => {
     query: {
       token, // Pass the token as a query parameter
     },
-
-    // extraHeaders: {
-    //   Authorization: `Bearer ${token}`, // Manually set the Authorization header
-    // },
   });
 
   socket.on('connect', () => {
