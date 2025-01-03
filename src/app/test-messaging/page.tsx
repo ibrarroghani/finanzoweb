@@ -22,33 +22,48 @@ const MessagingPage = () => {
     // Connect the socket when the component mounts
     connectSocket(); // This will set up the socket connection and listeners
 
-    // Listen for new messages and mark-as-seen events
-    const handleMessage = (message: any) => {
-      setReceivedMessages((prevMessages) => [...prevMessages, message]);
-    };
-
-    const handleMarkAsSeen = (result: any) => {
-      console.log('Marked as seen:', result);
-      // Handle the result of marking as seen (e.g., update UI state)
-    };
-
-    socket.on(SOCKET_EVENTS.MESSAGE.SEND.BROADCASTER, handleMessage);
-    socket.on(SOCKET_EVENTS.MESSAGE.MARK_AS_SEEN.BROADCASTER, handleMarkAsSeen);
-
-    // Setting the socket connection status
-    socket.on('connect', () => {
+    // Listen for socket connection and set socket status
+    const handleSocketConnect = () => {
       setSocketConnected(true);
-    });
+    };
 
-    socket.on('disconnect', () => {
+    const handleSocketDisconnect = () => {
       setSocketConnected(false);
-    });
+    };
+
+    socket.on('connect', handleSocketConnect);
+    socket.on('disconnect', handleSocketDisconnect);
+
+    // Add message and seen event listeners only when socket is connected
+    if (socketConnected) {
+      socket.on(SOCKET_EVENTS.MESSAGE.SEND.BROADCASTER, handleMessage);
+      socket.on(
+        SOCKET_EVENTS.MESSAGE.MARK_AS_SEEN.BROADCASTER,
+        handleMarkAsSeen
+      );
+    }
 
     // Cleanup on unmount
     return () => {
       disconnectSocket(); // Disconnect the socket when the component unmounts
+      socket.off('connect', handleSocketConnect);
+      socket.off('disconnect', handleSocketDisconnect);
+      socket.off(SOCKET_EVENTS.MESSAGE.SEND.BROADCASTER, handleMessage);
+      socket.off(
+        SOCKET_EVENTS.MESSAGE.MARK_AS_SEEN.BROADCASTER,
+        handleMarkAsSeen
+      );
     };
-  }, []);
+  }, [socketConnected]); // This hook depends on socketConnected
+
+  const handleMessage = (message: any) => {
+    setReceivedMessages((prevMessages) => [...prevMessages, message]);
+  };
+
+  const handleMarkAsSeen = (result: any) => {
+    console.log('Marked as seen:', result);
+    // Handle the result of marking as seen (e.g., update UI state)
+  };
 
   const handleSendMessage = () => {
     if (!socketConnected) {
