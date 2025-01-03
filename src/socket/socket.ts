@@ -1,7 +1,7 @@
 import { io, Socket } from 'socket.io-client';
 import { SOCKET_EVENTS } from './constants/socketEvents';
 
-const SOCKET_URL = process.env.NEXT_PUBLIC_SOCKET_URL;
+const SOCKET_URL = process.env.NEXT_PUBLIC_SOCKET_URL!;
 
 let socket: Socket;
 
@@ -15,7 +15,16 @@ const connectSocket = () => {
 
   socket = io(SOCKET_URL, {
     transports: ['websocket'], // Use WebSocket transport for better compatibility
-    auth: { token }, // Send the token in the `auth` option instead of query
+    auth: {
+      token, // Pass the token as an authentication parameter
+    },
+    query: {
+      token, // Pass the token as a query parameter
+    },
+
+    // extraHeaders: {
+    //   Authorization: `Bearer ${token}`, // Manually set the Authorization header
+    // },
   });
 
   socket.on('connect', () => {
