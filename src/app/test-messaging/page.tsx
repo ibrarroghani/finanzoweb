@@ -12,6 +12,7 @@ import {
 import { SOCKET_EVENTS } from '../../socket/constants/socketEvents';
 
 const MessagingPage = () => {
+  const token = localStorage.getItem('dummyAuthToken');
   const [message, setMessage] = useState('');
   const [threadSlug, setThreadSlug] = useState('');
   const [receivedMessages, setReceivedMessages] = useState<string[]>([]);
@@ -31,11 +32,14 @@ const MessagingPage = () => {
       setSocketConnected(false);
     };
 
-    socket.on('connect', handleSocketConnect);
-    socket.on('disconnect', handleSocketDisconnect);
+    // Ensure socket is defined before adding listeners
+    if (socket) {
+      socket.on('connect', handleSocketConnect);
+      socket.on('disconnect', handleSocketDisconnect);
+    }
 
     // Add message and seen event listeners only when socket is connected
-    if (socketConnected) {
+    if (socketConnected && socket) {
       socket.on(SOCKET_EVENTS.MESSAGE.SEND.BROADCASTER, handleMessage);
       socket.on(
         SOCKET_EVENTS.MESSAGE.MARK_AS_SEEN.BROADCASTER,
@@ -45,14 +49,16 @@ const MessagingPage = () => {
 
     // Cleanup on unmount
     return () => {
+      if (socket) {
+        socket.off('connect', handleSocketConnect);
+        socket.off('disconnect', handleSocketDisconnect);
+        socket.off(SOCKET_EVENTS.MESSAGE.SEND.BROADCASTER, handleMessage);
+        socket.off(
+          SOCKET_EVENTS.MESSAGE.MARK_AS_SEEN.BROADCASTER,
+          handleMarkAsSeen
+        );
+      }
       disconnectSocket(); // Disconnect the socket when the component unmounts
-      socket.off('connect', handleSocketConnect);
-      socket.off('disconnect', handleSocketDisconnect);
-      socket.off(SOCKET_EVENTS.MESSAGE.SEND.BROADCASTER, handleMessage);
-      socket.off(
-        SOCKET_EVENTS.MESSAGE.MARK_AS_SEEN.BROADCASTER,
-        handleMarkAsSeen
-      );
     };
   }, [socketConnected]); // This hook depends on socketConnected
 
@@ -96,6 +102,9 @@ const MessagingPage = () => {
 
   return (
     <div className='mx-auto max-w-4xl p-4'>
+      <h1 className='mb-4 text-center text-xl font-bold'>
+        {token ?? 'No User'}
+      </h1>
       <h2 className='mb-4 text-2xl font-bold'>Messaging</h2>
 
       {/* Input for message */}
