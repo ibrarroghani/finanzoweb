@@ -16,6 +16,7 @@ const MessagingPage = () => {
   const [threadSlug, setThreadSlug] = useState('');
   const [receivedMessages, setReceivedMessages] = useState<string[]>([]);
   const [socketConnected, setSocketConnected] = useState(false);
+  const [messageIds, setMessageIds] = useState('');
 
   useEffect(() => {
     // Connect the socket when the component mounts
@@ -34,6 +35,15 @@ const MessagingPage = () => {
     socket.on(SOCKET_EVENTS.MESSAGE.SEND.BROADCASTER, handleMessage);
     socket.on(SOCKET_EVENTS.MESSAGE.MARK_AS_SEEN.BROADCASTER, handleMarkAsSeen);
 
+    // Setting the socket connection status
+    socket.on('connect', () => {
+      setSocketConnected(true);
+    });
+
+    socket.on('disconnect', () => {
+      setSocketConnected(false);
+    });
+
     // Cleanup on unmount
     return () => {
       disconnectSocket(); // Disconnect the socket when the component unmounts
@@ -41,6 +51,11 @@ const MessagingPage = () => {
   }, []);
 
   const handleSendMessage = () => {
+    if (!socketConnected) {
+      alert('Socket is not connected. Please try again later.');
+      return;
+    }
+
     if (!message || !threadSlug) {
       alert('Please provide both message and threadSlug');
       return;
@@ -50,45 +65,90 @@ const MessagingPage = () => {
     setMessage(''); // Reset the message input field
   };
 
-  const handleMarkMessagesAsSeen = (messageIds: number[]) => {
-    markAsSeen(messageIds); // Mark the given message IDs as seen
+  const handleMarkMessagesAsSeen = () => {
+    const ids = messageIds
+      .split(',')
+      .map((id) => parseInt(id.trim()))
+      .filter((id) => !isNaN(id));
+
+    if (ids.length > 0) {
+      markAsSeen(ids); // Mark the given message IDs as seen
+      setMessageIds(''); // Reset the message IDs input field
+    } else {
+      alert('Please provide valid message IDs');
+    }
   };
 
   return (
-    <div>
-      <h2>Messaging</h2>
+    <div className='mx-auto max-w-4xl p-4'>
+      <h2 className='mb-4 text-2xl font-bold'>Messaging</h2>
 
       {/* Input for message */}
-      <input
-        type='text'
-        placeholder='Type a message'
-        value={message}
-        onChange={(e) => setMessage(e.target.value)}
-      />
+      <div className='mb-4'>
+        <input
+          type='text'
+          placeholder='Type a message'
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          className='w-full rounded-lg border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-blue-500'
+        />
+      </div>
 
       {/* Input for thread slug */}
-      <input
-        type='text'
-        placeholder='Enter threadSlug'
-        value={threadSlug}
-        onChange={(e) => setThreadSlug(e.target.value)}
-      />
+      <div className='mb-4'>
+        <input
+          type='text'
+          placeholder='Enter threadSlug'
+          value={threadSlug}
+          onChange={(e) => setThreadSlug(e.target.value)}
+          className='w-full rounded-lg border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-blue-500'
+        />
+      </div>
 
       {/* Send Message button */}
-      <button onClick={handleSendMessage}>Send Message</button>
+      <button
+        onClick={handleSendMessage}
+        className='mb-4 w-full rounded-lg bg-blue-500 p-2 text-white hover:bg-blue-600'
+      >
+        Send Message
+      </button>
 
       {/* Display received messages */}
-      <h3>Received Messages</h3>
-      <ul>
+      <h3 className='mb-2 text-xl font-semibold'>Received Messages</h3>
+      <ul className='mb-4'>
         {receivedMessages.map((msg, index) => (
-          <li key={index}>{msg}</li>
+          <li key={index} className='mb-2 rounded-lg bg-gray-100 p-2'>
+            {msg}
+          </li>
         ))}
       </ul>
 
-      {/* Mark Messages as Seen button */}
-      <button onClick={() => handleMarkMessagesAsSeen([1, 2, 3])}>
-        Mark Messages 1, 2, 3 as Seen
-      </button>
+      {/* Mark Messages as Seen form */}
+      <div className='mb-4'>
+        <h3 className='mb-2 text-xl font-semibold'>Mark Messages as Seen</h3>
+        <input
+          type='text'
+          placeholder='Enter message IDs (comma separated)'
+          value={messageIds}
+          onChange={(e) => setMessageIds(e.target.value)}
+          className='w-full rounded-lg border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-blue-500'
+        />
+        <button
+          onClick={handleMarkMessagesAsSeen}
+          className='mt-2 w-full rounded-lg bg-green-500 p-2 text-white hover:bg-green-600'
+        >
+          Mark as Seen
+        </button>
+      </div>
+
+      {/* Display socket connection status */}
+      <p className='mt-4 text-center'>
+        {socketConnected ? (
+          <span className='text-green-500'>Socket Connected</span>
+        ) : (
+          <span className='text-red-500'>Socket Disconnected</span>
+        )}
+      </p>
     </div>
   );
 };
