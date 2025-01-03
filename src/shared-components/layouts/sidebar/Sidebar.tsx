@@ -61,7 +61,7 @@ const Sidebar = () => {
 
   const { data, refetch, isLoading } = useGetClients({
     page: page,
-    limit: 5,
+    limit: 10,
     search: { name: searchValue },
   });
 
