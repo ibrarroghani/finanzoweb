@@ -44,18 +44,6 @@ const deduplicateById = (clients: IClient[]) =>
     (item, index, self) => self.findIndex((i) => i.id === item.id) === index
   );
 
-// Create helper for client transformation
-const transformClientData = (selectedUser: IClient) => ({
-  id: selectedUser.id,
-  name: selectedUser.name,
-  email: selectedUser.email,
-  image: selectedUser.profile_picture_url,
-  slug: selectedUser.slug,
-  address: selectedUser.address,
-  phone: selectedUser.phone_number,
-  status: selectedUser.is_active,
-});
-
 const Sidebar = () => {
   const [users, setUsers] = useState<IClient[]>([]);
   const [allUsers, setAllUsers] = useState<IClient[]>([]);
@@ -78,6 +66,24 @@ const Sidebar = () => {
     search: { name: searchValue },
   });
 
+  // Memoize transformClientData function
+  const transformClientData = useCallback(
+    (selectedUser: IClient) => ({
+      id: selectedUser.id,
+      name: selectedUser.name,
+      email: selectedUser.email,
+      image: selectedUser.profile_picture_url,
+      slug: selectedUser.slug,
+      address: selectedUser.address,
+      phone: selectedUser.phone_number,
+      status: selectedUser.is_active,
+    }),
+    []
+  );
+
+  // Memoize users array to prevent unnecessary re-renders
+  const memoizedUsers = useMemo(() => users, [users]);
+
   useEffect(() => {
     dispatch(setLoading(true)); // Set loading to true before fetching data
     refetch().finally(() => {
@@ -85,8 +91,9 @@ const Sidebar = () => {
     });
   }, [dispatch, refetch]);
 
+  // Optimize the data effect by moving the client selection logic to a separate effect
   useEffect(() => {
-    if (data && data.data && !isSearching) {
+    if (data?.data && !isSearching) {
       //eslint-disable-next-line
       const clientData = data as any;
 
@@ -98,14 +105,16 @@ const Sidebar = () => {
         setPage(1);
       }
 
-      setHasMore(clientData.meta.currentPage < clientData.meta.totalPages); // Check if more data is available
-
-      if (!slectedClient.id && data.data.length > 0) {
-        const selectedUser = data.data[0];
-        dispatch(setClient(transformClientData(selectedUser)));
-      }
+      setHasMore(clientData.meta.currentPage < clientData.meta.totalPages);
     }
-  }, [data, dispatch, slectedClient.id, searchValue, isSearching]);
+  }, [data, searchValue, isSearching]);
+
+  // Separate effect for initial client selection
+  useEffect(() => {
+    if (!slectedClient.id && data?.data?.length > 0) {
+      dispatch(setClient(transformClientData(data?.data[0])));
+    }
+  }, [data, slectedClient.id, dispatch, transformClientData]);
 
   const handleCardSelection = useCallback(
     (id: number) => {
@@ -114,7 +123,7 @@ const Sidebar = () => {
         dispatch(setClient(transformClientData(selectedUser)));
       }
     },
-    [users, dispatch]
+    [users, dispatch, transformClientData]
   );
 
   const submitHandler = useCallback(
@@ -155,11 +164,11 @@ const Sidebar = () => {
       <SidebarHeader
         control={control as unknown as Control<FieldValues>}
         onSearch={debouncedSubmit}
-        totalClients={users.length}
+        totalClients={memoizedUsers.length}
       />
 
       <UserList
-        users={users}
+        users={memoizedUsers}
         isLoading={isLoading || isSearching}
         fetchMoreData={fetchMoreData}
         hasMore={hasMore}
