@@ -6,8 +6,16 @@ const SOCKET_URL = process.env.NEXT_PUBLIC_SOCKET_URL;
 let socket: Socket;
 
 const connectSocket = () => {
+  const token = localStorage.getItem('dummyAuthToken'); // Retrieve the token (ensure it's available in localStorage)
+
+  if (!token) {
+    console.log('No token found. Cannot connect.');
+    return;
+  }
+
   socket = io(SOCKET_URL, {
     transports: ['websocket'], // Use WebSocket transport for better compatibility
+    auth: { token }, // Send the token in the `auth` option instead of query
   });
 
   socket.on('connect', () => {
@@ -16,7 +24,7 @@ const connectSocket = () => {
 
   socket.on(SOCKET_EVENTS.MESSAGE.SEND.BROADCASTER, (message: unknown) => {
     console.log('New message received:', message);
-    // Handle the message received event, e.g., display it in UI
+    // Handle the message received event
   });
 
   socket.on(
@@ -52,4 +60,4 @@ const disconnectSocket = () => {
   }
 };
 
-export { connectSocket, sendMessage, markAsSeen, disconnectSocket };
+export { connectSocket, sendMessage, markAsSeen, disconnectSocket, socket };
