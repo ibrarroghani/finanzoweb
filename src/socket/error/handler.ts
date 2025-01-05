@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { SOCKET_ERRORS } from '../../socket/constants/socketErrors';
+import { getSocketErrorMessage } from './message';
 
 export const handleSocketErrors = (socket: any) => {
   // Iterate through each error type and attach listeners

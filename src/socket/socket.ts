@@ -1,10 +1,12 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { io, Socket } from 'socket.io-client';
 import { SOCKET_EVENTS } from './constants/socketEvents';
 import { handleSocketErrors } from './error/handler';
 
 const SOCKET_URL = process.env.NEXT_PUBLIC_SOCKET_URL!;
 
-let socket: Socket;
+let socket: Socket | null = null;
 
 const connectSocket = () => {
   const token = localStorage.getItem('dummyAuthToken'); // Retrieve the token (ensure it's available in localStorage)
@@ -14,18 +16,27 @@ const connectSocket = () => {
     return;
   }
 
+  // If the socket is already connected, don't create a new connection
+  if (socket?.connected) {
+    console.log('Already connected to the socket.');
+    return;
+  }
+
   socket = io(SOCKET_URL, {
     transports: ['websocket'], // Use WebSocket transport for better compatibility
     auth: {
       token, // Pass the token as an authentication parameter
     },
+    reconnectionAttempts: 5, // Try to reconnect 5 times
+    reconnectionDelay: 1000, // Delay between reconnections (in ms)
+    reconnectionDelayMax: 5000, // Max delay between reconnections (in ms)
   });
 
   socket.on('connect', () => {
-    console.log('Socket connected: ' + socket.id);
+    console.log('Socket connected: ' + socket?.id);
   });
 
-  // Call the handleSocketErrors function to listen for error events
+  // Handle socket errors globally
   handleSocketErrors(socket);
 
   socket.on(SOCKET_EVENTS.MESSAGE.SEND.BROADCASTER, (message: unknown) => {
@@ -40,10 +51,50 @@ const connectSocket = () => {
       // Handle marking as seen event
     }
   );
+
+  socket.on(SOCKET_EVENTS.USER.JOIN_THREAD.BROADCASTER, (data: any) => {
+    console.log(data.message);
+    // Handle the message when a user joins the thread
+  });
+
+  socket.on('disconnect', () => {
+    console.log('Socket disconnected');
+    // Optionally, handle cleanup tasks when disconnected
+  });
+
+  socket.on('connect_error', (error) => {
+    console.error('Socket connection error:', error);
+    // Optionally, handle specific errors
+  });
+
+  socket.on('reconnect_failed', () => {
+    console.error('Socket reconnection failed');
+    // Optionally, notify the user or show an error message
+  });
 };
 
+const joinThread = (threadSlug: string, callback: (response: any) => void) => {
+  if (!socket || !threadSlug) {
+    callback({
+      success: false,
+      message: 'Socket not connected or threadSlug is empty.',
+    });
+    return;
+  }
+
+  // Emit the event to join the thread (room)
+  socket.emit(
+    SOCKET_EVENTS.USER.JOIN_THREAD.LISTENER,
+    threadSlug,
+    (response: any) => {
+      callback(response);
+    }
+  );
+};
+
+// Send a message
 const sendMessage = (threadSlug: string, message: string) => {
-  if (!socket) {
+  if (!socket?.connected) {
     console.log('Socket is not connected');
     return;
   }
@@ -51,19 +102,33 @@ const sendMessage = (threadSlug: string, message: string) => {
   socket.emit(SOCKET_EVENTS.MESSAGE.SEND.LISTENER, { threadSlug, message });
 };
 
-const markAsSeen = (messageIds: number[]) => {
-  if (!socket) {
+// Mark messages as seen
+const markAsSeen = (threadSlug: string, messageIds: number[]) => {
+  if (!socket?.connected) {
     console.log('Socket is not connected');
     return;
   }
 
-  socket.emit(SOCKET_EVENTS.MESSAGE.MARK_AS_SEEN.LISTENER, messageIds);
+  socket.emit(SOCKET_EVENTS.MESSAGE.MARK_AS_SEEN.LISTENER, {
+    threadSlug,
+    messageIds,
+  });
 };
 
+// Disconnect socket gracefully
 const disconnectSocket = () => {
   if (socket) {
-    socket.disconnect();
+    socket.off(); // Remove all event listeners
+    socket.disconnect(); // Disconnect the socket
+    socket = null;
   }
 };
 
-export { connectSocket, sendMessage, markAsSeen, disconnectSocket, socket };
+export {
+  connectSocket,
+  joinThread,
+  sendMessage,
+  markAsSeen,
+  disconnectSocket,
+  socket,
+};
