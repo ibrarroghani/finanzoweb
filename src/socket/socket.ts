@@ -1,5 +1,6 @@
 import { io, Socket } from 'socket.io-client';
 import { SOCKET_EVENTS } from './constants/socketEvents';
+import { handleSocketErrors } from './error/handler';
 
 const SOCKET_URL = process.env.NEXT_PUBLIC_SOCKET_URL!;
 
@@ -18,14 +19,14 @@ const connectSocket = () => {
     auth: {
       token, // Pass the token as an authentication parameter
     },
-    query: {
-      token, // Pass the token as a query parameter
-    },
   });
 
   socket.on('connect', () => {
     console.log('Socket connected: ' + socket.id);
   });
+
+  // Call the handleSocketErrors function to listen for error events
+  handleSocketErrors(socket);
 
   socket.on(SOCKET_EVENTS.MESSAGE.SEND.BROADCASTER, (message: unknown) => {
     console.log('New message received:', message);
