@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+'use client';
 import { useEffect, useState } from 'react';
 import {
   connectSocket,
@@ -18,6 +19,7 @@ const MessagingPage = () => {
   const [socketConnected, setSocketConnected] = useState(false);
   const [messageIds, setMessageIds] = useState('');
   const [threadJoined, setThreadJoined] = useState(false);
+  const [markAsSeenReceived, setMarkAsSeenReceived] = useState<any[]>([]);
 
   useEffect(() => {
     connectSocket();
@@ -31,10 +33,10 @@ const MessagingPage = () => {
     }
 
     if (socketConnected && socket) {
-      socket.on(SOCKET_EVENTS.MESSAGE.SEND.BROADCASTER, handleMessage);
+      socket.on(SOCKET_EVENTS.MESSAGE.SEND.BROADCASTER, handleReceiveMessage);
       socket.on(
         SOCKET_EVENTS.MESSAGE.MARK_AS_SEEN.BROADCASTER,
-        handleMarkAsSeen
+        handleMarkAsSeenReceived
       );
     }
 
@@ -42,22 +44,29 @@ const MessagingPage = () => {
       if (socket) {
         socket.off('connect', handleSocketConnect);
         socket.off('disconnect', handleSocketDisconnect);
-        socket.off(SOCKET_EVENTS.MESSAGE.SEND.BROADCASTER, handleMessage);
+        socket.off(
+          SOCKET_EVENTS.MESSAGE.SEND.BROADCASTER,
+          handleReceiveMessage
+        );
         socket.off(
           SOCKET_EVENTS.MESSAGE.MARK_AS_SEEN.BROADCASTER,
-          handleMarkAsSeen
+          handleMarkAsSeenReceived
         );
       }
       disconnectSocket();
     };
   }, [socketConnected]);
 
-  const handleMessage = (message: any) => {
+  const handleReceiveMessage = (message: any) => {
     setReceivedMessages((prevMessages) => [...prevMessages, message]);
   };
 
-  const handleMarkAsSeen = (result: any) => {
+  const handleMarkAsSeenReceived = (result: any) => {
     console.log('Marked as seen:', result);
+    setMarkAsSeenReceived((prevMarkAsSeenReceived) => [
+      ...prevMarkAsSeenReceived,
+      result.data,
+    ]);
   };
 
   const handleSendMessage = () => {
@@ -98,9 +107,9 @@ const MessagingPage = () => {
     joinThread(threadSlug, (response) => {
       if (response.success) {
         setThreadJoined(true);
-        alert(`Joined thread: ${threadSlug}`);
+        alert(response.message); // Display the success message received from backend
       } else {
-        alert('Failed to join thread. Try again.');
+        alert(response.message); // Display the error message received from backend
       }
     });
   };
@@ -191,6 +200,19 @@ const MessagingPage = () => {
           <span className='text-red-500'>Socket Disconnected</span>
         )}
       </p>
+
+      {Array.isArray(markAsSeen) && markAsSeen.length > 0 && (
+        <>
+          <h3 className='mb-2 text-xl font-semibold'>Marked as Seen</h3>
+          <ul className='mb-4'>
+            {markAsSeenReceived.map((msg, index) => (
+              <li key={index} className='mb-2 rounded-lg bg-gray-100 p-2'>
+                {JSON.stringify(msg)}
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
 
       {threadJoined && (
         <p className='mt-2 text-center text-green-500'>

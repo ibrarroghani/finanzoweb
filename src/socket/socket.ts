@@ -83,11 +83,26 @@ const joinThread = (threadSlug: string, callback: (response: any) => void) => {
   }
 
   // Emit the event to join the thread (room)
-  socket.emit(
-    SOCKET_EVENTS.USER.JOIN_THREAD.LISTENER,
-    threadSlug,
+  socket.emit(SOCKET_EVENTS.USER.JOIN_THREAD.LISTENER, { threadSlug });
+
+  // Listen for the confirmation event from the backend
+  socket.on(
+    SOCKET_EVENTS.USER.JOIN_THREAD_CONFIRMATION.BROADCASTER,
     (response: any) => {
-      callback(response);
+      console.log('response', response);
+      if (response && response.message) {
+        // Success: Join confirmation received
+        callback({
+          success: true,
+          message: response.message,
+        });
+      } else {
+        // Failure: Something went wrong
+        callback({
+          success: false,
+          message: 'Failed to join the thread.',
+        });
+      }
     }
   );
 };
