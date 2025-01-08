@@ -11,6 +11,15 @@ import {
 } from '../../socket/socket'; // Import the socket functions
 import { SOCKET_EVENTS } from '../../socket/constants/socketEvents';
 
+interface SeenData {
+  messageIds: number[];
+  seenBy: {
+    id: string;
+    name: string;
+    // add other user fields you need
+  };
+}
+
 const MessagingPage = () => {
   const token = localStorage.getItem('dummyAuthToken');
   const [message, setMessage] = useState('');
@@ -19,7 +28,10 @@ const MessagingPage = () => {
   const [socketConnected, setSocketConnected] = useState(false);
   const [messageIds, setMessageIds] = useState('');
   const [threadJoined, setThreadJoined] = useState(false);
-  const [markAsSeenReceived, setMarkAsSeenReceived] = useState<any[]>([]);
+  const [messageSeenByMe, setMessageSeenByMe] = useState<SeenData[]>([]);
+  const [messageSeenByOthers, setMessageSeenByOthers] = useState<SeenData[]>(
+    []
+  );
 
   useEffect(() => {
     connectSocket();
@@ -30,9 +42,7 @@ const MessagingPage = () => {
     if (socket) {
       socket.on('connect', handleSocketConnect);
       socket.on('disconnect', handleSocketDisconnect);
-    }
 
-    if (socketConnected && socket) {
       socket.on(SOCKET_EVENTS.MESSAGE.SEND.BROADCASTER, handleReceiveMessage);
       socket.on(
         SOCKET_EVENTS.MESSAGE.MARK_AS_SEEN.BROADCASTER,
@@ -55,18 +65,30 @@ const MessagingPage = () => {
       }
       disconnectSocket();
     };
-  }, [socketConnected]);
+  }, []);
 
   const handleReceiveMessage = (message: any) => {
     setReceivedMessages((prevMessages) => [...prevMessages, message]);
   };
 
-  const handleMarkAsSeenReceived = (result: any) => {
+  const handleMarkAsSeenReceived = (result: { data: SeenData }) => {
     console.log('Marked as seen:', result);
-    setMarkAsSeenReceived((prevMarkAsSeenReceived) => [
-      ...prevMarkAsSeenReceived,
-      result.data,
-    ]);
+    const seenData = result.data;
+
+    console.log('seenData.seenBy.id', seenData.seenBy.id);
+    console.log('token', token);
+    console.log('token?.replace("user-", "")', token?.replace('user-', ''));
+
+    console.log(
+      'seenData.seenBy.id.toString() === token?.replace("user-", "")',
+      seenData.seenBy.id.toString() === token?.replace('user-', '')
+    );
+
+    if (seenData.seenBy.id.toString() === token?.replace('user-', '')) {
+      setMessageSeenByMe((prev) => [...prev, seenData]);
+    } else {
+      setMessageSeenByOthers((prev) => [...prev, seenData]);
+    }
   };
 
   const handleSendMessage = () => {
@@ -201,13 +223,35 @@ const MessagingPage = () => {
         )}
       </p>
 
-      {Array.isArray(markAsSeen) && markAsSeen.length > 0 && (
+      {messageSeenByMe.length > 0 && (
         <>
-          <h3 className='mb-2 text-xl font-semibold'>Marked as Seen</h3>
+          <h3 className='mb-2 text-xl font-semibold'>Messages Seen By Me</h3>
           <ul className='mb-4'>
-            {markAsSeenReceived.map((msg, index) => (
+            {messageSeenByMe.map((seenData, index) => (
               <li key={index} className='mb-2 rounded-lg bg-gray-100 p-2'>
-                {JSON.stringify(msg)}
+                <div>
+                  <strong>Message IDs:</strong> {seenData.messageIds.join(', ')}
+                </div>
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
+
+      {messageSeenByOthers.length > 0 && (
+        <>
+          <h3 className='mb-2 text-xl font-semibold'>
+            Messages Seen by Others
+          </h3>
+          <ul className='mb-4'>
+            {messageSeenByOthers.map((seenData, index) => (
+              <li key={index} className='mb-2 rounded-lg bg-gray-100 p-2'>
+                <div>
+                  <strong>Seen by ID:</strong> {seenData.seenBy.id}
+                </div>
+                <div>
+                  <strong>Message IDs:</strong> {seenData.messageIds.join(', ')}
+                </div>
               </li>
             ))}
           </ul>
