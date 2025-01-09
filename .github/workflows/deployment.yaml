@@ -31,6 +31,8 @@ jobs:
 
               # Append secrets to the .env file
               echo "NEXT_PUBLIC_API_URL=${{ vars.DEV_NEXT_PUBLIC_API_URL }}" > $ENV_FILE
+              echo "NEXT_PUBLIC_SOCKET_URL=${{ vars.DEV_NEXT_PUBLIC_SOCKET_URL }}" > $ENV_FILE
+              
               echo "NEXT_PUBLIC_AZURE_AD_CLIENT_ID=${{ secrets.DEV_NEXT_PUBLIC_AZURE_AD_CLIENT_ID }}" >> $ENV_FILE
               echo "NEXT_PUBLIC_AZURE_AD_TENANT_ID=${{ secrets.DEV_NEXT_PUBLIC_AZURE_AD_TENANT_ID }}" >> $ENV_FILE
               echo "NEXT_PUBLIC_AZURE_AD_REDIRECT_URI=${{ vars.DEV_NEXT_PUBLIC_AZURE_AD_REDIRECT_URI }}" >> $ENV_FILE
