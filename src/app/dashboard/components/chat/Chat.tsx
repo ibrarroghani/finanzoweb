@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import ChatContainer from './ChatContainer';
-//import useGetConnectMessage from '@/hooks/data-hooks/chat/use-get-connect-message';
+import useGetConnection from '@/hooks/data-hooks/chat/use-get-connect-message';
 import useGetMessages from '@/hooks/data-hooks/chat/use-get-messages';
 import useSendMessage from '@/hooks/data-hooks/chat/use-send-message';
 import Spinner from '@/shared-components/Spinner';
 import { useIsFetching } from '@tanstack/react-query';
+import { RootState } from '@/store';
+import { useSelector } from 'react-redux';
 
 export type MessageType = 'text' | 'image' | 'file';
 export type SenderType = 'client' | 'broker';
@@ -45,20 +47,20 @@ export interface IMessage {
 
 const Chat = () => {
   const [messages, setMessages] = useState<IMessage[]>([]);
-  // const [connectionSlugId, setConnectionId] = useState<string>(
-  //   'message-thread-5ec4cf91-8e9f-4fa2-9145-67730090da1d-8db6a520-f6b3-4b7f-a053-0f0d178cc892'
-  // );
+  const [connectionSlugId, setConnectionId] = useState<string>('');
 
-  const connectionSlugId =
-    'message-thread-0e90905a-b136-40bb-9a52-d18eaa0113f5-2b266330-a5cb-46fa-be38-17c6f3b79210';
+  const clientSlug = useSelector((state: RootState) => state.auth.client.slug);
+
+  // const connectionSlugId =
+  //   'message-thread-0e90905a-b136-40bb-9a52-d18eaa0113f5-2b266330-a5cb-46fa-be38-17c6f3b79210';
+
+  const {
+    data: chatConnectedData,
+    //isLoading:isAccountListLoading,
+    //isError: isAccountListError,
+  } = useGetConnection(clientSlug);
 
   const { mutate: sendMessage, isPending } = useSendMessage(connectionSlugId);
-
-  // const {
-  //   data: chatConnectMessageData,
-  //   //isLoading:isAccountListLoading,
-  //   //isError: isAccountListError,
-  // } = useGetConnectMessage();
 
   const { data: messagesData, isLoading: isMessageLoading } = useGetMessages(
     connectionSlugId,
@@ -75,11 +77,11 @@ const Chat = () => {
     });
   };
 
-  // useEffect(() => {
-  //   if (chatConnectMessageData && chatConnectMessageData.data) {
-  //     setConnectionId(chatConnectMessageData.data?.slug);
-  //   }
-  // }, [chatConnectMessageData]);
+  useEffect(() => {
+    if (chatConnectedData && chatConnectedData.data) {
+      setConnectionId(chatConnectedData.data?.slug);
+    }
+  }, [chatConnectedData]);
 
   useEffect(() => {
     if (messagesData && messagesData.data) {
