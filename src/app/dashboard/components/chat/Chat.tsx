@@ -1,12 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import ChatContainer from './ChatContainer';
-import useGetConnection from '@/hooks/data-hooks/chat/use-get-connect-message';
+//import useGetConnection from '@/hooks/data-hooks/chat/use-get-connect-message';
 import useGetMessages from '@/hooks/data-hooks/chat/use-get-messages';
-import useSendMessage from '@/hooks/data-hooks/chat/use-send-message';
+//import useSendMessage from '@/hooks/data-hooks/chat/use-send-message';
 import Spinner from '@/shared-components/Spinner';
 import { useIsFetching } from '@tanstack/react-query';
-import { RootState } from '@/store';
-import { useSelector } from 'react-redux';
+//import { RootState } from '@/store';
+//import { useSelector } from 'react-redux';
+import {
+  connectSocket,
+  disconnectSocket,
+  sendMessage,
+  socket,
+} from '@/socket/socket';
+import { SOCKET_EVENTS } from '@/socket/constants/socketEvents';
 
 export type MessageType = 'text' | 'image' | 'file';
 export type SenderType = 'client' | 'broker';
@@ -47,20 +54,22 @@ export interface IMessage {
 
 const Chat = () => {
   const [messages, setMessages] = useState<IMessage[]>([]);
-  const [connectionSlugId, setConnectionId] = useState<string>('');
+  // const [connectionSlugId, setConnectionId] = useState<string>('');
+  const [socketConnected, setSocketConnected] = useState(false);
 
-  const clientSlug = useSelector((state: RootState) => state.auth.client.slug);
+  const connectionSlugId =
+    'message-thread-0e90905a-b136-40bb-9a52-d18eaa0113f5-2b266330-a5cb-46fa-be38-17c6f3b79210';
 
-  // const connectionSlugId =
-  //   'message-thread-0e90905a-b136-40bb-9a52-d18eaa0113f5-2b266330-a5cb-46fa-be38-17c6f3b79210';
+  // const clientSlug = useSelector((state: RootState) => state.auth.client.slug);
+  // console.log('clientSlug', clientSlug);
 
-  const {
-    data: chatConnectedData,
-    //isLoading:isAccountListLoading,
-    //isError: isAccountListError,
-  } = useGetConnection(clientSlug);
+  // const {
+  //   data: chatConnectedData,
+  //   //isLoading:isAccountListLoading,
+  //   //isError: isAccountListError,
+  // } = useGetConnection(clientSlug);
 
-  const { mutate: sendMessage, isPending } = useSendMessage(connectionSlugId);
+  //const { mutate: sendMessage, isPending } = useSendMessage(connectionSlugId);
 
   const { data: messagesData, isLoading: isMessageLoading } = useGetMessages(
     connectionSlugId,
@@ -69,19 +78,74 @@ const Chat = () => {
 
   const isFetching = useIsFetching({ queryKey: ['getMessages'] });
 
+  // //eslint-disable-next-line
+  // const addMessage = (message: any) => {
+  //   if (isPending) return;
+  //   sendMessage({
+  //     message,
+  //   });
+  // };
+
   //eslint-disable-next-line
-  const addMessage = (message: any) => {
-    if (isPending) return;
-    sendMessage({
-      message,
-    });
+  const handleSendMessage = (message: any) => {
+    if (!socketConnected) {
+      alert('Socket is not connected. Please try again later.');
+      return;
+    }
+
+    if (!message || !connectionSlugId) {
+      alert('Please provide both message and threadSlug');
+      return;
+    }
+
+    sendMessage(connectionSlugId, message);
   };
 
+  //eslint-disable-next-line
+  const handleReceiveMessage = useCallback((message: any) => {
+    setMessages((prevMessages) => [...prevMessages, message]);
+  }, []);
+
   useEffect(() => {
-    if (chatConnectedData && chatConnectedData.data) {
-      setConnectionId(chatConnectedData.data?.slug);
+    connectSocket();
+
+    const handleSocketConnect = () => setSocketConnected(true);
+    const handleSocketDisconnect = () => setSocketConnected(false);
+
+    if (socket) {
+      socket.on('connect', handleSocketConnect);
+      socket.on('disconnect', handleSocketDisconnect);
+
+      socket.on(SOCKET_EVENTS.MESSAGE.SEND.BROADCASTER, handleReceiveMessage);
+      // socket.on(
+      //   SOCKET_EVENTS.MESSAGE.MARK_AS_SEEN.BROADCASTER,
+      //   handleMarkAsSeenReceived
+      // );
     }
-  }, [chatConnectedData]);
+
+    return () => {
+      if (socket) {
+        socket.off('connect', handleSocketConnect);
+        socket.off('disconnect', handleSocketDisconnect);
+        socket.off(
+          SOCKET_EVENTS.MESSAGE.SEND.BROADCASTER,
+          handleReceiveMessage
+        );
+        // socket.off(
+        //   SOCKET_EVENTS.MESSAGE.MARK_AS_SEEN.BROADCASTER,
+        //   handleMarkAsSeenReceived
+        // );
+      }
+      disconnectSocket();
+    };
+  }, [handleReceiveMessage]);
+
+  // useEffect(() => {
+  //   if (chatConnectedData && chatConnectedData.data) {
+  //     console.log('chatConnectedData', chatConnectedData.data.slug);
+  //     setConnectionId(chatConnectedData.data?.slug);
+  //   }
+  // }, [chatConnectedData]);
 
   useEffect(() => {
     if (messagesData && messagesData.data) {
@@ -127,7 +191,7 @@ const Chat = () => {
       <div className='h-full'>
         <ChatContainer
           messages={messages}
-          onSendMessage={addMessage}
+          onSendMessage={handleSendMessage}
           isLoading={isLoadingState}
           //onDeleteFile={deleteMessageFile}
           //onDeleteMessage={deleteMessage}

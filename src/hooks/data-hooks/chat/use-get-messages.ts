@@ -7,7 +7,7 @@ const useGetMessages = (connect_slug_id: string, params?: any) => {
   return useQuery({
     queryKey: ['getMessages', connect_slug_id], // Unique key for the query
     enabled: !!connect_slug_id,
-    refetchInterval: 10000,
+    // refetchInterval: 10000,
     queryFn: async () => {
       try {
         const response = await chatAPIEndpoint.getMessages(

@@ -9,6 +9,7 @@ export const handleSocketErrors = (socket: any) => {
       socket.on(errorType, (errorMessage: string) => {
         // Process the error message
         const displayMessage = getSocketErrorMessage(errorType, errorMessage);
+        //eslint-disable-next-line
         console.error('Socket Error:', displayMessage);
 
         // You can display this message in your UI
