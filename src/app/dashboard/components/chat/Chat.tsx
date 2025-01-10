@@ -12,8 +12,12 @@ import {
   disconnectSocket,
   sendMessage,
   socket,
+  markAsSeen,
 } from '@/socket/socket';
 import { SOCKET_EVENTS } from '@/socket/constants/socketEvents';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store';
+import { notification } from 'antd';
 
 export type MessageType = 'text' | 'image' | 'file';
 export type SenderType = 'client' | 'broker';
@@ -40,7 +44,7 @@ export interface IMessage {
   thread_id: number;
   sender_id: number;
   message: string;
-  seen_at: null;
+  seen_at: Date | null;
   created_at: Date;
   sender_name: string;
   sender_email: string;
@@ -52,11 +56,21 @@ export interface IMessage {
   sender: Sender;
 }
 
+interface SeenData {
+  messageIds: number[];
+  seenBy: {
+    id: string;
+    name: string;
+    // add other user fields you need
+  };
+}
+
 const Chat = () => {
   const [messages, setMessages] = useState<IMessage[]>([]);
   // const [connectionSlugId, setConnectionId] = useState<string>('');
   const [socketConnected, setSocketConnected] = useState(false);
-
+  // Add this line to get currentUserId from Redux store
+  const currentUserId = useSelector((state: RootState) => state.auth.user.slug);
   const connectionSlugId =
     'message-thread-0e90905a-b136-40bb-9a52-d18eaa0113f5-2b266330-a5cb-46fa-be38-17c6f3b79210';
 
@@ -86,20 +100,67 @@ const Chat = () => {
   //   });
   // };
 
-  //eslint-disable-next-line
-  const handleSendMessage = (message: any) => {
-    if (!socketConnected) {
-      alert('Socket is not connected. Please try again later.');
-      return;
-    }
+  // ... existing imports ...
 
-    if (!message || !connectionSlugId) {
-      alert('Please provide both message and threadSlug');
-      return;
-    }
+  const handleMarkAsSeenReceived = useCallback((result: { data: SeenData }) => {
+    setMessages((prevMessages) =>
+      prevMessages.map((msg) =>
+        result.data.messageIds.includes(msg.id)
+          ? {
+              ...msg,
+              seen_at: new Date(),
+              seen_by: result.data.seenBy,
+            }
+          : msg
+      )
+    );
+  }, []);
 
-    sendMessage(connectionSlugId, message);
-  };
+  const handleMarkAsRead = useCallback(
+    (messageIds: number[]) => {
+      if (!socketConnected || !connectionSlugId) return;
+
+      // Get only messages that were received (not sent by current user)
+      const receivedMessageIds = messages
+        .filter(
+          (msg) =>
+            messageIds.includes(msg.id) && msg.sender_slug !== currentUserId
+        )
+        .map((msg) => msg.id);
+
+      if (receivedMessageIds.length === 0) return;
+
+      // Update local state only for received messages
+      setMessages((prevMessages) =>
+        prevMessages.map((msg) =>
+          receivedMessageIds.includes(msg.id)
+            ? {
+                ...msg,
+                seen_at: new Date(),
+              }
+            : msg
+        )
+      );
+
+      // Send to server
+      markAsSeen(connectionSlugId, receivedMessageIds);
+    },
+    [socketConnected, connectionSlugId, messages, currentUserId]
+  );
+  const handleSendMessage = useCallback(
+    //eslint-disable-next-line
+    (message: any) => {
+      if (!socketConnected || !message || !connectionSlugId) {
+        notification.error({
+          message: 'Unable to send message. Please check your connection.',
+          placement: 'topRight',
+        });
+        return;
+      }
+      sendMessage(connectionSlugId, message);
+    },
+    [socketConnected, connectionSlugId]
+  );
 
   //eslint-disable-next-line
   const handleReceiveMessage = useCallback((message: any) => {
@@ -117,10 +178,10 @@ const Chat = () => {
       socket.on('disconnect', handleSocketDisconnect);
 
       socket.on(SOCKET_EVENTS.MESSAGE.SEND.BROADCASTER, handleReceiveMessage);
-      // socket.on(
-      //   SOCKET_EVENTS.MESSAGE.MARK_AS_SEEN.BROADCASTER,
-      //   handleMarkAsSeenReceived
-      // );
+      socket.on(
+        SOCKET_EVENTS.MESSAGE.MARK_AS_SEEN.BROADCASTER,
+        handleMarkAsSeenReceived
+      );
     }
 
     return () => {
@@ -131,14 +192,14 @@ const Chat = () => {
           SOCKET_EVENTS.MESSAGE.SEND.BROADCASTER,
           handleReceiveMessage
         );
-        // socket.off(
-        //   SOCKET_EVENTS.MESSAGE.MARK_AS_SEEN.BROADCASTER,
-        //   handleMarkAsSeenReceived
-        // );
+        socket.off(
+          SOCKET_EVENTS.MESSAGE.MARK_AS_SEEN.BROADCASTER,
+          handleMarkAsSeenReceived
+        );
       }
       disconnectSocket();
     };
-  }, [handleReceiveMessage]);
+  }, [handleReceiveMessage, handleMarkAsSeenReceived]);
 
   // useEffect(() => {
   //   if (chatConnectedData && chatConnectedData.data) {
@@ -193,6 +254,7 @@ const Chat = () => {
           messages={messages}
           onSendMessage={handleSendMessage}
           isLoading={isLoadingState}
+          onMarkAsRead={handleMarkAsRead}
           //onDeleteFile={deleteMessageFile}
           //onDeleteMessage={deleteMessage}
         />

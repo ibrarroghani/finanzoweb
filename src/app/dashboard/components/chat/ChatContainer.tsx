@@ -9,6 +9,9 @@ interface ChatContainerProps {
   onSendMessage: (message: string) => void;
 
   //eslint-disable-next-line
+  onMarkAsRead: (messageId: number[]) => void;
+
+  //eslint-disable-next-line
   //onDeleteFile: (messageId: string, fileName: string) => void;
 
   //eslint-disable-next-line
@@ -20,6 +23,7 @@ interface ChatContainerProps {
 const ChatContainer: React.FC<ChatContainerProps> = ({
   messages,
   onSendMessage,
+  onMarkAsRead,
   //onDeleteFile,
   // onDeleteMessage,
   isLoading,
@@ -37,10 +41,11 @@ const ChatContainer: React.FC<ChatContainerProps> = ({
     <div className='rounded-extra-small sticky top-0 flex h-[calc(100vh-240px)] w-full flex-col justify-between bg-primary-light py-6'>
       <div
         ref={messagesEndRef}
-        className='custom-scrollbar flex flex-col overflow-y-auto px-4'
+        className='custom-scrollbar flex flex-col overflow-hidden overflow-y-auto px-4'
       >
         <MessageList
           messages={messages}
+          onMarkAsRead={onMarkAsRead}
           // onDeleteFile={onDeleteFile}
           //onDeleteMessage={onDeleteMessage}
         />
