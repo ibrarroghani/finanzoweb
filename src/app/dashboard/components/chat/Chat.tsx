@@ -1,12 +1,10 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import ChatContainer from './ChatContainer';
-//import useGetConnection from '@/hooks/data-hooks/chat/use-get-connect-message';
+import useGetConnection from '@/hooks/data-hooks/chat/use-get-connect-message';
 import useGetMessages from '@/hooks/data-hooks/chat/use-get-messages';
 //import useSendMessage from '@/hooks/data-hooks/chat/use-send-message';
 import Spinner from '@/shared-components/Spinner';
 import { useIsFetching } from '@tanstack/react-query';
-//import { RootState } from '@/store';
-//import { useSelector } from 'react-redux';
 import {
   connectSocket,
   disconnectSocket,
@@ -67,21 +65,14 @@ interface SeenData {
 
 const Chat = () => {
   const [messages, setMessages] = useState<IMessage[]>([]);
-  // const [connectionSlugId, setConnectionId] = useState<string>('');
+  const [connectionSlugId, setConnectionId] = useState<string>('');
   const [socketConnected, setSocketConnected] = useState(false);
-  // Add this line to get currentUserId from Redux store
+
   const currentUserId = useSelector((state: RootState) => state.auth.user.slug);
-  const connectionSlugId =
-    'message-thread-0e90905a-b136-40bb-9a52-d18eaa0113f5-2b266330-a5cb-46fa-be38-17c6f3b79210';
 
-  // const clientSlug = useSelector((state: RootState) => state.auth.client.slug);
-  // console.log('clientSlug', clientSlug);
+  const clientSlug = useSelector((state: RootState) => state.auth.client.slug);
 
-  // const {
-  //   data: chatConnectedData,
-  //   //isLoading:isAccountListLoading,
-  //   //isError: isAccountListError,
-  // } = useGetConnection(clientSlug);
+  const { data: chatConnectedData } = useGetConnection(clientSlug);
 
   //const { mutate: sendMessage, isPending } = useSendMessage(connectionSlugId);
 
@@ -91,16 +82,6 @@ const Chat = () => {
   );
 
   const isFetching = useIsFetching({ queryKey: ['getMessages'] });
-
-  // //eslint-disable-next-line
-  // const addMessage = (message: any) => {
-  //   if (isPending) return;
-  //   sendMessage({
-  //     message,
-  //   });
-  // };
-
-  // ... existing imports ...
 
   const handleMarkAsSeenReceived = useCallback((result: { data: SeenData }) => {
     setMessages((prevMessages) =>
@@ -201,12 +182,11 @@ const Chat = () => {
     };
   }, [handleReceiveMessage, handleMarkAsSeenReceived]);
 
-  // useEffect(() => {
-  //   if (chatConnectedData && chatConnectedData.data) {
-  //     console.log('chatConnectedData', chatConnectedData.data.slug);
-  //     setConnectionId(chatConnectedData.data?.slug);
-  //   }
-  // }, [chatConnectedData]);
+  useEffect(() => {
+    if (chatConnectedData && chatConnectedData.data) {
+      setConnectionId(chatConnectedData.data?.slug);
+    }
+  }, [chatConnectedData]);
 
   useEffect(() => {
     if (messagesData && messagesData.data) {
