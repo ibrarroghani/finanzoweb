@@ -8,8 +8,8 @@ import {
   disconnectSocket,
   joinThread,
   socket,
-} from '../../socket/socket'; // Import the socket functions
-import { SOCKET_EVENTS } from '../../socket/constants/socketEvents';
+} from '../../utils/socket/socket'; // Import the socket functions
+import { SOCKET_EVENTS } from '../../utils/socket/constants/socketEvents';
 
 interface SeenData {
   messageIds: number[];

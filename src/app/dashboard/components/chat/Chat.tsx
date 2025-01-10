@@ -11,8 +11,8 @@ import {
   sendMessage,
   socket,
   markAsSeen,
-} from '@/socket/socket';
-import { SOCKET_EVENTS } from '@/socket/constants/socketEvents';
+} from '@/utils/socket/socket';
+import { SOCKET_EVENTS } from '@/utils/socket/constants/socketEvents';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store';
 import { notification } from 'antd';
