@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { SOCKET_ERRORS } from '../../socket/constants/socketErrors';
+import { SOCKET_ERRORS } from '../constants/socketErrors';
 import { getSocketErrorMessage } from './message';
 
 export const handleSocketErrors = (socket: any) => {
@@ -9,6 +9,7 @@ export const handleSocketErrors = (socket: any) => {
       socket.on(errorType, (errorMessage: string) => {
         // Process the error message
         const displayMessage = getSocketErrorMessage(errorType, errorMessage);
+        //eslint-disable-next-line
         console.error('Socket Error:', displayMessage);
 
         // You can display this message in your UI

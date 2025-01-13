@@ -33,7 +33,7 @@ const ClientDetailsCard: React.FC<IClientDetailsProps> = ({
         </div>
       ) : (
         <>
-          <div className='flex flex-col lg:w-[60%] lg:flex-row lg:items-center lg:justify-between lg:border-r lg:border-r-border-primary'>
+          <div className='flex flex-col lg:w-[60%] lg:flex-row lg:items-center lg:justify-between lg:border-r lg:border-r-border-primary 2xl:w-1/2'>
             <div className='flex items-center gap-4'>
               <div className='h-16 w-16 overflow-hidden'>
                 <Image
@@ -61,7 +61,7 @@ const ClientDetailsCard: React.FC<IClientDetailsProps> = ({
               <p>Email: {email}</p>
             </div>
           </div>
-          <div className='text-medium flex gap-1 lg:w-[40%] lg:flex-col lg:pl-8'>
+          <div className='text-medium flex gap-1 lg:w-[40%] lg:flex-col lg:pl-8 2xl:w-1/2'>
             <p className='font-medium capitalize'>address:</p>
             <p>{address}</p>
           </div>

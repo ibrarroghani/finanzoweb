@@ -36,7 +36,7 @@ const ClientCard: React.FC<IClientCardProps> = ({
             alt='profile'
             width={48}
             height={48}
-            className='0bject-cover rounded-full'
+            className='rounded-full object-cover'
           />
         </div>
         <div className='flex max-w-full flex-col gap-2 overflow-hidden'>

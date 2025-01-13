@@ -49,6 +49,7 @@ const Sidebar = () => {
   const [allUsers, setAllUsers] = useState<IClient[]>([]);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(false);
+  const [isSearching, setIsSearching] = useState(false); // New state for search loading
   const scrollableDivRef = useRef<HTMLDivElement>(null);
 
   const slectedClient = useSelector((state: RootState) => state.auth.client);
@@ -65,6 +66,24 @@ const Sidebar = () => {
     search: { name: searchValue },
   });
 
+  // Memoize transformClientData function
+  const transformClientData = useCallback(
+    (selectedUser: IClient) => ({
+      id: selectedUser.id,
+      name: selectedUser.name,
+      email: selectedUser.email,
+      image: selectedUser.profile_picture_url,
+      slug: selectedUser.slug,
+      address: selectedUser.address,
+      phone: selectedUser.phone_number,
+      status: selectedUser.is_active,
+    }),
+    []
+  );
+
+  // Memoize users array to prevent unnecessary re-renders
+  const memoizedUsers = useMemo(() => users, [users]);
+
   useEffect(() => {
     dispatch(setLoading(true)); // Set loading to true before fetching data
     refetch().finally(() => {
@@ -72,107 +91,85 @@ const Sidebar = () => {
     });
   }, [dispatch, refetch]);
 
+  // Optimize the data effect by moving the client selection logic to a separate effect
   useEffect(() => {
-    if (data && data.data) {
+    if (data?.data && !isSearching) {
       //eslint-disable-next-line
       const clientData = data as any;
-      if (searchValue.trim()) {
-        // When searching, replace the user list
-        setUsers(clientData.data);
-      } else {
-        // Append new data for pagination
-        setUsers((prev) => deduplicateById([...prev, ...clientData.data]));
+
+      if (!searchValue.trim()) {
         setAllUsers((prev) => deduplicateById([...prev, ...clientData.data]));
+        setUsers((prev) => deduplicateById([...prev, ...clientData.data]));
+      } else {
+        setUsers(clientData.data);
+        setPage(1);
       }
 
-      setHasMore(clientData.meta.currentPage < clientData.meta.totalPages); // Check if more data is available
-      if (!slectedClient.id && data.data.length > 0) {
-        const selectedUser = data.data[0];
-        dispatch(
-          setClient({
-            id: selectedUser.id,
-            name: selectedUser.name,
-            email: selectedUser.email,
-            image: selectedUser.profile_picture_url,
-            slug: selectedUser.slug,
-            address: selectedUser.address,
-            phone: selectedUser.phone_number,
-            status: selectedUser.is_active,
-          })
-        );
-      }
+      setHasMore(clientData.meta.currentPage < clientData.meta.totalPages);
     }
-  }, [data, dispatch, slectedClient.id, searchValue]);
+  }, [data, searchValue, isSearching]);
+
+  // Separate effect for initial client selection
+  useEffect(() => {
+    if (!slectedClient.id && data?.data?.length > 0) {
+      dispatch(setClient(transformClientData(data?.data[0])));
+    }
+  }, [data, slectedClient.id, dispatch, transformClientData]);
 
   const handleCardSelection = useCallback(
     (id: number) => {
       const selectedUser = users.find((user) => user.id === id);
       if (selectedUser) {
-        dispatch(
-          setClient({
-            id: selectedUser.id,
-            name: selectedUser.name,
-            email: selectedUser.email,
-            image: selectedUser.profile_picture_url,
-            slug: selectedUser.slug,
-            address: selectedUser.address,
-            phone: selectedUser.phone_number,
-            status: selectedUser.is_active,
-          })
-        );
+        dispatch(setClient(transformClientData(selectedUser)));
       }
     },
-    [users, dispatch]
+    [users, dispatch, transformClientData]
   );
 
   const submitHandler = useCallback(
     (data: IFormData) => {
       const searchTerm = data.search.trim().toLowerCase();
-      if (searchTerm) {
-        const results = allUsers.filter((item) =>
-          item.name.toLowerCase().includes(data?.search?.toLowerCase())
-        );
-        setUsers(results);
-      } else {
-        setUsers(allUsers);
-      }
+      setIsSearching(!!searchTerm);
+      refetch().finally(() => setIsSearching(false));
     },
-    [allUsers]
+    [refetch]
   );
 
   const debouncedSubmit = useMemo(
     () =>
       debounce((data) => {
-        if (data.search.trim()) {
-          handleSubmit(submitHandler)(data);
-        }
+        handleSubmit(submitHandler)(data);
       }, 500),
     [handleSubmit, submitHandler]
   );
 
+  // Handle Search Input Changes
   useEffect(() => {
-    debouncedSubmit({ search: searchValue });
-    return () => debouncedSubmit.cancel();
-  }, [searchValue, debouncedSubmit]);
+    if (!searchValue.trim()) {
+      setUsers(allUsers);
+    } else {
+      setIsSearching(true);
+      setUsers([]);
+      debouncedSubmit({ search: searchValue });
+    }
+  }, [searchValue, allUsers, debouncedSubmit]);
 
   // Fetch More Data for Pagination
   const fetchMoreData = useCallback(() => {
-    if (searchValue) return;
-    setPage((prevPage) => prevPage + 1);
-    refetch();
-  }, [refetch, searchValue]);
+    if (!searchValue) setPage((prevPage) => prevPage + 1);
+  }, [searchValue]);
 
   return (
     <div className='flex w-64 flex-col border-r border-r-border-primary px-2'>
       <SidebarHeader
         control={control as unknown as Control<FieldValues>}
         onSearch={debouncedSubmit}
-        totalClients={users.length}
+        totalClients={memoizedUsers.length}
       />
 
       <UserList
-        users={users}
-        isLoading={isLoading}
+        users={memoizedUsers}
+        isLoading={isLoading || isSearching}
         fetchMoreData={fetchMoreData}
         hasMore={hasMore}
         slectedClientId={slectedClient.id}

@@ -16,33 +16,34 @@ export const product_sans = localFont({
     {
       path: './ProductSans-Black.ttf',
       weight: '900',
-      style: 'black',
+      style: 'normal',
     },
     {
       path: './ProductSans-Bold.ttf',
       weight: '700',
-      style: 'bold',
+      style: 'normal',
     },
     {
       path: './ProductSans-Regular.ttf',
       weight: '400',
-      style: 'regular',
+      style: 'normal',
     },
     {
       path: './ProductSans-Medium.ttf',
       weight: '500',
-      style: 'medium',
+      style: 'normal',
     },
     {
       path: './ProductSans-Thin.ttf',
       weight: '100',
-      style: 'thin',
+      style: 'normal',
     },
     {
       path: './ProductSans-Light.ttf',
       weight: '300',
-      style: 'light',
+      style: 'normal',
     },
   ],
   fallback: ['Arial', 'sans-serif'],
+  display: 'swap',
 });

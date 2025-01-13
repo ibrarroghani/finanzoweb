@@ -10,14 +10,16 @@ let socket: Socket | null = null;
 
 const connectSocket = () => {
   const token = localStorage.getItem('dummyAuthToken'); // Retrieve the token (ensure it's available in localStorage)
-
+  //const token = 'user-2';
   if (!token) {
+    //eslint-disable-next-line
     console.log('No token found. Cannot connect.');
     return;
   }
 
   // If the socket is already connected, don't create a new connection
   if (socket?.connected) {
+    //eslint-disable-next-line
     console.log('Already connected to the socket.');
     return;
   }
@@ -33,6 +35,7 @@ const connectSocket = () => {
   });
 
   socket.on('connect', () => {
+    //eslint-disable-next-line
     console.log('Socket connected: ' + socket?.id);
   });
 
@@ -40,6 +43,7 @@ const connectSocket = () => {
   handleSocketErrors(socket);
 
   socket.on(SOCKET_EVENTS.MESSAGE.SEND.BROADCASTER, (message: unknown) => {
+    //eslint-disable-next-line
     console.log('New message received:', message);
     // Handle the message received event
   });
@@ -47,27 +51,32 @@ const connectSocket = () => {
   socket.on(
     SOCKET_EVENTS.MESSAGE.MARK_AS_SEEN.BROADCASTER,
     (result: unknown) => {
+      //eslint-disable-next-line
       console.log('Message marked as seen:', result);
       // Handle marking as seen event
     }
   );
 
   socket.on(SOCKET_EVENTS.USER.JOIN_THREAD.BROADCASTER, (data: any) => {
+    //eslint-disable-next-line
     console.log(data.message);
     // Handle the message when a user joins the thread
   });
 
   socket.on('disconnect', () => {
+    //eslint-disable-next-line
     console.log('Socket disconnected');
     // Optionally, handle cleanup tasks when disconnected
   });
 
   socket.on('connect_error', (error) => {
+    //eslint-disable-next-line
     console.error('Socket connection error:', error);
     // Optionally, handle specific errors
   });
 
   socket.on('reconnect_failed', () => {
+    //eslint-disable-next-line
     console.error('Socket reconnection failed');
     // Optionally, notify the user or show an error message
   });
@@ -89,6 +98,7 @@ const joinThread = (threadSlug: string, callback: (response: any) => void) => {
   socket.on(
     SOCKET_EVENTS.USER.JOIN_THREAD_CONFIRMATION.BROADCASTER,
     (response: any) => {
+      //eslint-disable-next-line
       console.log('response', response);
       if (response && response.message) {
         // Success: Join confirmation received
@@ -110,9 +120,15 @@ const joinThread = (threadSlug: string, callback: (response: any) => void) => {
 // Send a message
 const sendMessage = (threadSlug: string, message: string) => {
   if (!socket?.connected) {
+    //eslint-disable-next-line
     console.log('Socket is not connected');
     return;
   }
+
+  //eslint-disable-next-line
+  console.log('threadSlug', threadSlug);
+  //eslint-disable-next-line
+  console.log('message', message);
 
   socket.emit(SOCKET_EVENTS.MESSAGE.SEND.LISTENER, { threadSlug, message });
 };
@@ -120,6 +136,7 @@ const sendMessage = (threadSlug: string, message: string) => {
 // Mark messages as seen
 const markAsSeen = (threadSlug: string, messageIds: number[]) => {
   if (!socket?.connected) {
+    //eslint-disable-next-line
     console.log('Socket is not connected');
     return;
   }

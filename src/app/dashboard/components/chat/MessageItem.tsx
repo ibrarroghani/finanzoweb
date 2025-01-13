@@ -1,14 +1,20 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { IMessage } from './Chat';
 //import FileItem from './FileItem';
 import { getDateAndTime } from '@/utils/date-formatter';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store';
-import { MessageSeenIcon } from '@/assets/icons/bussiness-panel-icons';
+import {
+  DoubleTickIcon,
+  SingleTickIcon,
+} from '@/assets/icons/bussiness-panel-icons';
 //import { Modal } from 'antd';
 
 interface MessageItemProps {
   message: IMessage;
+
+  //eslint-disable-next-line
+  onMarkAsRead: (messageId: number[]) => void;
 
   //eslint-disable-next-line
   //onDeleteFile: (messageId: string, fileName: string) => void;
@@ -19,8 +25,10 @@ interface MessageItemProps {
 
 const MessageItem: React.FC<MessageItemProps> = ({
   message,
+  onMarkAsRead,
   // onDeleteMessage,
 }) => {
+  const messageRef = useRef<HTMLDivElement>(null);
   const slug = useSelector(
     (state: RootState) =>
       state.auth.user?.slug ??
@@ -44,29 +52,50 @@ const MessageItem: React.FC<MessageItemProps> = ({
   //   });
   // };
 
+  useEffect(() => {
+    if (!message.seen_at && !isSystemMessage) {
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) {
+            onMarkAsRead([message.id]);
+            observer.disconnect();
+          }
+        },
+        { threshold: 0.5 }
+      );
+
+      if (messageRef.current) {
+        observer.observe(messageRef.current);
+      }
+
+      return () => observer.disconnect();
+    }
+  }, [message.id, message.seen_at, isSystemMessage, onMarkAsRead]);
+
   return (
     <div
+      ref={messageRef}
       className={`message mb-4 flex ${isSystemMessage ? 'justify-end' : 'justify-start'}`}
     >
       <div
-        className='max-w-[80%] rounded-lg bg-content p-2'
+        className='overflow-wrap-anywhere max-w-[80%] break-words rounded-lg bg-content p-2'
         // {...(message.status !== 'deleted' && {
         //   onClick: () => showDeleteConfirm(message.id),
         // })}
       >
-        {message.seen_at === 'deleted' ? (
+        {/* {message.seen_at === 'deleted' ? (
           <p className='text-small capitalize'>This Message is deleted</p>
-        ) : (
-          <>
-            {/* Text Message */}
-            {message.message && (
-              <p className='text-small h-auto w-full whitespace-pre-wrap'>
-                {message.message}
-              </p>
-            )}
+        ) : ( */}
+        <>
+          {/* Text Message */}
+          {message.message && (
+            <p className='text-small h-auto w-full whitespace-pre-wrap break-words'>
+              {message.message}
+            </p>
+          )}
 
-            {/* File Previews */}
-            {/* {message.files?.map((fileItem, index) => (
+          {/* File Previews */}
+          {/* {message.files?.map((fileItem, index) => (
               <FileItem
                 key={index}
                 file={fileItem}
@@ -75,19 +104,23 @@ const MessageItem: React.FC<MessageItemProps> = ({
               />
             ))} */}
 
-            {/* Timestamp */}
-            <div className='mt-1 flex justify-between gap-2'>
-              <p className='timestamp text-extra-small'>
-                {getDateAndTime(message.created_at)}
+          {/* Timestamp */}
+          <div className='mt-1 flex justify-between gap-2'>
+            <p className='timestamp text-extra-small'>
+              {getDateAndTime(message.created_at)}
+            </p>
+            {message.seen_at ? (
+              <p>
+                <DoubleTickIcon />
               </p>
-              {message.seen_at && (
-                <p>
-                  <MessageSeenIcon />
-                </p>
-              )}
-            </div>
-          </>
-        )}
+            ) : (
+              <p>
+                <SingleTickIcon />
+              </p>
+            )}
+          </div>
+        </>
+        {/* )} */}
       </div>
     </div>
   );

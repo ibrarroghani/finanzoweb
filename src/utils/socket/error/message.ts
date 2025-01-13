@@ -1,4 +1,4 @@
-import { SOCKET_ERRORS } from '../../socket/constants/socketErrors';
+import { SOCKET_ERRORS } from '../constants/socketErrors';
 
 export const getSocketErrorMessage = (
   errorType: string,

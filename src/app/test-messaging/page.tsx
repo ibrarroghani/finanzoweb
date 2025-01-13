@@ -8,8 +8,8 @@ import {
   disconnectSocket,
   joinThread,
   socket,
-} from '../../socket/socket'; // Import the socket functions
-import { SOCKET_EVENTS } from '../../socket/constants/socketEvents';
+} from '../../utils/socket/socket'; // Import the socket functions
+import { SOCKET_EVENTS } from '../../utils/socket/constants/socketEvents';
 
 interface SeenData {
   messageIds: number[];
@@ -65,6 +65,7 @@ const MessagingPage = () => {
       }
       disconnectSocket();
     };
+    //eslint-disable-next-line
   }, []);
 
   const handleReceiveMessage = (message: any) => {
@@ -72,13 +73,18 @@ const MessagingPage = () => {
   };
 
   const handleMarkAsSeenReceived = (result: { data: SeenData }) => {
+    //eslint-disable-next-line
     console.log('Marked as seen:', result);
     const seenData = result.data;
 
+    //eslint-disable-next-line
     console.log('seenData.seenBy.id', seenData.seenBy.id);
+    //eslint-disable-next-line
     console.log('token', token);
+    //eslint-disable-next-line
     console.log('token?.replace("user-", "")', token?.replace('user-', ''));
 
+    //eslint-disable-next-line
     console.log(
       'seenData.seenBy.id.toString() === token?.replace("user-", "")',
       seenData.seenBy.id.toString() === token?.replace('user-', '')

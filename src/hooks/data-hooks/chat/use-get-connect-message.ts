@@ -2,13 +2,13 @@ import { useQuery } from '@tanstack/react-query';
 import { chatAPIEndpoint } from '@/config/api/api-endpoints/chat-api-endpoint';
 import { handleApiError } from '@/utils/error/api-error-handler';
 
-//eslint-disable-next-line
-const useGetConnectMessage = (params?: any) => {
+const useGetConnection = (clientSlug: string) => {
   return useQuery({
-    queryKey: ['getConnectMessage', params], // Unique key for the query
+    queryKey: ['getConnected', clientSlug], // Unique key for the query
+    enabled: !!clientSlug,
     queryFn: async () => {
       try {
-        const response = await chatAPIEndpoint.getConnectMessage(params);
+        const response = await chatAPIEndpoint.getConnection(clientSlug);
         return response;
       } catch (error) {
         throw handleApiError(error);
@@ -17,4 +17,4 @@ const useGetConnectMessage = (params?: any) => {
   });
 };
 
-export default useGetConnectMessage;
+export default useGetConnection;

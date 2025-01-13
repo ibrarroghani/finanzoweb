@@ -6,6 +6,9 @@ interface MessageListProps {
   messages: IMessage[];
 
   //eslint-disable-next-line
+  onMarkAsRead: (messageId: number[]) => void;
+
+  //eslint-disable-next-line
   //onDeleteFile: (messageId: string, fileName: string) => void;
 
   //eslint-disable-next-line
@@ -14,6 +17,7 @@ interface MessageListProps {
 
 const MessageList: React.FC<MessageListProps> = ({
   messages,
+  onMarkAsRead,
   // onDeleteFile,
   //onDeleteMessage,
 }) => (
@@ -23,6 +27,7 @@ const MessageList: React.FC<MessageListProps> = ({
         <MessageItem
           key={message.id}
           message={message}
+          onMarkAsRead={onMarkAsRead}
           // onDeleteFile={onDeleteFile}
           //onDeleteMessage={onDeleteMessage}
         />
