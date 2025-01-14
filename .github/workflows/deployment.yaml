@@ -29,7 +29,10 @@ jobs:
               # Path to the .env file in the project directory
               ENV_FILE="/www/finanzo_web/.env"
 
-              # Append secrets to the .env file
+              # Clear or create new .env file
+              : > $ENV_FILE
+
+              # Write all secrets to the .env file
               echo "NEXT_PUBLIC_API_URL=${{ vars.DEV_NEXT_PUBLIC_API_URL }}" >> $ENV_FILE
               echo "NEXT_PUBLIC_SOCKET_URL=${{ vars.DEV_NEXT_PUBLIC_SOCKET_URL }}" >> $ENV_FILE
               
