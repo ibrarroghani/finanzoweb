@@ -1,7 +1,8 @@
-import React, { useRef, useEffect } from 'react';
+import React from 'react';
 import MessageList from './MessageList';
 import InputSection from './InputSection';
 import { IMessage } from './Chat';
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 interface ChatContainerProps {
   messages: IMessage[];
@@ -18,6 +19,8 @@ interface ChatContainerProps {
   //onDeleteMessage: (messageId: string) => void;
 
   isLoading: boolean;
+  hasMore: boolean;
+  loadMore: () => void;
 }
 
 const ChatContainer: React.FC<ChatContainerProps> = ({
@@ -27,28 +30,64 @@ const ChatContainer: React.FC<ChatContainerProps> = ({
   //onDeleteFile,
   // onDeleteMessage,
   isLoading,
+  hasMore,
+  loadMore,
 }) => {
-  const messagesEndRef = useRef<HTMLDivElement | null>(null);
+  // const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
-  useEffect(() => {
-    messagesEndRef.current?.scrollTo({
-      top: messagesEndRef.current.scrollHeight,
-      behavior: 'smooth',
-    });
-  }, [messages]);
+  // useEffect(() => {
+  //   messagesEndRef.current?.scrollTo({
+  //     top: messagesEndRef.current.scrollHeight,
+  //     behavior: 'smooth',
+  //   });
+  // }, [messages]);
 
   return (
-    <div className='rounded-extra-small sticky top-0 flex h-[calc(100vh-240px)] w-full flex-col justify-between bg-primary-light py-6'>
+    <div className='rounded-extra-small sticky top-0 flex w-full flex-col justify-between bg-primary-light py-6'>
       <div
-        ref={messagesEndRef}
-        className='custom-scrollbar flex flex-col overflow-hidden overflow-y-auto px-4'
+        id='scrollableDiv'
+        //ref={messagesEndRef}
+        style={{
+          display: 'flex',
+          flexDirection: 'column-reverse',
+          height: '300px',
+          overflowY: 'auto',
+        }}
+        className='custom-scrollbar flex flex-col px-4'
+        onScroll={(e) => {
+          const target = e.target as HTMLDivElement;
+          const isAtTop =
+            Math.abs(
+              target.scrollHeight + target.scrollTop - target.clientHeight
+            ) < 1;
+
+          if (isAtTop && hasMore) {
+            loadMore();
+          }
+        }}
       >
-        <MessageList
-          messages={messages}
-          onMarkAsRead={onMarkAsRead}
-          // onDeleteFile={onDeleteFile}
-          //onDeleteMessage={onDeleteMessage}
-        />
+        <InfiniteScroll
+          dataLength={messages.length}
+          next={loadMore}
+          hasMore={hasMore}
+          loader={null}
+          endMessage={
+            !isLoading && messages.length > 0 && !hasMore ? (
+              <div className='text-small mb-4 text-center font-bold capitalize text-primary-dark'>
+                No more messages
+              </div>
+            ) : null
+          }
+          scrollableTarget='scrollableDiv'
+          inverse={true}
+          style={{
+            display: 'flex',
+            flexDirection: 'column-reverse',
+            overflow: 'hidden',
+          }}
+        >
+          <MessageList messages={messages} onMarkAsRead={onMarkAsRead} />
+        </InfiniteScroll>
       </div>
       <InputSection onSendMessage={onSendMessage} isLoading={isLoading} />
     </div>

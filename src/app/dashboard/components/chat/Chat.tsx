@@ -67,7 +67,8 @@ const Chat = () => {
   const [messages, setMessages] = useState<IMessage[]>([]);
   const [connectionSlugId, setConnectionId] = useState<string>('');
   const [socketConnected, setSocketConnected] = useState(false);
-
+  const [curserValue, setCurserValue] = useState<number>(0);
+  const [hasMore, setHasMore] = useState<boolean>(false);
   const currentUserId = useSelector((state: RootState) => state.auth.user.slug);
 
   const clientSlug = useSelector((state: RootState) => state.auth.client.slug);
@@ -76,10 +77,19 @@ const Chat = () => {
 
   //const { mutate: sendMessage, isPending } = useSendMessage(connectionSlugId);
 
-  const { data: messagesData, isLoading: isMessageLoading } = useGetMessages(
-    connectionSlugId,
-    { limit: 100 }
-  );
+  const {
+    data: messagesData,
+    isLoading: isMessageLoading,
+    refetch,
+  } = useGetMessages(connectionSlugId, {
+    limit: 10,
+    cursor: JSON.stringify({
+      column: 'user_messages.id',
+      value: curserValue,
+      direction: 'before',
+    }),
+    'reverse-data': 'no',
+  });
 
   const isFetching = useIsFetching({ queryKey: ['getMessages'] });
 
@@ -145,7 +155,7 @@ const Chat = () => {
 
   //eslint-disable-next-line
   const handleReceiveMessage = useCallback((message: any) => {
-    setMessages((prevMessages) => [...prevMessages, message]);
+    setMessages((prevMessages) => [message, ...prevMessages]);
   }, []);
 
   useEffect(() => {
@@ -184,15 +194,42 @@ const Chat = () => {
 
   useEffect(() => {
     if (chatConnectedData && chatConnectedData.data) {
-      setConnectionId(chatConnectedData.data?.slug);
+      setConnectionId(chatConnectedData.data.thread?.slug);
+      const lastMessageId = chatConnectedData.data.lastMessage?.id;
+      setCurserValue(lastMessageId ? lastMessageId + 1 : 0);
     }
   }, [chatConnectedData]);
 
   useEffect(() => {
     if (messagesData && messagesData.data) {
-      setMessages(messagesData.data);
+      setMessages((prevMessages) => {
+        // Combine previous and new messages
+        const allMessages = [...prevMessages, ...messagesData.data];
+
+        // Remove duplicates based on message id
+        const uniqueMessages = allMessages.filter(
+          (message, index, self) =>
+            index === self.findIndex((m) => m.id === message.id)
+        );
+
+        // Sort messages by creation date in descending order (newest first)
+        return uniqueMessages.sort(
+          (a, b) =>
+            new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+        );
+      });
+
+      //eslint-disable-next-line
+      const metaData = messagesData as any;
+
+      setCurserValue(metaData.meta.nextCursor?.value ?? 0);
+      setHasMore(metaData.meta.hasMore);
     }
   }, [messagesData]);
+
+  const fetchMoreData = () => {
+    refetch();
+  };
 
   // const deleteMessageFile = (messageId: string, fileName: string) => {
   //   console.log('deleteMessageFile', messageId, fileName);
@@ -235,6 +272,8 @@ const Chat = () => {
           onSendMessage={handleSendMessage}
           isLoading={isLoadingState}
           onMarkAsRead={handleMarkAsRead}
+          hasMore={hasMore}
+          loadMore={fetchMoreData}
           //onDeleteFile={deleteMessageFile}
           //onDeleteMessage={deleteMessage}
         />
