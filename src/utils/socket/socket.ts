@@ -156,10 +156,25 @@ const disconnectSocket = () => {
   }
 };
 
+// Add this with your other socket functions
+const sendDocument = (threadSlug: string, documentSlug: string) => {
+  if (!socket?.connected) {
+    console.log('Socket is not connected');
+    return;
+  }
+
+  socket.emit(SOCKET_EVENTS.MESSAGE.SEND_DOCUMENT.LISTENER, {
+    threadSlug,
+    documentSlug,
+    message: null, // Including message as null as per your backend expectation
+  });
+};
+
 export {
   connectSocket,
   joinThread,
   sendMessage,
+  sendDocument,
   markAsSeen,
   disconnectSocket,
   socket,
