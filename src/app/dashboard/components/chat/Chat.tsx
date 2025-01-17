@@ -11,6 +11,7 @@ import {
   sendMessage,
   socket,
   markAsSeen,
+  sendDocument,
 } from '@/utils/socket/socket';
 import { SOCKET_EVENTS } from '@/utils/socket/constants/socketEvents';
 import { useSelector } from 'react-redux';
@@ -143,7 +144,7 @@ const Chat = () => {
   );
   const handleSendMessage = useCallback(
     //eslint-disable-next-line
-    (message: any, fileSlug?: string) => {
+    (message: any) => {
       if (!socketConnected || !message || !connectionSlugId) {
         notification.error({
           message: 'Unable to send message. Please check your connection.',
@@ -152,6 +153,20 @@ const Chat = () => {
         return;
       }
       sendMessage(connectionSlugId, message);
+    },
+    [socketConnected, connectionSlugId]
+  );
+
+  const handleSendDocument = useCallback(
+    (fileSlug: string) => {
+      if (!socketConnected || !fileSlug || !connectionSlugId) {
+        notification.error({
+          message: 'Unable to send message. Please check your connection.',
+          placement: 'topRight',
+        });
+        return;
+      }
+      sendDocument(connectionSlugId, fileSlug);
     },
     [socketConnected, connectionSlugId]
   );
@@ -176,6 +191,10 @@ const Chat = () => {
         SOCKET_EVENTS.MESSAGE.MARK_AS_SEEN.BROADCASTER,
         handleMarkAsSeenReceived
       );
+      socket.on(
+        SOCKET_EVENTS.MESSAGE.SEND_DOCUMENT.BROADCASTER,
+        handleReceiveMessage
+      );
     }
 
     return () => {
@@ -189,6 +208,10 @@ const Chat = () => {
         socket.off(
           SOCKET_EVENTS.MESSAGE.MARK_AS_SEEN.BROADCASTER,
           handleMarkAsSeenReceived
+        );
+        socket.off(
+          SOCKET_EVENTS.MESSAGE.SEND_DOCUMENT.BROADCASTER,
+          handleReceiveMessage
         );
       }
       disconnectSocket();
@@ -279,6 +302,7 @@ const Chat = () => {
         <ChatContainer
           messages={messages}
           onSendMessage={handleSendMessage}
+          onSendDocument={handleSendDocument}
           isLoading={isLoadingState}
           onMarkAsRead={handleMarkAsRead}
           hasMore={hasMore}

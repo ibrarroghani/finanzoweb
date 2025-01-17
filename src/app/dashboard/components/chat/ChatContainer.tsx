@@ -10,6 +10,9 @@ interface ChatContainerProps {
   onSendMessage: (message: string, fileSlug?: string) => void;
 
   //eslint-disable-next-line
+  onSendDocument: (fileSlug: string) => void;
+
+  //eslint-disable-next-line
   onMarkAsRead: (messageId: number[]) => void;
 
   //eslint-disable-next-line
@@ -27,6 +30,7 @@ interface ChatContainerProps {
 const ChatContainer: React.FC<ChatContainerProps> = ({
   messages,
   onSendMessage,
+  onSendDocument,
   onMarkAsRead,
   //onDeleteFile,
   // onDeleteMessage,
@@ -93,6 +97,7 @@ const ChatContainer: React.FC<ChatContainerProps> = ({
       </div>
       <InputSection
         onSendMessage={onSendMessage}
+        onSendDocument={onSendDocument}
         isLoading={isLoading}
         message_slug={message_slug}
       />

@@ -159,6 +159,7 @@ const disconnectSocket = () => {
 // Add this with your other socket functions
 const sendDocument = (threadSlug: string, documentSlug: string) => {
   if (!socket?.connected) {
+    //eslint-disable-next-line
     console.log('Socket is not connected');
     return;
   }
