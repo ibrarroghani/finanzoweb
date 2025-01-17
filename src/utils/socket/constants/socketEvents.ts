@@ -7,6 +7,10 @@ export const SOCKET_EVENTS = {
       LISTENER: 'message:send:new',
       BROADCASTER: 'message:send:sent',
     },
+    SEND_DOCUMENT: {
+      LISTENER: 'message:send:document:new',
+      BROADCASTER: 'message:send:document:sent',
+    },
     MARK_AS_SEEN: {
       LISTENER: 'message:seen:mark',
       BROADCASTER: 'message:seen:marked',

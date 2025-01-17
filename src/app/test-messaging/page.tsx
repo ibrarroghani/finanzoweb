@@ -8,6 +8,7 @@ import {
   disconnectSocket,
   joinThread,
   socket,
+  sendDocument,
 } from '../../utils/socket/socket'; // Import the socket functions
 import { SOCKET_EVENTS } from '../../utils/socket/constants/socketEvents';
 
@@ -32,6 +33,7 @@ const MessagingPage = () => {
   const [messageSeenByOthers, setMessageSeenByOthers] = useState<SeenData[]>(
     []
   );
+  const [documentSlug, setDocumentSlug] = useState('');
 
   useEffect(() => {
     connectSocket();
@@ -48,6 +50,10 @@ const MessagingPage = () => {
         SOCKET_EVENTS.MESSAGE.MARK_AS_SEEN.BROADCASTER,
         handleMarkAsSeenReceived
       );
+      socket.on(
+        SOCKET_EVENTS.MESSAGE.SEND_DOCUMENT.BROADCASTER,
+        handleReceiveMessage
+      );
     }
 
     return () => {
@@ -61,6 +67,10 @@ const MessagingPage = () => {
         socket.off(
           SOCKET_EVENTS.MESSAGE.MARK_AS_SEEN.BROADCASTER,
           handleMarkAsSeenReceived
+        );
+        socket.off(
+          SOCKET_EVENTS.MESSAGE.SEND_DOCUMENT.BROADCASTER,
+          handleReceiveMessage
         );
       }
       disconnectSocket();
@@ -147,6 +157,21 @@ const MessagingPage = () => {
     setThreadJoined(false);
   };
 
+  const handleSendDocument = () => {
+    if (!socketConnected) {
+      alert('Socket is not connected. Please try again later.');
+      return;
+    }
+
+    if (!documentSlug || !threadSlug) {
+      alert('Please provide both documentSlug and threadSlug');
+      return;
+    }
+
+    sendDocument(threadSlug, documentSlug);
+    setDocumentSlug('');
+  };
+
   return (
     <div className='mx-auto max-w-4xl p-4'>
       <h1 className='mb-4 text-center text-xl font-bold'>
@@ -193,6 +218,23 @@ const MessagingPage = () => {
         className='mb-4 w-full rounded-lg bg-blue-500 p-2 text-white hover:bg-blue-600'
       >
         Send Message
+      </button>
+
+      <div className='mb-4'>
+        <input
+          type='text'
+          placeholder='Enter document slug'
+          value={documentSlug}
+          onChange={(e) => setDocumentSlug(e.target.value)}
+          className='w-full rounded-lg border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-blue-500'
+        />
+      </div>
+
+      <button
+        onClick={handleSendDocument}
+        className='mb-4 w-full rounded-lg bg-purple-500 p-2 text-white hover:bg-purple-600'
+      >
+        Send Document
       </button>
 
       <h3 className='mb-2 text-xl font-semibold'>Received Messages</h3>
