@@ -8,6 +8,7 @@ import {
   DoubleTickIcon,
   SingleTickIcon,
 } from '@/assets/icons/bussiness-panel-icons';
+import FileItem from './FileItem';
 //import { Modal } from 'antd';
 
 interface MessageItemProps {
@@ -103,6 +104,15 @@ const MessageItem: React.FC<MessageItemProps> = ({
                 className='-m-2'
               />
             ))} */}
+
+          {/* File Previews */}
+          {message.file && (
+            <FileItem
+              file={message.file}
+              // messageStatus={message.status}
+              className='-m-2'
+            />
+          )}
 
           {/* Timestamp */}
           <div className='mt-1 flex justify-between gap-2'>

@@ -11,6 +11,7 @@ import {
   sendMessage,
   socket,
   markAsSeen,
+  sendDocument,
 } from '@/utils/socket/socket';
 import { SOCKET_EVENTS } from '@/utils/socket/constants/socketEvents';
 import { useSelector } from 'react-redux';
@@ -30,6 +31,15 @@ export interface Sender {
   details: Details;
 }
 
+export interface File {
+  id: number;
+  original_name: string;
+  file_url: string;
+  file_type: string;
+  file_size: number;
+  created_at: Date;
+}
+
 export interface Details {
   id: number;
   address: string;
@@ -44,14 +54,8 @@ export interface IMessage {
   message: string;
   seen_at: Date | null;
   created_at: Date;
-  sender_name: string;
-  sender_email: string;
-  sender_slug: string;
-  sender_details_id: number;
-  sender_address: string;
-  sender_profile_picture_url: string;
-  sender_phone_number: string;
   sender: Sender;
+  file: File | null;
 }
 
 interface SeenData {
@@ -67,7 +71,8 @@ const Chat = () => {
   const [messages, setMessages] = useState<IMessage[]>([]);
   const [connectionSlugId, setConnectionId] = useState<string>('');
   const [socketConnected, setSocketConnected] = useState(false);
-
+  const [curserValue, setCurserValue] = useState<number>(0);
+  const [hasMore, setHasMore] = useState<boolean>(false);
   const currentUserId = useSelector((state: RootState) => state.auth.user.slug);
 
   const clientSlug = useSelector((state: RootState) => state.auth.client.slug);
@@ -76,10 +81,19 @@ const Chat = () => {
 
   //const { mutate: sendMessage, isPending } = useSendMessage(connectionSlugId);
 
-  const { data: messagesData, isLoading: isMessageLoading } = useGetMessages(
-    connectionSlugId,
-    { limit: 100 }
-  );
+  const {
+    data: messagesData,
+    isLoading: isMessageLoading,
+    refetch,
+  } = useGetMessages(connectionSlugId, {
+    limit: 10,
+    cursor: JSON.stringify({
+      column: 'user_messages.id',
+      value: curserValue,
+      direction: 'before',
+    }),
+    'reverse-data': 'no',
+  });
 
   const isFetching = useIsFetching({ queryKey: ['getMessages'] });
 
@@ -105,7 +119,7 @@ const Chat = () => {
       const receivedMessageIds = messages
         .filter(
           (msg) =>
-            messageIds.includes(msg.id) && msg.sender_slug !== currentUserId
+            messageIds.includes(msg.id) && msg.sender.slug !== currentUserId
         )
         .map((msg) => msg.id);
 
@@ -143,9 +157,23 @@ const Chat = () => {
     [socketConnected, connectionSlugId]
   );
 
+  const handleSendDocument = useCallback(
+    (fileSlug: string) => {
+      if (!socketConnected || !fileSlug || !connectionSlugId) {
+        notification.error({
+          message: 'Unable to send message. Please check your connection.',
+          placement: 'topRight',
+        });
+        return;
+      }
+      sendDocument(connectionSlugId, fileSlug);
+    },
+    [socketConnected, connectionSlugId]
+  );
+
   //eslint-disable-next-line
   const handleReceiveMessage = useCallback((message: any) => {
-    setMessages((prevMessages) => [...prevMessages, message]);
+    setMessages((prevMessages) => [message, ...prevMessages]);
   }, []);
 
   useEffect(() => {
@@ -163,6 +191,10 @@ const Chat = () => {
         SOCKET_EVENTS.MESSAGE.MARK_AS_SEEN.BROADCASTER,
         handleMarkAsSeenReceived
       );
+      socket.on(
+        SOCKET_EVENTS.MESSAGE.SEND_DOCUMENT.BROADCASTER,
+        handleReceiveMessage
+      );
     }
 
     return () => {
@@ -177,6 +209,10 @@ const Chat = () => {
           SOCKET_EVENTS.MESSAGE.MARK_AS_SEEN.BROADCASTER,
           handleMarkAsSeenReceived
         );
+        socket.off(
+          SOCKET_EVENTS.MESSAGE.SEND_DOCUMENT.BROADCASTER,
+          handleReceiveMessage
+        );
       }
       disconnectSocket();
     };
@@ -184,15 +220,48 @@ const Chat = () => {
 
   useEffect(() => {
     if (chatConnectedData && chatConnectedData.data) {
-      setConnectionId(chatConnectedData.data?.slug);
+      setConnectionId(chatConnectedData.data.thread?.slug);
+      const lastMessageId = chatConnectedData.data.lastMessage?.id;
+      setCurserValue(lastMessageId ? lastMessageId + 1 : 0);
+      setMessages([]);
     }
   }, [chatConnectedData]);
 
   useEffect(() => {
+    setMessages([]);
+    setCurserValue(0);
+  }, [clientSlug]);
+
+  useEffect(() => {
     if (messagesData && messagesData.data) {
-      setMessages(messagesData.data);
+      setMessages((prevMessages) => {
+        // Combine previous and new messages
+        const allMessages = [...prevMessages, ...messagesData.data];
+
+        // Remove duplicates based on message id
+        const uniqueMessages = allMessages.filter(
+          (message, index, self) =>
+            index === self.findIndex((m) => m.id === message.id)
+        );
+
+        // Sort messages by creation date in descending order (newest first)
+        return uniqueMessages.sort(
+          (a, b) =>
+            new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+        );
+      });
+
+      //eslint-disable-next-line
+      const metaData = messagesData as any;
+
+      setCurserValue(metaData.meta.nextCursor?.value ?? 0);
+      setHasMore(metaData.meta.hasMore);
     }
   }, [messagesData]);
+
+  const fetchMoreData = () => {
+    refetch();
+  };
 
   // const deleteMessageFile = (messageId: string, fileName: string) => {
   //   console.log('deleteMessageFile', messageId, fileName);
@@ -233,8 +302,12 @@ const Chat = () => {
         <ChatContainer
           messages={messages}
           onSendMessage={handleSendMessage}
+          onSendDocument={handleSendDocument}
           isLoading={isLoadingState}
           onMarkAsRead={handleMarkAsRead}
+          hasMore={hasMore}
+          loadMore={fetchMoreData}
+          message_slug={connectionSlugId}
           //onDeleteFile={deleteMessageFile}
           //onDeleteMessage={deleteMessage}
         />

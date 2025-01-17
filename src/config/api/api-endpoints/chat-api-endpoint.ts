@@ -11,4 +11,12 @@ export const chatAPIEndpoint = {
   //eslint-disable-next-line
   sendMessage: (data: any, connect_slug_id: string) =>
     apiService.post(`/messages/thread/${connect_slug_id}/send`, data),
+
+  //eslint-disable-next-line
+  uploadFile: (data: FormData, message_slug: string) =>
+    apiService.post(`/messages/thread/${message_slug}/upload-document`, data, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    }),
 };
