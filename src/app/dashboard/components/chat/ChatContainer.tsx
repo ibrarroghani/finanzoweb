@@ -56,12 +56,12 @@ const ChatContainer: React.FC<ChatContainerProps> = ({
         className='custom-scrollbar flex flex-col px-4'
         onScroll={(e) => {
           const target = e.target as HTMLDivElement;
-          const isAtTop =
-            Math.abs(
-              target.scrollHeight + target.scrollTop - target.clientHeight
-            ) < 1;
-
-          if (isAtTop && hasMore) {
+          // Check if we're near the bottom since we're using column-reverse
+          const scrollPercentage =
+            (Math.abs(target.scrollTop) /
+              (target.scrollHeight - target.clientHeight)) *
+            100;
+          if (scrollPercentage > 95 && hasMore && !isLoading) {
             loadMore();
           }
         }}

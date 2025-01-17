@@ -1,10 +1,11 @@
 import React from 'react';
 import Image from 'next/image';
 import { DownloadIconTwo } from '@/assets/icons/bussiness-panel-icons';
+import { File } from './Chat';
 
 interface FileItemProps {
-  file: { file: File; url: string };
-  messageStatus: string;
+  file: File;
+  messageStatus?: string;
   className?: string;
 }
 
@@ -13,7 +14,7 @@ const FileItem: React.FC<FileItemProps> = ({
   file,
   messageStatus,
 }) => {
-  const isImage = file.file.type.startsWith('image/');
+  const isImage = file.file_type === 'image';
 
   return (
     <div className={`mb-2 ${className} rounded-medium`}>
@@ -23,7 +24,7 @@ const FileItem: React.FC<FileItemProps> = ({
         <>
           {isImage ? (
             <Image
-              src={file.url}
+              src={file.file_url}
               alt='preview'
               height={250}
               width={250}
@@ -32,13 +33,13 @@ const FileItem: React.FC<FileItemProps> = ({
           ) : (
             <div className='flex flex-col gap-2 px-3'>
               <div className=''>
-                <span className='text-large'>{file.file.name}</span>
+                <span className='text-large'>{file.original_name}</span>
               </div>
               <div className='flex gap-1'>
                 {/* Download Link */}
                 <a
-                  href={file.url}
-                  download={file.file.name}
+                  href={file.file_url}
+                  download={file.original_name}
                   className='text-small flex items-center gap-1 rounded-full bg-primary-dark px-3 py-1 text-primary-light'
                 >
                   <span>

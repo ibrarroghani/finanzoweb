@@ -30,6 +30,15 @@ export interface Sender {
   details: Details;
 }
 
+export interface File {
+  id: number;
+  original_name: string;
+  file_url: string;
+  file_type: string;
+  file_size: number;
+  created_at: Date;
+}
+
 export interface Details {
   id: number;
   address: string;
@@ -44,14 +53,8 @@ export interface IMessage {
   message: string;
   seen_at: Date | null;
   created_at: Date;
-  sender_name: string;
-  sender_email: string;
-  sender_slug: string;
-  sender_details_id: number;
-  sender_address: string;
-  sender_profile_picture_url: string;
-  sender_phone_number: string;
   sender: Sender;
+  file: File | null;
 }
 
 interface SeenData {
@@ -115,7 +118,7 @@ const Chat = () => {
       const receivedMessageIds = messages
         .filter(
           (msg) =>
-            messageIds.includes(msg.id) && msg.sender_slug !== currentUserId
+            messageIds.includes(msg.id) && msg.sender.slug !== currentUserId
         )
         .map((msg) => msg.id);
 
@@ -197,8 +200,14 @@ const Chat = () => {
       setConnectionId(chatConnectedData.data.thread?.slug);
       const lastMessageId = chatConnectedData.data.lastMessage?.id;
       setCurserValue(lastMessageId ? lastMessageId + 1 : 0);
+      setMessages([]);
     }
   }, [chatConnectedData]);
+
+  useEffect(() => {
+    setMessages([]);
+    setCurserValue(0);
+  }, [clientSlug]);
 
   useEffect(() => {
     if (messagesData && messagesData.data) {
