@@ -7,7 +7,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 interface ChatContainerProps {
   messages: IMessage[];
   //eslint-disable-next-line
-  onSendMessage: (message: string) => void;
+  onSendMessage: (message: string, fileSlug?: string) => void;
 
   //eslint-disable-next-line
   onMarkAsRead: (messageId: number[]) => void;
@@ -21,6 +21,7 @@ interface ChatContainerProps {
   isLoading: boolean;
   hasMore: boolean;
   loadMore: () => void;
+  message_slug: string;
 }
 
 const ChatContainer: React.FC<ChatContainerProps> = ({
@@ -32,6 +33,7 @@ const ChatContainer: React.FC<ChatContainerProps> = ({
   isLoading,
   hasMore,
   loadMore,
+  message_slug,
 }) => {
   // const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
@@ -89,7 +91,11 @@ const ChatContainer: React.FC<ChatContainerProps> = ({
           <MessageList messages={messages} onMarkAsRead={onMarkAsRead} />
         </InfiniteScroll>
       </div>
-      <InputSection onSendMessage={onSendMessage} isLoading={isLoading} />
+      <InputSection
+        onSendMessage={onSendMessage}
+        isLoading={isLoading}
+        message_slug={message_slug}
+      />
     </div>
   );
 };

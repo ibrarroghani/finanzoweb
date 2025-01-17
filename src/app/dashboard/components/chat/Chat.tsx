@@ -143,7 +143,7 @@ const Chat = () => {
   );
   const handleSendMessage = useCallback(
     //eslint-disable-next-line
-    (message: any) => {
+    (message: any, fileSlug?: string) => {
       if (!socketConnected || !message || !connectionSlugId) {
         notification.error({
           message: 'Unable to send message. Please check your connection.',
@@ -283,6 +283,7 @@ const Chat = () => {
           onMarkAsRead={handleMarkAsRead}
           hasMore={hasMore}
           loadMore={fetchMoreData}
+          message_slug={connectionSlugId}
           //onDeleteFile={deleteMessageFile}
           //onDeleteMessage={deleteMessage}
         />
