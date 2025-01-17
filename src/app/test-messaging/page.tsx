@@ -9,6 +9,7 @@ import {
   joinThread,
   socket,
   sendDocument,
+  deleteDocument,
 } from '../../utils/socket/socket'; // Import the socket functions
 import { SOCKET_EVENTS } from '../../utils/socket/constants/socketEvents';
 
@@ -34,6 +35,7 @@ const MessagingPage = () => {
     []
   );
   const [documentSlug, setDocumentSlug] = useState('');
+  const [deleteDocumentSlug, setDeleteDocumentSlug] = useState('');
 
   useEffect(() => {
     connectSocket();
@@ -54,6 +56,10 @@ const MessagingPage = () => {
         SOCKET_EVENTS.MESSAGE.SEND_DOCUMENT.BROADCASTER,
         handleReceiveMessage
       );
+      socket.on(
+        SOCKET_EVENTS.MESSAGE.DELETE_DOCUMENT.BROADCASTER,
+        handleReceiveMessage
+      );
     }
 
     return () => {
@@ -72,6 +78,10 @@ const MessagingPage = () => {
           SOCKET_EVENTS.MESSAGE.SEND_DOCUMENT.BROADCASTER,
           handleReceiveMessage
         );
+        socket.off(
+          SOCKET_EVENTS.MESSAGE.DELETE_DOCUMENT.BROADCASTER,
+          handleReceiveMessage
+        );
       }
       disconnectSocket();
     };
@@ -79,7 +89,26 @@ const MessagingPage = () => {
   }, []);
 
   const handleReceiveMessage = (message: any) => {
-    setReceivedMessages((prevMessages) => [...prevMessages, message]);
+    if (message.id) {
+      // If message has an ID, check if it's an update to an existing message
+      setReceivedMessages((prevMessages) => {
+        const messageIndex = prevMessages.findIndex(
+          (msg: any) => msg.id === message.id
+        );
+
+        if (messageIndex !== -1) {
+          // Replace the existing message with the updated one
+          const newMessages = [...prevMessages];
+          newMessages[messageIndex] = message;
+          return newMessages;
+        }
+        // If not found, add as a new message
+        return [...prevMessages, message];
+      });
+    } else {
+      // Handle new messages as before
+      setReceivedMessages((prevMessages) => [...prevMessages, message]);
+    }
   };
 
   const handleMarkAsSeenReceived = (result: { data: SeenData }) => {
@@ -172,6 +201,21 @@ const MessagingPage = () => {
     setDocumentSlug('');
   };
 
+  const handleDeleteDocument = () => {
+    if (!socketConnected) {
+      alert('Socket is not connected. Please try again later.');
+      return;
+    }
+
+    if (!deleteDocumentSlug || !threadSlug) {
+      alert('Please provide both documentSlug and threadSlug');
+      return;
+    }
+
+    deleteDocument(threadSlug, deleteDocumentSlug);
+    setDeleteDocumentSlug('');
+  };
+
   return (
     <div className='mx-auto max-w-4xl p-4'>
       <h1 className='mb-4 text-center text-xl font-bold'>
@@ -237,11 +281,43 @@ const MessagingPage = () => {
         Send Document
       </button>
 
+      <div className='mb-4'>
+        <input
+          type='text'
+          placeholder='Enter document slug to delete'
+          value={deleteDocumentSlug}
+          onChange={(e) => setDeleteDocumentSlug(e.target.value)}
+          className='w-full rounded-lg border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-blue-500'
+        />
+      </div>
+
+      <button
+        onClick={handleDeleteDocument}
+        className='mb-4 w-full rounded-lg bg-red-500 p-2 text-white hover:bg-red-600'
+      >
+        Delete Document
+      </button>
+
       <h3 className='mb-2 text-xl font-semibold'>Received Messages</h3>
       <ul className='mb-4'>
-        {receivedMessages.map((msg, index) => (
-          <li key={index} className='mb-2 rounded-lg bg-gray-100 p-2'>
-            {JSON.stringify(msg)}
+        {receivedMessages.map((msg: any, index) => (
+          <li
+            key={index}
+            className={`mb-2 rounded-lg p-2 ${(() => {
+              const bgColors = {
+                file: 'bg-green-100',
+                comment: 'bg-pink-100',
+                default: 'bg-gray-100',
+              };
+
+              if (msg.file !== null) return bgColors.file;
+              if (msg.comment !== null) return bgColors.comment;
+              return bgColors.default;
+            })()}`}
+          >
+            <pre className='max-h-[200px] overflow-y-auto transition-[max-height] duration-300 ease-in-out hover:max-h-full'>
+              {JSON.stringify(msg, null, 2)}
+            </pre>
           </li>
         ))}
       </ul>

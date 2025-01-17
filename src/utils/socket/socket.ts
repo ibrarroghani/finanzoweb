@@ -170,11 +170,24 @@ const sendDocument = (threadSlug: string, documentSlug: string) => {
   });
 };
 
+const deleteDocument = (threadSlug: string, documentSlug: string) => {
+  if (!socket?.connected) {
+    console.log('Socket is not connected');
+    return;
+  }
+
+  socket.emit(SOCKET_EVENTS.MESSAGE.DELETE_DOCUMENT.LISTENER, {
+    threadSlug,
+    documentSlug,
+  });
+};
+
 export {
   connectSocket,
   joinThread,
   sendMessage,
   sendDocument,
+  deleteDocument,
   markAsSeen,
   disconnectSocket,
   socket,
