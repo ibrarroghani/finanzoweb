@@ -12,6 +12,7 @@ import {
   socket,
   markAsSeen,
   sendDocument,
+  deleteDocument,
 } from '@/utils/socket/socket';
 import { SOCKET_EVENTS } from '@/utils/socket/constants/socketEvents';
 import { useSelector } from 'react-redux';
@@ -37,6 +38,7 @@ export interface File {
   file_url: string;
   file_type: string;
   file_size: number;
+  slug: string;
   created_at: Date;
 }
 
@@ -56,6 +58,7 @@ export interface IMessage {
   created_at: Date;
   sender: Sender;
   file: File | null;
+  comment: string | null;
 }
 
 interface SeenData {
@@ -173,7 +176,23 @@ const Chat = () => {
 
   //eslint-disable-next-line
   const handleReceiveMessage = useCallback((message: any) => {
-    setMessages((prevMessages) => [message, ...prevMessages]);
+    setMessages((prevMessages) => {
+      // If the message has been deleted, filter out the message with that ID
+      if (message.deleted_at) {
+        return prevMessages.filter((msg) => msg.id !== message.id);
+      }
+
+      // Check if message already exists
+      const isDuplicate = prevMessages.some((msg) => msg.id === message.id);
+      if (isDuplicate) {
+        // If it exists, update the existing message (preserve seen_at status)
+        return prevMessages.map((msg) =>
+          msg.id === message.id ? { ...message, seen_at: msg.seen_at } : msg
+        );
+      }
+      // Add new message at the beginning
+      return [message, ...prevMessages];
+    });
   }, []);
 
   useEffect(() => {
@@ -195,6 +214,11 @@ const Chat = () => {
         SOCKET_EVENTS.MESSAGE.SEND_DOCUMENT.BROADCASTER,
         handleReceiveMessage
       );
+
+      socket.on(
+        SOCKET_EVENTS.MESSAGE.DELETE_DOCUMENT.BROADCASTER,
+        handleReceiveMessage
+      );
     }
 
     return () => {
@@ -211,6 +235,10 @@ const Chat = () => {
         );
         socket.off(
           SOCKET_EVENTS.MESSAGE.SEND_DOCUMENT.BROADCASTER,
+          handleReceiveMessage
+        );
+        socket.off(
+          SOCKET_EVENTS.MESSAGE.DELETE_DOCUMENT.BROADCASTER,
           handleReceiveMessage
         );
       }
@@ -263,31 +291,19 @@ const Chat = () => {
     refetch();
   };
 
-  // const deleteMessageFile = (messageId: string, fileName: string) => {
-  //   console.log('deleteMessageFile', messageId, fileName);
-  //   setMessages((prev) =>
-  //     prev.map((message) =>
-  //       message.id === messageId
-  //         ? {
-  //             ...message,
-  //             files: message.files?.map((file) =>
-  //               file.file.name === fileName
-  //                 ? { ...file, status: 'deleted' }
-  //                 : file
-  //             ),
-  //           }
-  //         : message
-  //     )
-  //   );
-  // };
-
-  // const deleteMessage = (messageId: string) => {
-  //   setMessages((prev) =>
-  //     prev.map((message) =>
-  //       message.id === messageId ? { ...message, status: 'deleted' } : message
-  //     )
-  //   );
-  // };
+  const handleDeleteDocument = useCallback(
+    (slugId: string) => {
+      if (!socketConnected || !slugId || !connectionSlugId) {
+        notification.error({
+          message: 'Unable to delete. Please check your connection.',
+          placement: 'topRight',
+        });
+        return;
+      }
+      deleteDocument(connectionSlugId, slugId);
+    },
+    [socketConnected, connectionSlugId]
+  );
 
   const isLoadingState = isMessageLoading || isFetching > 0;
 
@@ -308,7 +324,7 @@ const Chat = () => {
           hasMore={hasMore}
           loadMore={fetchMoreData}
           message_slug={connectionSlugId}
-          //onDeleteFile={deleteMessageFile}
+          onDeleteFile={handleDeleteDocument}
           //onDeleteMessage={deleteMessage}
         />
       </div>

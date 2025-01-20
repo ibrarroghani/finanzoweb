@@ -41,6 +41,18 @@ const InputSection: React.FC<InputSectionProps> = ({
   const { mutate: uploadFile, isPending: isUploading } =
     useFileUpload(message_slug);
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === 'Enter') {
+      if (e.shiftKey) {
+        // Allow new line when Shift+Enter is pressed
+        return;
+      }
+      // Prevent default to avoid unwanted new line
+      e.preventDefault();
+      handleSendMessage();
+    }
+  };
+
   const handleSendMessage = () => {
     if (!message.trim() && selectedFiles.length === 0) return;
 
@@ -111,6 +123,7 @@ const InputSection: React.FC<InputSectionProps> = ({
           onChange={(e) => setMessage(e.target.value)}
           autoSize={{ minRows: 2, maxRows: 6 }}
           placeholder='Enter your message here...'
+          onKeyDown={handleKeyDown}
           disabled={selectedFiles.length > 0}
           style={{
             resize: 'none',
@@ -119,17 +132,18 @@ const InputSection: React.FC<InputSectionProps> = ({
           }}
         />
 
+        {/* File Preview */}
         {selectedFiles.length > 0 && (
           <div className='absolute bottom-4 left-0 right-0 flex p-2'>
             <div className='relative mb-2 mr-2'>
               {selectedFiles[0].file.type.startsWith('image/') ? (
-                <div className='rounded-small h-10 w-10 overflow-hidden bg-card'>
+                <div className='rounded-small h-16 w-16 overflow-hidden bg-primary-light'>
                   <Image
                     src={selectedFiles[0].url}
                     alt='preview'
-                    width={40}
-                    height={40}
-                    className='object-cover'
+                    width={64}
+                    height={64}
+                    className='h-full w-full object-cover'
                   />
                 </div>
               ) : (
