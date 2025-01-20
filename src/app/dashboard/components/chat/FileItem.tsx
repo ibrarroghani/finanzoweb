@@ -1,6 +1,7 @@
 import React from 'react';
 import Image from 'next/image';
 import {
+  AttachmentIcon,
   DeleteIcon,
   DownloadIconTwo,
 } from '@/assets/icons/bussiness-panel-icons';
@@ -55,7 +56,10 @@ const FileItem: React.FC<FileItemProps> = ({
             />
           ) : (
             <div className='flex flex-col gap-2 px-3'>
-              <div className='my-2'>
+              <div className='my-3 flex gap-2'>
+                <span>
+                  <AttachmentIcon />
+                </span>
                 <span className='text-small h-auto w-full whitespace-pre-wrap break-words'>
                   {file.original_name}
                 </span>

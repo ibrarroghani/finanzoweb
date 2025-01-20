@@ -201,11 +201,6 @@ const InputSection: React.FC<InputSectionProps> = ({
             <ImageUploadIcon />
           </button>
         </Upload>
-        {/* <Dropdown menu={{ items: fileUploadMenu }} trigger={['click']}>
-          <button className='upload-button absolute right-2 top-7'>
-            <ImageUploadIcon />
-          </button>
-        </Dropdown> */}
       </div>
     </div>
   );
