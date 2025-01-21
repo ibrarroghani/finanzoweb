@@ -193,7 +193,7 @@ const InputSection: React.FC<InputSectionProps> = ({
           onChange={handleFileChange}
           showUploadList={false}
           multiple
-          accept='image/*,application/pdf'
+          accept='.jpg,.jpeg,.png,.pdf,.zip'
           fileList={fileList}
           disabled={message.trim().length > 0}
         >
