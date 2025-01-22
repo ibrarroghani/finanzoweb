@@ -173,6 +173,7 @@ const sendDocument = (threadSlug: string, documentSlug: string) => {
 
 const deleteDocument = (threadSlug: string, documentSlug: string) => {
   if (!socket?.connected) {
+    //eslint-disable-next-line
     console.log('Socket is not connected');
     return;
   }

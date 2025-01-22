@@ -16,7 +16,7 @@ interface ChatContainerProps {
   onMarkAsRead: (messageId: number[]) => void;
 
   //eslint-disable-next-line
-  //onDeleteFile: (messageId: string, fileName: string) => void;
+  onDeleteFile: (slugId: string) => void;
 
   //eslint-disable-next-line
   //onDeleteMessage: (messageId: string) => void;
@@ -38,6 +38,7 @@ const ChatContainer: React.FC<ChatContainerProps> = ({
   hasMore,
   loadMore,
   message_slug,
+  onDeleteFile,
 }) => {
   // const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
@@ -49,14 +50,15 @@ const ChatContainer: React.FC<ChatContainerProps> = ({
   // }, [messages]);
 
   return (
-    <div className='rounded-extra-small sticky top-0 flex w-full flex-col justify-between bg-primary-light py-6'>
+    <div className='chat-container rounded-extra-small sticky top-0 flex h-[calc(100vh-240px)] w-full flex-col justify-between bg-primary-light py-6'>
       <div
         id='scrollableDiv'
         //ref={messagesEndRef}
         style={{
+          transition: 'height 0.3s ease-out',
           display: 'flex',
           flexDirection: 'column-reverse',
-          height: '300px',
+          //height: '300px',
           overflowY: 'auto',
         }}
         className='custom-scrollbar flex flex-col px-4'
@@ -92,7 +94,11 @@ const ChatContainer: React.FC<ChatContainerProps> = ({
             overflow: 'hidden',
           }}
         >
-          <MessageList messages={messages} onMarkAsRead={onMarkAsRead} />
+          <MessageList
+            messages={messages}
+            onMarkAsRead={onMarkAsRead}
+            onDeleteFile={onDeleteFile}
+          />
         </InfiniteScroll>
       </div>
       <InputSection

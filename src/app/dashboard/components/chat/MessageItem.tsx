@@ -7,6 +7,7 @@ import { RootState } from '@/store';
 import {
   DoubleTickIcon,
   SingleTickIcon,
+  UnavailableIcon,
 } from '@/assets/icons/bussiness-panel-icons';
 import FileItem from './FileItem';
 //import { Modal } from 'antd';
@@ -18,7 +19,7 @@ interface MessageItemProps {
   onMarkAsRead: (messageId: number[]) => void;
 
   //eslint-disable-next-line
-  //onDeleteFile: (messageId: string, fileName: string) => void;
+  onDeleteFile: (slugId: string) => void;
 
   //eslint-disable-next-line
   //onDeleteMessage: (messageId: string) => void;
@@ -27,7 +28,7 @@ interface MessageItemProps {
 const MessageItem: React.FC<MessageItemProps> = ({
   message,
   onMarkAsRead,
-  // onDeleteMessage,
+  onDeleteFile,
 }) => {
   const messageRef = useRef<HTMLDivElement>(null);
   const slug = useSelector(
@@ -111,14 +112,24 @@ const MessageItem: React.FC<MessageItemProps> = ({
               file={message.file}
               // messageStatus={message.status}
               className='-m-2'
+              isSender={isSystemMessage}
+              onDeleteFile={onDeleteFile}
             />
           )}
 
+          {message.comment && (
+            <div className='flex gap-2'>
+              <span>
+                <UnavailableIcon />
+              </span>
+              <p className='text-small h-auto w-full whitespace-pre-wrap break-words'>
+                {message.comment}
+              </p>
+            </div>
+          )}
+
           {/* Timestamp */}
-          <div className='mt-1 flex justify-between gap-2'>
-            <p className='timestamp text-extra-small'>
-              {getDateAndTime(message.created_at)}
-            </p>
+          <div className='mt-1 flex justify-end gap-2'>
             {message.seen_at ? (
               <p>
                 <DoubleTickIcon />
@@ -128,6 +139,9 @@ const MessageItem: React.FC<MessageItemProps> = ({
                 <SingleTickIcon />
               </p>
             )}
+            <p className='timestamp text-extra-small'>
+              {getDateAndTime(message.created_at)}
+            </p>
           </div>
         </>
         {/* )} */}
