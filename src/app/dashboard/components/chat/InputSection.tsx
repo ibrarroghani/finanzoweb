@@ -11,35 +11,29 @@ const { TextArea } = Input;
 import Image from 'next/image';
 import useFileUpload from '@/hooks/data-hooks/chat/use-file-upload';
 import { fileSizeCheck } from '@/utils/file-size';
-// import { IMessage } from './Chat';
+import { useDashboardPageContext } from '@/app/dashboard/context/DashboardPageContext';
 
-interface InputSectionProps {
-  //eslint-disable-next-line
-  onSendMessage: (message: string, fileSlug?: string) => void;
-
-  //eslint-disable-next-line
-  onSendDocument: (fileSlug: string) => void;
-
-  isLoading?: boolean;
-  message_slug: string;
+interface ISelectedFile {
+  file: File;
+  url: string;
 }
 
-const InputSection: React.FC<InputSectionProps> = ({
-  onSendMessage,
-  onSendDocument,
-  isLoading,
-  message_slug,
-}) => {
+const InputSection: React.FC = () => {
   const [message, setMessage] = useState('');
   const [fileSlug, setFileSlug] = useState('');
-  const [selectedFiles, setSelectedFiles] = useState<
-    { file: File; url: string }[]
-  >([]);
+  const [selectedFiles, setSelectedFiles] = useState<ISelectedFile[]>([]);
   //eslint-disable-next-line
   const [fileList, setFileList] = useState<any[]>([]);
 
+  const {
+    connectionSlugId,
+    handleSendMessage,
+    handleSendDocument,
+    isLoadingState,
+  } = useDashboardPageContext();
+
   const { mutate: uploadFile, isPending: isUploading } =
-    useFileUpload(message_slug);
+    useFileUpload(connectionSlugId);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter') {
@@ -49,17 +43,17 @@ const InputSection: React.FC<InputSectionProps> = ({
       }
       // Prevent default to avoid unwanted new line
       e.preventDefault();
-      handleSendMessage();
+      handleSendMessage(message);
     }
   };
 
-  const handleSendMessage = () => {
+  const handleMessage = () => {
     if (!message.trim() && selectedFiles.length === 0) return;
 
     if (fileSlug) {
-      onSendDocument(fileSlug);
+      handleSendDocument(fileSlug);
     } else {
-      onSendMessage(message);
+      handleSendMessage(message);
     }
     setMessage('');
     setFileSlug('');
@@ -182,8 +176,8 @@ const InputSection: React.FC<InputSectionProps> = ({
 
         <button
           className='send-button absolute right-12 top-7'
-          onClick={handleSendMessage}
-          disabled={isLoading || isUploading}
+          onClick={handleMessage}
+          disabled={isLoadingState || isUploading}
         >
           <MessageSendIcon />
         </button>

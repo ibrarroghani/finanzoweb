@@ -5,17 +5,17 @@ import {
   DeleteIcon,
   DownloadIconTwo,
 } from '@/assets/icons/bussiness-panel-icons';
-import { File } from './Chat';
+
 import Link from 'next/link';
 import { Modal } from 'antd';
+import { useDashboardPageContext } from '@/app/dashboard/context/DashboardPageContext';
+import { File } from '@/app/dashboard/interface/chat-interface';
 
 interface FileItemProps {
   file: File;
   messageStatus?: string;
   className?: string;
   isSender?: boolean;
-  //eslint-disable-next-line
-  onDeleteFile: (slugId: string) => void;
 }
 
 const FileItem: React.FC<FileItemProps> = ({
@@ -23,19 +23,19 @@ const FileItem: React.FC<FileItemProps> = ({
   file,
   messageStatus,
   isSender,
-  onDeleteFile,
 }) => {
+  const { handleDeleteDocument } = useDashboardPageContext();
   const isImage = file.file_type === 'image';
 
   const handleDeleteConfirm = () => {
     Modal.confirm({
-      title: 'Are you sure you want to delete this?',
+      title: 'Are you sure you want to delete this file?',
       content: 'This action cannot be undone.',
       okText: 'Delete',
       okType: 'danger',
       cancelText: 'Cancel',
       onOk() {
-        onDeleteFile(file.slug);
+        handleDeleteDocument(file.slug);
       },
     });
   };
@@ -68,8 +68,7 @@ const FileItem: React.FC<FileItemProps> = ({
           )}
           <div className='mx-2 flex gap-1'>
             {isSender && (
-              <Link
-                href='#'
+              <button
                 onClick={handleDeleteConfirm}
                 className='text-small flex items-center gap-1 rounded-full bg-primary-dark px-3 py-1 text-primary-light'
               >
@@ -77,7 +76,7 @@ const FileItem: React.FC<FileItemProps> = ({
                   <DeleteIcon />
                 </span>
                 Delete
-              </Link>
+              </button>
             )}
 
             {/* Download Link */}

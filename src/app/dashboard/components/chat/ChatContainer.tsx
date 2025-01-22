@@ -1,86 +1,96 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import MessageList from './MessageList';
 import InputSection from './InputSection';
-import { IMessage } from './Chat';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import { useDashboardPageContext } from '@/app/dashboard/context/DashboardPageContext';
 
-interface ChatContainerProps {
-  messages: IMessage[];
-  //eslint-disable-next-line
-  onSendMessage: (message: string, fileSlug?: string) => void;
+const ChatContainer: React.FC = () => {
+  const scrollDivRef = useRef<HTMLDivElement | null>(null);
+  const [canCheckScroll, setCanCheckScroll] = useState(false);
+  const prevMessagesLength = useRef(0);
 
-  //eslint-disable-next-line
-  onSendDocument: (fileSlug: string) => void;
+  const { messages, isLoadingState, hasMore, fetchMoreData, connectionSlugId } =
+    useDashboardPageContext();
 
-  //eslint-disable-next-line
-  onMarkAsRead: (messageId: number[]) => void;
+  // Reset scroll position immediately when switching clients
+  useEffect(() => {
+    setCanCheckScroll(false);
+    prevMessagesLength.current = 0;
 
-  //eslint-disable-next-line
-  onDeleteFile: (slugId: string) => void;
+    // Force immediate scroll reset with a double reset
+    const resetScroll = () => {
+      if (scrollDivRef.current) {
+        scrollDivRef.current.style.overflow = 'hidden';
+        scrollDivRef.current.scrollTop = 0;
 
-  //eslint-disable-next-line
-  //onDeleteMessage: (messageId: string) => void;
+        // Re-enable scrolling after reset
+        setTimeout(() => {
+          if (scrollDivRef.current) {
+            scrollDivRef.current.style.overflow = 'auto';
+            scrollDivRef.current.scrollTop = 0;
+          }
+        }, 50);
+      }
+    };
 
-  isLoading: boolean;
-  hasMore: boolean;
-  loadMore: () => void;
-  message_slug: string;
-}
+    resetScroll();
+    // Second reset after a brief delay to ensure it catches any late updates
+    setTimeout(resetScroll, 100);
 
-const ChatContainer: React.FC<ChatContainerProps> = ({
-  messages,
-  onSendMessage,
-  onSendDocument,
-  onMarkAsRead,
-  //onDeleteFile,
-  // onDeleteMessage,
-  isLoading,
-  hasMore,
-  loadMore,
-  message_slug,
-  onDeleteFile,
-}) => {
-  // const messagesEndRef = useRef<HTMLDivElement | null>(null);
+    // Re-enable scroll checking after everything is settled
+    const timer = setTimeout(() => {
+      setCanCheckScroll(true);
+    }, 500);
 
-  // useEffect(() => {
-  //   messagesEndRef.current?.scrollTo({
-  //     top: messagesEndRef.current.scrollHeight,
-  //     behavior: 'smooth',
-  //   });
-  // }, [messages]);
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [connectionSlugId]);
+
+  // Handle scroll checking after messages update
+  useEffect(() => {
+    if (messages.length !== prevMessagesLength.current) {
+      prevMessagesLength.current = messages.length;
+
+      // Only manage scroll checking for normal message updates
+      if (!isLoadingState && connectionSlugId) {
+        setCanCheckScroll(true);
+      }
+    }
+  }, [messages.length, isLoadingState, connectionSlugId]);
 
   return (
     <div className='chat-container rounded-extra-small sticky top-0 flex h-[calc(100vh-240px)] w-full flex-col justify-between bg-primary-light py-6'>
       <div
         id='scrollableDiv'
-        //ref={messagesEndRef}
+        ref={scrollDivRef}
         style={{
-          transition: 'height 0.3s ease-out',
+          height: '100%',
           display: 'flex',
           flexDirection: 'column-reverse',
-          //height: '300px',
           overflowY: 'auto',
         }}
         className='custom-scrollbar flex flex-col px-4'
         onScroll={(e) => {
           const target = e.target as HTMLDivElement;
-          // Check if we're near the bottom since we're using column-reverse
-          const scrollPercentage =
-            (Math.abs(target.scrollTop) /
-              (target.scrollHeight - target.clientHeight)) *
-            100;
-          if (scrollPercentage > 95 && hasMore && !isLoading) {
-            loadMore();
+          if (!isLoadingState && canCheckScroll && messages.length > 0) {
+            const scrollPercentage =
+              (Math.abs(target.scrollTop) /
+                (target.scrollHeight - target.clientHeight)) *
+              100;
+            if (scrollPercentage > 90 && hasMore) {
+              fetchMoreData();
+            }
           }
         }}
       >
         <InfiniteScroll
           dataLength={messages.length}
-          next={loadMore}
+          next={fetchMoreData}
           hasMore={hasMore}
           loader={null}
           endMessage={
-            !isLoading && messages.length > 0 && !hasMore ? (
+            !isLoadingState && messages.length > 0 && !hasMore ? (
               <div className='text-small mb-4 text-center font-bold capitalize text-primary-dark'>
                 No more messages
               </div>
@@ -94,19 +104,10 @@ const ChatContainer: React.FC<ChatContainerProps> = ({
             overflow: 'hidden',
           }}
         >
-          <MessageList
-            messages={messages}
-            onMarkAsRead={onMarkAsRead}
-            onDeleteFile={onDeleteFile}
-          />
+          <MessageList />
         </InfiniteScroll>
       </div>
-      <InputSection
-        onSendMessage={onSendMessage}
-        onSendDocument={onSendDocument}
-        isLoading={isLoading}
-        message_slug={message_slug}
-      />
+      <InputSection />
     </div>
   );
 };
