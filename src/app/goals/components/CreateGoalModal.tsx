@@ -13,7 +13,7 @@ import { RootState } from '@/store';
 import SelectField from '@/shared-components/SelectField';
 import TextareaField from '@/shared-components/TextareaField';
 import useGetBankAccounts from '@/hooks/data-hooks/account/use-get-bank-accounts';
-//import useUserAccounts from '@/hooks/data-hooks/user/use-user-accounts';
+import { IGoalFormData } from '@/app/goals/interface/goal-interface';
 
 // interface IBankAccount {
 //   id: string;
@@ -40,47 +40,23 @@ interface IGoalModalProps {
   setShowModal: () => void;
 }
 
-export interface ILinkedAccount {
-  account_id: string;
-  contribution_limit?: string;
-}
-
-export interface IGoalFormData {
-  title: string;
-  goal_purpose: string;
-  description: string;
-  goal_amount: string;
-  target_date: Date;
-  goal_status: 'active' | 'paused';
-  linked_accounts: ILinkedAccount[];
-}
+const INITIAL_GOAL_FORM_DATA: IGoalFormData = {
+  title: '',
+  goal_purpose: '',
+  description: '',
+  goal_amount: 0,
+  target_date: getTomorrowDate(),
+  goal_status: 'active',
+  linked_accounts: [],
+};
 
 const GoalModal: React.FC<IGoalModalProps> = ({
   title,
   showModal,
   setShowModal,
 }) => {
-  const slug = useSelector((state: RootState) => state.auth.client.slug);
   const [userAccounts, setUserAccounts] = useState([]);
-  // const userAccounts = [
-  //   {
-  //     id: '1',
-  //     name: 'Account 1',
-  //   },
-  //   {
-  //     id: '2',
-  //     name: 'Account 2',
-  //   },
-  // ];
-  const initialValue: IGoalFormData = {
-    title: '',
-    goal_purpose: '',
-    description: '',
-    goal_amount: '',
-    target_date: getTomorrowDate(),
-    goal_status: 'active',
-    linked_accounts: [],
-  };
+  const slug = useSelector((state: RootState) => state.auth.client.slug);
 
   const {
     control,
@@ -89,7 +65,7 @@ const GoalModal: React.FC<IGoalModalProps> = ({
     watch,
     setValue,
   } = useForm<IGoalFormData>({
-    defaultValues: initialValue,
+    defaultValues: INITIAL_GOAL_FORM_DATA,
     resolver: yupResolver<IGoalFormData>(goalCreateValidationSchema),
   });
 
@@ -100,6 +76,25 @@ const GoalModal: React.FC<IGoalModalProps> = ({
   const { data: bankAccounts, isLoading } = useGetBankAccounts(slug, {
     force_initial_plaid_account_fetch: 'yes',
   });
+
+  const handleGoalCreate = (data: IGoalFormData) => {
+    const formData = {
+      ...data,
+      goal_amount: Number(data.goal_amount),
+      target_date: convertDateApiFormat(data.target_date),
+      goal_status: data.goal_status,
+      linked_accounts: data.linked_accounts.map((account) => ({
+        account_id: account.account_id,
+        contribution_limit: Number(account.contribution_limit),
+      })),
+    };
+
+    CreateGoal(formData, {
+      onSuccess: () => {
+        setShowModal();
+      },
+    });
+  };
 
   useEffect(() => {
     if (bankAccounts?.data) {
@@ -114,37 +109,6 @@ const GoalModal: React.FC<IGoalModalProps> = ({
       setValue('linked_accounts', [linkedAccounts[0]]);
     }
   }, [goalPurpose, linkedAccounts, setValue]);
-
-  const handleGoalCreate = (data: IGoalFormData) => {
-    const {
-      title,
-      goal_purpose,
-      description,
-      goal_amount,
-      target_date,
-      goal_status,
-      linked_accounts,
-    } = data;
-
-    const formData = {
-      title,
-      goal_purpose,
-      description,
-      goal_amount: Number(goal_amount),
-      target_date: convertDateApiFormat(target_date),
-      goal_status,
-      linked_accounts: linked_accounts.map((account) => ({
-        account_id: account.account_id,
-        contribution_limit: Number(account.contribution_limit),
-      })),
-    };
-
-    CreateGoal(formData, {
-      onSuccess: () => {
-        setShowModal();
-      },
-    });
-  };
 
   return (
     <>
@@ -281,10 +245,6 @@ const GoalModal: React.FC<IGoalModalProps> = ({
                             currentAccounts.splice(index, 1);
                             setValue('linked_accounts', currentAccounts);
                           }}
-                          // disabled={
-                          //   goalPurpose === 'repayment' &&
-                          //   field.value.length <= 1
-                          // }
                         >
                           Remove
                         </button>

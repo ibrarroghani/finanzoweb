@@ -30,12 +30,13 @@ const TextareaField: React.FC<ITextareaFieldProps> = ({
         <Controller
           name={name}
           control={control}
-          render={({ field: { onChange } }) => (
+          render={({ field: { onChange, value } }) => (
             <TextArea
               showCount
               maxLength={maxLength}
               onChange={onChange}
               placeholder={placeholder}
+              value={value}
               style={{ height: rows * 20, resize: 'none' }}
             />
           )}

@@ -1,6 +1,6 @@
 import { getTomorrowDate } from '@/utils/date-formatter';
 import * as yup from 'yup';
-import { IGoalFormData } from '../components/CreateGoalModal';
+import { IGoalFormData } from '@/app/goals/interface/goal-interface';
 
 export const goalCreateValidationSchema = yup.object().shape({
   title: yup
@@ -22,14 +22,9 @@ export const goalCreateValidationSchema = yup.object().shape({
     )
     .required(),
   goal_amount: yup
-    .string()
-    .trim()
-    .test('is-positive', 'Amount must be greater than 0', (value) => {
-      if (!value) return false;
-      const numericValue = parseFloat(value);
-      return !isNaN(numericValue) && numericValue > 0;
-    })
-    .min(2, 'Amount must be at least 2 characters long')
+    .number()
+    .typeError('Amount must be a number')
+    .positive('Amount must be greater than 0')
     .required('Amount is required'),
 
   // monthlyAmount: yup
@@ -95,8 +90,7 @@ export const goalCreateValidationSchema = yup.object().shape({
             const numValue = parseFloat(value);
             return !isNaN(numValue) && numValue > 0;
           },
-          message:
-            'Contribution limit must be a valid positive number for savings goals',
+          message: 'Monthly contribution amount is required',
         }),
       })
     )

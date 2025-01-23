@@ -3,22 +3,13 @@ import { goalAPIEndpoint } from '@/config/api/api-endpoints/goal-api-endpoint';
 import { handleApiError } from '@/utils/error/api-error-handler';
 import { notification } from 'antd';
 import { checkInternetConnection } from '@/utils/error/check-internet-connection';
-
-interface IData {
-  title: string;
-  description: string;
-  goal_amount: number;
-  // monthlyAmount: string;
-  target_date: string;
-  goal_status: 'active' | 'paused';
-  // progress?: boolean;
-}
+import { IGoalApiRequest } from '@/app/goals/interface/goal-interface';
 
 const useUpdateGoal = (userSlug: string, goalSlug: string) => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationKey: ['updateGoalMutation'],
-    mutationFn: async (data: IData) => {
+    mutationFn: async (data: IGoalApiRequest) => {
       if (!checkInternetConnection()) {
         throw new Error(
           'Network error. Please check your internet connection.'

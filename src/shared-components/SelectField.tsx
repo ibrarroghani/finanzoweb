@@ -15,7 +15,6 @@ interface ISelectFieldProps {
   placeholder?: string;
   disabled?: boolean;
   control: Control<FieldValues>;
-  value?: string;
 }
 
 const SelectField: React.FC<ISelectFieldProps> = ({
@@ -25,7 +24,6 @@ const SelectField: React.FC<ISelectFieldProps> = ({
   error,
   control,
   disabled,
-  value,
   label,
 }) => {
   return (
@@ -37,7 +35,7 @@ const SelectField: React.FC<ISelectFieldProps> = ({
         <Controller
           name={name}
           control={control}
-          render={({ field: { onChange } }) => (
+          render={({ field: { onChange, value } }) => (
             <Select
               disabled={disabled ?? false}
               placeholder={placeholder ?? ''}
@@ -45,7 +43,7 @@ const SelectField: React.FC<ISelectFieldProps> = ({
               onChange={onChange}
               options={options}
               size='large'
-              defaultValue={value}
+              value={value || undefined}
             />
           )}
         />
