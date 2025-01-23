@@ -31,8 +31,15 @@ interface IGoalCardProps {
 const GoalCard: React.FC<IGoalCardProps> = ({ edit, goal }) => {
   const { showUpdateModal, setShowUpdateModal, setGoalSlug } =
     useGoalPageContext();
-  const { title, goal_amount, goal_status, target_date, current_amount, slug } =
-    goal;
+  const {
+    title,
+    goal_amount,
+    goal_status,
+    target_date,
+    current_amount,
+    slug,
+    progress_percentage,
+  } = goal;
 
   const handleUpdateModal = () => {
     setShowUpdateModal(!showUpdateModal);
@@ -74,7 +81,10 @@ const GoalCard: React.FC<IGoalCardProps> = ({ edit, goal }) => {
         <div className='flex w-1/2 flex-col justify-end'>
           <div className='flex justify-end'>
             <DoughnutChart
-              data={[80, 20]}
+              data={[
+                Math.min(progress_percentage, 100),
+                Math.max(0, 100 - progress_percentage),
+              ]}
               backgroundColor={getChartColor(goal_status)}
             />
           </div>

@@ -6,12 +6,12 @@ import { checkInternetConnection } from '@/utils/error/check-internet-connection
 
 interface IData {
   title: string;
+  goal_purpose: string;
   description: string;
   goal_amount: number;
   // monthlyAmount: string;
   target_date: string;
   goal_status: 'active' | 'paused';
-  // progress?: boolean;
 }
 
 const useCreateGoal = (slug: string) => {

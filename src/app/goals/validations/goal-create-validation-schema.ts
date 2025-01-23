@@ -1,5 +1,6 @@
 import { getTomorrowDate } from '@/utils/date-formatter';
 import * as yup from 'yup';
+import { IGoalFormData } from '../components/CreateGoalModal';
 
 export const goalCreateValidationSchema = yup.object().shape({
   title: yup
@@ -7,13 +8,26 @@ export const goalCreateValidationSchema = yup.object().shape({
     .trim()
     .min(2, 'Goal Name is required and must be at least 2 characters long')
     .required(),
+  goal_purpose: yup
+    .string()
+    .trim()
+    .min(1, 'Goal Purpose is required')
+    .required(),
+  description: yup
+    .string()
+    .trim()
+    .min(
+      2,
+      'Goal description is required and must be at least 2 characters long'
+    )
+    .required(),
   goal_amount: yup
     .string()
     .trim()
     .test('is-positive', 'Amount must be greater than 0', (value) => {
       if (!value) return false;
-      const numericValue = parseFloat(value); // Convert the string to a number
-      return !isNaN(numericValue) && numericValue > 0; // Check if it's a number and greater than 0
+      const numericValue = parseFloat(value);
+      return !isNaN(numericValue) && numericValue > 0;
     })
     .min(2, 'Amount must be at least 2 characters long')
     .required('Amount is required'),
@@ -57,6 +71,35 @@ export const goalCreateValidationSchema = yup.object().shape({
     .min(getTomorrowDate(), 'Date cannot be today or in the past date'),
   goal_status: yup
     .string()
-    .oneOf(['active', 'paused'], 'Status must be either "active" or "paused"')
+    .oneOf(['active', 'paused'])
     .required('Status is required'),
-});
+  linked_accounts: yup
+    .array()
+    .of(
+      yup.object({
+        account_id: yup.string().required('Account is required'),
+        contribution_limit: yup.string().test({
+          name: 'conditional-contribution-limit',
+          test: function (value, context) {
+            const goal_purpose =
+              context.from &&
+              context.from[1] &&
+              context.from[1].value.goal_purpose;
+
+            if (goal_purpose === 'repayment') {
+              return true; // Skip validation for repayment
+            }
+
+            // Check if value exists and is a valid positive number
+            if (!value) return false;
+            const numValue = parseFloat(value);
+            return !isNaN(numValue) && numValue > 0;
+          },
+          message:
+            'Contribution limit must be a valid positive number for savings goals',
+        }),
+      })
+    )
+    .min(1, 'At least one account must be linked')
+    .required('Linked accounts are required'),
+}) as yup.ObjectSchema<IGoalFormData>;

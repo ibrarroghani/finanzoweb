@@ -3,7 +3,7 @@ import ClientDetailsCard from '@/app/dashboard/components/ClientDetailsCard';
 import { ClientAddIcon } from '@/assets/icons/bussiness-panel-icons';
 import CustomButton from '@/shared-components/CustomButton';
 import React from 'react';
-import GoalModal from './GoalModal';
+import CreateGoalModal from './CreateGoalModal';
 import RecommendationCard from './RecommendationCard';
 import { recommendationData } from '@/utils/dummy-data';
 import Section from '@/app/dashboard/components/Section';
@@ -78,7 +78,7 @@ const Goal = () => {
 
       {showCreateModal && (
         <div>
-          <GoalModal
+          <CreateGoalModal
             showModal={showCreateModal}
             setShowModal={handleCreateToggleModal}
             title='Create New Goal'

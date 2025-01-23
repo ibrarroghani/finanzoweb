@@ -44,7 +44,7 @@ const InputField: React.FC<IInputFieldProps> = ({
 
   return (
     <div className='relative flex flex-col'>
-      <div className='relative py-2'>
+      <div className='relative py-1'>
         {/* Render label or icon based on props */}
         {icon ? (
           <span className='absolute left-3 top-[35%] mr-5'>{icon}</span>
@@ -53,7 +53,7 @@ const InputField: React.FC<IInputFieldProps> = ({
             {label}
           </p>
         ) : (
-          <p className='text-small my-1 capitalize text-muted'>{label}</p>
+          <p className='text-small mb-1 capitalize text-muted'>{label}</p>
         )}
 
         <Controller

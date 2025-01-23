@@ -8,18 +8,25 @@ interface ITextareaFieldProps {
   error?: string;
   maxLength?: number;
   control: Control<FieldValues>;
+  rows?: number;
+  label?: string;
 }
 
 const TextareaField: React.FC<ITextareaFieldProps> = ({
   placeholder = 'Please enter a value',
   name,
   error,
-  maxLength = 100,
+  maxLength = 200,
   control,
+  rows = 5,
+  label,
 }) => {
   return (
     <div className='flex flex-col'>
-      <div>
+      <div className='py-1'>
+        {label && (
+          <p className='text-small mb-1 capitalize text-muted'>{label}</p>
+        )}
         <Controller
           name={name}
           control={control}
@@ -29,7 +36,7 @@ const TextareaField: React.FC<ITextareaFieldProps> = ({
               maxLength={maxLength}
               onChange={onChange}
               placeholder={placeholder}
-              style={{ height: 120 }}
+              style={{ height: rows * 20, resize: 'none' }}
             />
           )}
         />
