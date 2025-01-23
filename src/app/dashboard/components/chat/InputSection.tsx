@@ -1,64 +1,98 @@
 import React, { useState } from 'react';
-import { Upload, Dropdown, Button, Input } from 'antd';
+import { Upload, Input, notification } from 'antd';
 import {
   MessageSendIcon,
   ImageUploadIcon,
   CloseIcon,
+  DocumentIcon,
 } from '@/assets/icons/bussiness-panel-icons';
 
 const { TextArea } = Input;
 import Image from 'next/image';
-// import { IMessage } from './Chat';
+import useFileUpload from '@/hooks/data-hooks/chat/use-file-upload';
+import { fileSizeCheck } from '@/utils/file-size';
+import { useDashboardPageContext } from '@/app/dashboard/context/DashboardPageContext';
 
-interface InputSectionProps {
-  //eslint-disable-next-line
-  onSendMessage: (message: string) => void;
-  isLoading?: boolean;
+interface ISelectedFile {
+  file: File;
+  url: string;
 }
 
-const InputSection: React.FC<InputSectionProps> = ({
-  onSendMessage,
-  isLoading,
-}) => {
+const InputSection: React.FC = () => {
   const [message, setMessage] = useState('');
-  const [selectedFiles, setSelectedFiles] = useState<
-    { file: File; url: string }[]
-  >([]);
+  const [fileSlug, setFileSlug] = useState('');
+  const [selectedFiles, setSelectedFiles] = useState<ISelectedFile[]>([]);
   //eslint-disable-next-line
   const [fileList, setFileList] = useState<any[]>([]);
 
-  const handleSendMessage = () => {
+  const {
+    connectionSlugId,
+    handleSendMessage,
+    handleSendDocument,
+    isLoadingState,
+  } = useDashboardPageContext();
+
+  const { mutate: uploadFile, isPending: isUploading } =
+    useFileUpload(connectionSlugId);
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === 'Enter') {
+      if (e.shiftKey) {
+        // Allow new line when Shift+Enter is pressed
+        return;
+      }
+      // Prevent default to avoid unwanted new line
+      e.preventDefault();
+      handleSendMessage(message);
+    }
+  };
+
+  const handleMessage = () => {
     if (!message.trim() && selectedFiles.length === 0) return;
 
-    // onSendMessage({
-    //   id: String(Date.now()),
-    //   message: message.trim(),
-    //   dateTime: new Date(),
-    //   type: 'text',
-    //   sender: 'client',
-    //   senderName: 'Dan Koa',
-    //   senderImage: '',
-    //   senderImageType: 'source',
-    //   status: 'read',
-    //   files: selectedFiles,
-    // });
-
-    onSendMessage(message);
-
+    if (fileSlug) {
+      handleSendDocument(fileSlug);
+    } else {
+      handleSendMessage(message);
+    }
     setMessage('');
+    setFileSlug('');
     setSelectedFiles([]);
     setFileList([]);
   };
 
   //eslint-disable-next-line
   const handleFileChange = (info: any) => {
-    //eslint-disable-next-line
-    const newFiles = info.fileList.map((file: any) => ({
-      file: file.originFileObj as File,
-      url: URL.createObjectURL(file.originFileObj),
-    }));
-    setSelectedFiles(newFiles);
-    setFileList(info.fileList);
+    // Only keep the latest file
+    const file = info.fileList[info.fileList.length - 1];
+    if (file) {
+      if (fileSizeCheck(file.size)) {
+        notification.error({
+          message: 'File size is too large',
+          description: 'Please select a file smaller than 5MB',
+        });
+        return;
+      }
+      const newFile = {
+        file: file.originFileObj as File,
+        url: URL.createObjectURL(file.originFileObj),
+      };
+      setSelectedFiles([newFile]);
+      setFileList([file]);
+
+      const formData = new FormData();
+
+      formData.append('file', file.originFileObj);
+
+      uploadFile(formData, {
+        onSuccess: (response) => {
+          setFileSlug(response.data.slug);
+        },
+      });
+    } else {
+      setSelectedFiles([]);
+      setFileList([]);
+    }
   };
 
   const handleRemoveFile = (fileToRemove: { file: File; url: string }) => {
@@ -70,25 +104,8 @@ const InputSection: React.FC<InputSectionProps> = ({
       prev.filter((file: any) => file.originFileObj !== fileToRemove.file)
     );
     URL.revokeObjectURL(fileToRemove.url);
+    setFileSlug('');
   };
-
-  const fileUploadMenu = [
-    {
-      key: '1',
-      label: (
-        <Upload
-          beforeUpload={() => false}
-          onChange={handleFileChange}
-          showUploadList={false}
-          multiple
-          accept='image/*,application/pdf'
-          fileList={fileList}
-        >
-          <Button>Select Image or File</Button>
-        </Upload>
-      ),
-    },
-  ];
 
   return (
     <div className='input-section flex items-center justify-between px-4'>
@@ -100,54 +117,84 @@ const InputSection: React.FC<InputSectionProps> = ({
           onChange={(e) => setMessage(e.target.value)}
           autoSize={{ minRows: 2, maxRows: 6 }}
           placeholder='Enter your message here...'
+          onKeyDown={handleKeyDown}
+          disabled={selectedFiles.length > 0}
           style={{
             resize: 'none',
             paddingRight: '5rem',
             paddingBottom: selectedFiles.length > 0 ? '5rem' : '1rem', // Adjust padding to accommodate image preview
           }}
         />
-        {/* Image Preview */}
+
+        {/* File Preview */}
         {selectedFiles.length > 0 && (
-          <div className='absolute bottom-0 left-0 right-0 flex flex-wrap p-2'>
-            {selectedFiles.map(({ file, url }, index) => (
-              <div key={index} className='relative mb-2 mr-2'>
-                {file.type.startsWith('image/') ? (
-                  <div className='rounded-small h-10 w-10 overflow-hidden bg-card'>
-                    <Image
-                      src={url}
-                      alt='preview'
-                      width={40}
-                      height={40}
-                      className='object-cover'
-                    />
+          <div className='absolute bottom-4 left-0 right-0 flex p-2'>
+            <div className='relative mb-2 mr-2'>
+              {selectedFiles[0].file.type.startsWith('image/') ? (
+                <div className='rounded-small h-16 w-16 overflow-hidden bg-primary-light'>
+                  <Image
+                    src={selectedFiles[0].url}
+                    alt='preview'
+                    width={64}
+                    height={64}
+                    className='h-full w-full object-cover'
+                  />
+                </div>
+              ) : (
+                <div className='flex h-12 min-w-[3rem] max-w-[12rem] items-center justify-start gap-2 rounded border px-2'>
+                  <DocumentIcon />
+                  <div className='flex max-w-[8rem]'>
+                    <span
+                      className='truncate text-xs'
+                      title={selectedFiles[0].file.name}
+                    >
+                      {selectedFiles[0].file.name
+                        .split('.')
+                        .slice(0, -1)
+                        .join('.')}
+                    </span>
+                    <span className='text-xs'>
+                      .{selectedFiles[0].file.name.split('.').pop()}
+                    </span>
                   </div>
+                </div>
+              )}
+              <button
+                className='absolute -right-3.5 -top-1 flex h-4 w-4 items-center justify-center bg-muted'
+                onClick={() => handleRemoveFile(selectedFiles[0])}
+                disabled={isUploading}
+              >
+                {isUploading ? (
+                  <div className='h-3 w-3 animate-spin rounded-full border-2 border-solid border-blue-500 border-t-transparent'></div>
                 ) : (
-                  <div className='flex h-12 w-12 items-center justify-center rounded border'>
-                    <span className='text-xs'>{file.name}</span>
-                  </div>
-                )}
-                <button
-                  className='absolute -right-2 -top-1'
-                  onClick={() => handleRemoveFile({ file, url })}
-                >
                   <CloseIcon />
-                </button>
-              </div>
-            ))}
+                )}
+              </button>
+            </div>
           </div>
         )}
+
         <button
           className='send-button absolute right-12 top-7'
-          onClick={handleSendMessage}
-          disabled={isLoading}
+          onClick={handleMessage}
+          disabled={isLoadingState || isUploading}
         >
           <MessageSendIcon />
         </button>
-        <Dropdown menu={{ items: fileUploadMenu }} trigger={['click']}>
+
+        <Upload
+          beforeUpload={() => false}
+          onChange={handleFileChange}
+          showUploadList={false}
+          multiple
+          accept='.jpg,.jpeg,.png,.pdf,.zip'
+          fileList={fileList}
+          disabled={message.trim().length > 0}
+        >
           <button className='upload-button absolute right-2 top-7'>
             <ImageUploadIcon />
           </button>
-        </Dropdown>
+        </Upload>
       </div>
     </div>
   );

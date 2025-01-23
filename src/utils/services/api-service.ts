@@ -20,7 +20,9 @@ apiService.interceptors.request.use(
       console.log('Auth failed', error);
     }
 
-    config.headers['Content-Type'] = 'application/json';
+    if (!config.headers['Content-Type']) {
+      config.headers['Content-Type'] = 'application/json';
+    }
     return config;
   },
   (error) => {

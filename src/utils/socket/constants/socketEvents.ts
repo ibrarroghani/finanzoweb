@@ -15,6 +15,10 @@ export const SOCKET_EVENTS = {
       LISTENER: 'message:seen:mark',
       BROADCASTER: 'message:seen:marked',
     },
+    DELETE_DOCUMENT: {
+      LISTENER: 'message:document:delete',
+      BROADCASTER: 'message:document:deleted',
+    },
   },
   USER: {
     JOIN_THREAD: {

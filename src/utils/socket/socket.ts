@@ -159,6 +159,7 @@ const disconnectSocket = () => {
 // Add this with your other socket functions
 const sendDocument = (threadSlug: string, documentSlug: string) => {
   if (!socket?.connected) {
+    //eslint-disable-next-line
     console.log('Socket is not connected');
     return;
   }
@@ -170,11 +171,25 @@ const sendDocument = (threadSlug: string, documentSlug: string) => {
   });
 };
 
+const deleteDocument = (threadSlug: string, documentSlug: string) => {
+  if (!socket?.connected) {
+    //eslint-disable-next-line
+    console.log('Socket is not connected');
+    return;
+  }
+
+  socket.emit(SOCKET_EVENTS.MESSAGE.DELETE_DOCUMENT.LISTENER, {
+    threadSlug,
+    documentSlug,
+  });
+};
+
 export {
   connectSocket,
   joinThread,
   sendMessage,
   sendDocument,
+  deleteDocument,
   markAsSeen,
   disconnectSocket,
   socket,

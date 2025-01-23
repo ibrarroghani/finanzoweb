@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Section from './Section';
 import BankCard from './BankCard';
 import DataSection from './DataSection';
@@ -14,9 +14,11 @@ const AccountsSection = () => {
     force_initial_plaid_account_fetch: 'yes',
   });
 
-  if (isError && error?.message) {
-    notification.error({ message: error.message, placement: 'topRight' });
-  }
+  useEffect(() => {
+    if (isError && error?.message) {
+      notification.error({ message: error.message, placement: 'topRight' });
+    }
+  }, [isError, error]);
 
   return (
     <>

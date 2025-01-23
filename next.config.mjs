@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ['randomuser.me'], // Add the domain here
+    domains: ['randomuser.me', 'finanzoblobstorage.blob.core.windows.net'], // Add the domain here
   },
 };
 

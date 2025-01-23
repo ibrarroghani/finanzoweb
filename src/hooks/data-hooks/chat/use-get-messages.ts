@@ -6,7 +6,7 @@ import { handleApiError } from '@/utils/error/api-error-handler';
 const useGetMessages = (connect_slug_id: string, params?: any) => {
   return useQuery({
     queryKey: ['getMessages', connect_slug_id], // Unique key for the query
-    enabled: !!connect_slug_id,
+    enabled: !!connect_slug_id && !!params?.cursor,
     // refetchInterval: 10000,
     queryFn: async () => {
       try {

@@ -1,56 +1,113 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import MessageList from './MessageList';
 import InputSection from './InputSection';
-import { IMessage } from './Chat';
+import InfiniteScroll from 'react-infinite-scroll-component';
+import { useDashboardPageContext } from '@/app/dashboard/context/DashboardPageContext';
 
-interface ChatContainerProps {
-  messages: IMessage[];
-  //eslint-disable-next-line
-  onSendMessage: (message: string) => void;
+const ChatContainer: React.FC = () => {
+  const scrollDivRef = useRef<HTMLDivElement | null>(null);
+  const [canCheckScroll, setCanCheckScroll] = useState(false);
+  const prevMessagesLength = useRef(0);
 
-  //eslint-disable-next-line
-  onMarkAsRead: (messageId: number[]) => void;
+  const { messages, isLoadingState, hasMore, fetchMoreData, connectionSlugId } =
+    useDashboardPageContext();
 
-  //eslint-disable-next-line
-  //onDeleteFile: (messageId: string, fileName: string) => void;
-
-  //eslint-disable-next-line
-  //onDeleteMessage: (messageId: string) => void;
-
-  isLoading: boolean;
-}
-
-const ChatContainer: React.FC<ChatContainerProps> = ({
-  messages,
-  onSendMessage,
-  onMarkAsRead,
-  //onDeleteFile,
-  // onDeleteMessage,
-  isLoading,
-}) => {
-  const messagesEndRef = useRef<HTMLDivElement | null>(null);
-
+  // Reset scroll position immediately when switching clients
   useEffect(() => {
-    messagesEndRef.current?.scrollTo({
-      top: messagesEndRef.current.scrollHeight,
-      behavior: 'smooth',
-    });
-  }, [messages]);
+    setCanCheckScroll(false);
+    prevMessagesLength.current = 0;
+
+    // Force immediate scroll reset with a double reset
+    const resetScroll = () => {
+      if (scrollDivRef.current) {
+        scrollDivRef.current.style.overflow = 'hidden';
+        scrollDivRef.current.scrollTop = 0;
+
+        // Re-enable scrolling after reset
+        setTimeout(() => {
+          if (scrollDivRef.current) {
+            scrollDivRef.current.style.overflow = 'auto';
+            scrollDivRef.current.scrollTop = 0;
+          }
+        }, 50);
+      }
+    };
+
+    resetScroll();
+    // Second reset after a brief delay to ensure it catches any late updates
+    setTimeout(resetScroll, 100);
+
+    // Re-enable scroll checking after everything is settled
+    const timer = setTimeout(() => {
+      setCanCheckScroll(true);
+    }, 500);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [connectionSlugId]);
+
+  // Handle scroll checking after messages update
+  useEffect(() => {
+    if (messages.length !== prevMessagesLength.current) {
+      prevMessagesLength.current = messages.length;
+
+      // Only manage scroll checking for normal message updates
+      if (!isLoadingState && connectionSlugId) {
+        setCanCheckScroll(true);
+      }
+    }
+  }, [messages.length, isLoadingState, connectionSlugId]);
 
   return (
-    <div className='rounded-extra-small sticky top-0 flex h-[calc(100vh-240px)] w-full flex-col justify-between bg-primary-light py-6'>
+    <div className='chat-container rounded-extra-small sticky top-0 flex h-[calc(100vh-240px)] w-full flex-col justify-between bg-primary-light py-6'>
       <div
-        ref={messagesEndRef}
-        className='custom-scrollbar flex flex-col overflow-hidden overflow-y-auto px-4'
+        id='scrollableDiv'
+        ref={scrollDivRef}
+        style={{
+          height: '100%',
+          display: 'flex',
+          flexDirection: 'column-reverse',
+          overflowY: 'auto',
+        }}
+        className='custom-scrollbar flex flex-col px-4'
+        onScroll={(e) => {
+          const target = e.target as HTMLDivElement;
+          if (!isLoadingState && canCheckScroll && messages.length > 0) {
+            const scrollPercentage =
+              (Math.abs(target.scrollTop) /
+                (target.scrollHeight - target.clientHeight)) *
+              100;
+            if (scrollPercentage > 90 && hasMore) {
+              fetchMoreData();
+            }
+          }
+        }}
       >
-        <MessageList
-          messages={messages}
-          onMarkAsRead={onMarkAsRead}
-          // onDeleteFile={onDeleteFile}
-          //onDeleteMessage={onDeleteMessage}
-        />
+        <InfiniteScroll
+          dataLength={messages.length}
+          next={fetchMoreData}
+          hasMore={hasMore}
+          loader={null}
+          endMessage={
+            !isLoadingState && messages.length > 0 && !hasMore ? (
+              <div className='text-small mb-4 text-center font-bold capitalize text-primary-dark'>
+                No more messages
+              </div>
+            ) : null
+          }
+          scrollableTarget='scrollableDiv'
+          inverse={true}
+          style={{
+            display: 'flex',
+            flexDirection: 'column-reverse',
+            overflow: 'hidden',
+          }}
+        >
+          <MessageList />
+        </InfiniteScroll>
       </div>
-      <InputSection onSendMessage={onSendMessage} isLoading={isLoading} />
+      <InputSection />
     </div>
   );
 };
