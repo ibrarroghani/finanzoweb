@@ -94,6 +94,45 @@ export const goalCreateValidationSchema = yup.object().shape({
         }),
       })
     )
+    .test({
+      name: 'repayment-single-account',
+      test: function (value, context) {
+        const goal_purpose = context.parent.goal_purpose;
+        if (goal_purpose === 'repayment' && (value?.length ?? 0) > 1) {
+          return false;
+        }
+        return true;
+      },
+      message: 'Only one account can be selected for repayment goals',
+    })
     .min(1, 'At least one account must be linked')
     .required('Linked accounts are required'),
+  tempSelectedAccounts: yup.array().when('goal_purpose', {
+    is: 'savings',
+    then: (schema) =>
+      schema.of(
+        yup.object().shape({
+          account_id: yup.string().required(),
+          contribution_limit: yup
+            .string()
+            .trim()
+            .required('Monthly contribution is required')
+            .test(
+              'is-greater-than-zero',
+              'Contribution must be greater than 0',
+              (value) => {
+                const numValue = parseFloat(value || '0');
+                return !isNaN(numValue) && numValue > 0;
+              }
+            ),
+        })
+      ),
+    otherwise: (schema) =>
+      schema.of(
+        yup.object().shape({
+          account_id: yup.string().required(),
+          contribution_limit: yup.string().optional(),
+        })
+      ),
+  }),
 }) as yup.ObjectSchema<IGoalFormData>;

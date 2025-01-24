@@ -26,7 +26,7 @@ const AccountDetailsModal: React.FC<IClientModalProps> = ({
         footer={null}
       >
         <div>
-          {data.length > 0 &&
+          {data?.length > 0 &&
             //eslint-disable-next-line
             data.map((accountDetails: any, index: any) => (
               <div key={index} className='rounded-small my-2 bg-card p-2'>
