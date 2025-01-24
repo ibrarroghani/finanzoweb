@@ -16,46 +16,8 @@ import useGetBankAccounts from '@/hooks/data-hooks/account/use-get-bank-accounts
 import {
   IGoalFormData,
   ILinkedAccount,
+  IUserAccounts,
 } from '@/app/goals/interface/goal-interface';
-
-// interface IBankAccountDetails {
-//   account: {
-//     id: string;
-//     name: string;
-//     // Add other account properties as needed
-//   };
-//   // Add other properties if needed
-// }
-
-export interface IAccount {
-  id: string;
-  user_id: number;
-  client_institution_id: number;
-  balances_available: string;
-  balances_current: string;
-  balances_iso_currency_code: string;
-  balances_limit: string;
-  balances_unofficial_currency_code: null;
-  mask: string;
-  name: string;
-  official_name: string;
-  persistent_account_id: null;
-  subtype: string;
-  type: string;
-  created_at: Date;
-  updated_at: Date;
-}
-
-export interface IInstitution {
-  name: string;
-  logo: null;
-  slug: string;
-}
-
-interface IUserAccounts {
-  account: IAccount;
-  institution: IInstitution;
-}
 
 interface IGoalModalProps {
   title: string;
@@ -342,9 +304,19 @@ const GoalModal: React.FC<IGoalModalProps> = ({
           <div className='custom-scrollbar h-full overflow-y-auto pr-6'>
             <div className='grid grid-cols-1 gap-4 pb-24'>
               {userAccounts.map((acc: IUserAccounts) => {
-                const isSelected = (watch('tempSelectedAccounts') || []).some(
-                  (item: ILinkedAccount) => item.account_id === acc.account.id
-                );
+                const isSelected =
+                  (watch('tempSelectedAccounts') || []).some(
+                    (item: ILinkedAccount) => item.account_id === acc.account.id
+                  ) ||
+                  (watch('linked_accounts') || []).some(
+                    (item: ILinkedAccount) => item.account_id === acc.account.id
+                  );
+
+                // Find the existing contribution limit if the account is already linked
+                const existingContributionLimit =
+                  (watch('linked_accounts') || []).find(
+                    (item: ILinkedAccount) => item.account_id === acc.account.id
+                  )?.contribution_limit || '';
 
                 return (
                   <div
@@ -367,7 +339,7 @@ const GoalModal: React.FC<IGoalModalProps> = ({
                             setValue('tempSelectedAccounts', [
                               {
                                 account_id: acc.account.id,
-                                contribution_limit: '',
+                                contribution_limit: existingContributionLimit, // Use existing value if available
                               },
                             ]);
                             return;
@@ -377,7 +349,7 @@ const GoalModal: React.FC<IGoalModalProps> = ({
                             // Only add if checkbox is checked
                             currentTempAccounts.push({
                               account_id: acc.account.id,
-                              contribution_limit: '',
+                              contribution_limit: existingContributionLimit, // Use existing value if available
                             });
                             setValue(
                               'tempSelectedAccounts',
@@ -435,6 +407,7 @@ const GoalModal: React.FC<IGoalModalProps> = ({
                               ) ?? 0
                             ]?.contribution_limit?.message
                           }
+                          value={existingContributionLimit} // Set default value to existing contribution limit
                           onCustomChange={() => {
                             // Manually trigger validation for the field
                             trigger(
@@ -457,11 +430,6 @@ const GoalModal: React.FC<IGoalModalProps> = ({
           {/* Fixed button container */}
           <div className='absolute bottom-0 left-0 right-0 border-t bg-white px-6 py-4'>
             <div className='flex items-center justify-between'>
-              {/* <div className='text-sm text-gray-600'>
-              {goalPurpose === 'repayment'
-                ? 'Select one account for repayment'
-                : `Selected ${(watch('tempSelectedAccounts') || []).length} out of ${userAccounts.length} available accounts`}
-            </div> */}
               <CustomButton
                 type='button'
                 title='Select Account'
@@ -474,6 +442,7 @@ const GoalModal: React.FC<IGoalModalProps> = ({
                   }
 
                   const tempAccounts = watch('tempSelectedAccounts') || [];
+                  const currentLinkedAccounts = watch('linked_accounts') || [];
 
                   // Validate if any account is selected
                   if (tempAccounts.length === 0) {
@@ -481,8 +450,24 @@ const GoalModal: React.FC<IGoalModalProps> = ({
                     return;
                   }
 
+                  // Combine current linked accounts with temp accounts and remove duplicates
+                  const combinedAccounts = [
+                    ...currentLinkedAccounts,
+                    ...tempAccounts,
+                  ];
+
+                  // Use a Set to filter out duplicates based on account_id
+                  const uniqueAccounts = Array.from(
+                    new Map(
+                      combinedAccounts.map((account) => [
+                        account.account_id,
+                        account,
+                      ])
+                    ).values()
+                  );
+
                   // If all validations pass, update the linked accounts and close modal
-                  setValue('linked_accounts', [...tempAccounts]);
+                  setValue('linked_accounts', uniqueAccounts);
                   setValue('tempSelectedAccounts', []);
                   setShowAccountSelectionModal(false);
                 }}
