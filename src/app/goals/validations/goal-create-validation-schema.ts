@@ -22,9 +22,9 @@ export const goalCreateValidationSchema = yup.object().shape({
     )
     .required(),
   goal_amount: yup
-    .number()
-    .typeError('Amount must be a number')
-    .positive('Amount must be greater than 0')
+    .string()
+    .trim()
+    .min(1, 'Goal amount is at least 2 characters long')
     .required('Amount is required'),
 
   // monthlyAmount: yup

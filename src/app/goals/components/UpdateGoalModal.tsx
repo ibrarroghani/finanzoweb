@@ -28,7 +28,7 @@ const INITIAL_GOAL_FORM_DATA: IGoalFormData = {
   title: '',
   goal_purpose: '',
   description: '',
-  goal_amount: 0,
+  goal_amount: '',
   target_date: getTomorrowDate(),
   goal_status: 'active',
   linked_accounts: [],

@@ -2,7 +2,7 @@ export interface IGoalFormData {
   title: string;
   goal_purpose: string;
   description: string;
-  goal_amount: number;
+  goal_amount: string;
   target_date: Date;
   goal_status: 'active' | 'paused';
   linked_accounts: {
