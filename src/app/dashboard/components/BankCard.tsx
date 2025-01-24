@@ -44,7 +44,7 @@ const BankCard: React.FC<IBankCardProps> = ({ bankData }) => {
     //isLoading:isAccountListLoading,
     //isError: isAccountListError,
   } = useGetBankInstitutionDetails(slug, institution.plaid_institution_id, {
-    force_initial_plaid_account_fetch: 'yes',
+    force_initial_plaid_account_fetch: 'no',
   });
 
   useEffect(() => {

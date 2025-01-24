@@ -11,7 +11,7 @@ const AccountsSection = () => {
   const slug = useSelector((state: RootState) => state.auth.client.slug);
 
   const { data, isLoading, isError, error } = useGetBankInstitutions(slug, {
-    force_initial_plaid_account_fetch: 'yes',
+    force_initial_plaid_account_fetch: 'no',
   });
 
   useEffect(() => {
