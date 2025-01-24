@@ -15,6 +15,7 @@ interface ISelectFieldProps {
   placeholder?: string;
   disabled?: boolean;
   control: Control<FieldValues>;
+  defaultValue?: string;
 }
 
 const SelectField: React.FC<ISelectFieldProps> = ({
@@ -25,6 +26,7 @@ const SelectField: React.FC<ISelectFieldProps> = ({
   control,
   disabled,
   label,
+  defaultValue,
 }) => {
   return (
     <div className='flex flex-col'>
@@ -44,6 +46,7 @@ const SelectField: React.FC<ISelectFieldProps> = ({
               options={options}
               size='large'
               value={value || undefined}
+              defaultValue={defaultValue}
             />
           )}
         />
