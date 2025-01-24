@@ -9,8 +9,7 @@ const SOCKET_URL = process.env.NEXT_PUBLIC_SOCKET_URL!;
 let socket: Socket | null = null;
 
 const connectSocket = () => {
-  const token = localStorage.getItem('dummyAuthToken'); // Retrieve the token (ensure it's available in localStorage)
-  //const token = 'user-2';
+  const token = localStorage.getItem('dummyAuthToken') || 'user-2';
   if (!token) {
     //eslint-disable-next-line
     console.log('No token found. Cannot connect.');
