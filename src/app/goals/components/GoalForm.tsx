@@ -39,7 +39,7 @@ interface GoalFormProps {
 const GoalForm: React.FC<GoalFormProps> = ({
   control,
   formErrors,
-  onSubmit, // Use this function for form submission
+  onSubmit,
   onAddAccountClick,
   setShowAccountSelectionModal,
   goalPurpose,
@@ -53,6 +53,16 @@ const GoalForm: React.FC<GoalFormProps> = ({
     if (linkedAccounts.length === 0) {
       notification.error({
         message: 'No linked accounts found. Please link an account.',
+      });
+    } else if (
+      goalPurpose === 'savings' &&
+      linkedAccounts.some(
+        (account) => Number(account?.contribution_limit) === 0
+      )
+    ) {
+      notification.error({
+        message:
+          'Contribution limit must be greater than 0 for a savings goal. Please adjust the limit for linked accounts.',
       });
     }
     onSubmit();

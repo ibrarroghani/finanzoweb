@@ -76,9 +76,10 @@ const UpdateGoalModal: React.FC<IUpdateGoalModalProps> = ({
     goalSlug
   );
   const { mutate: updateGoal, isPending } = useUpdateGoal(slug, goalSlug);
-  const { data: bankAccounts, isLoading } = useGetBankAccounts(slug, {
-    force_initial_plaid_account_fetch: 'yes',
-  });
+  const { data: bankAccounts, isLoading: isBankAccountsLoading } =
+    useGetBankAccounts(slug, {
+      force_initial_plaid_account_fetch: 'yes',
+    });
 
   const handleGoalUpdate = (data: IGoalFormData) => {
     const formData = {
@@ -137,7 +138,7 @@ const UpdateGoalModal: React.FC<IUpdateGoalModalProps> = ({
         footer={null}
       >
         <div className='flex min-h-[350px] flex-col'>
-          {isGoalLoading ? (
+          {isGoalLoading || isBankAccountsLoading ? (
             <div className='flex flex-1 items-center justify-center'>
               <Spinner />
             </div>
@@ -151,7 +152,7 @@ const UpdateGoalModal: React.FC<IUpdateGoalModalProps> = ({
               linkedAccounts={linkedAccounts}
               userAccounts={userAccounts}
               setValue={setValue}
-              isLoading={isLoading}
+              isLoading={isBankAccountsLoading}
               isPending={isPending}
               onAddAccountClick={handleAddAccountClick}
             />
