@@ -27,6 +27,7 @@ interface GoalFormProps {
   onSubmit: () => void;
   //eslint-disable-next-line
   setShowAccountSelectionModal: (value: boolean) => void;
+  onAddAccountClick?: () => void;
   goalPurpose: string;
   linkedAccounts: ILinkedAccount[];
   userAccounts: IUserAccounts[];
@@ -40,6 +41,7 @@ const GoalForm: React.FC<GoalFormProps> = ({
   control,
   formErrors,
   onSubmit, // Use this function for form submission
+  onAddAccountClick,
   setShowAccountSelectionModal,
   goalPurpose,
   linkedAccounts,
@@ -51,6 +53,11 @@ const GoalForm: React.FC<GoalFormProps> = ({
 }) => {
   const handleSubmit = () => {
     onSubmit();
+  };
+
+  const handleAddAccount = () => {
+    if (onAddAccountClick) onAddAccountClick();
+    setShowAccountSelectionModal(true);
   };
 
   return (
@@ -110,9 +117,7 @@ const GoalForm: React.FC<GoalFormProps> = ({
               className='w-24 bg-primary-dark text-primary-light'
               type='button'
               title='Add Account'
-              onClick={() => {
-                setShowAccountSelectionModal(true);
-              }}
+              onClick={handleAddAccount}
               disable={
                 !goalPurpose ||
                 (goalPurpose === 'repayment' && linkedAccounts.length >= 1) ||
