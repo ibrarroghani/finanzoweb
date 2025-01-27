@@ -1,3 +1,9 @@
+import { FieldValues } from 'react-hook-form';
+
+export interface IFormValues extends FieldValues {
+  tempSelectedAccounts: ILinkedAccount[];
+}
+
 export interface ILinkedAccount {
   account_id: string;
   contribution_limit?: string;
