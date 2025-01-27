@@ -130,7 +130,6 @@ const GoalModal: React.FC<IGoalModalProps> = ({
           linkedAccounts={linkedAccounts}
           userAccounts={userAccounts}
           setValue={setValue}
-          watch={watch}
           isLoading={isLoading}
           isPending={isPending}
           onAddAccountClick={handleAddAccountClick}

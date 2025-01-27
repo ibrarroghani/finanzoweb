@@ -1,12 +1,11 @@
 'use client';
 import React from 'react';
-import { Radio } from 'antd';
+import { notification, Radio } from 'antd';
 import {
   Control,
   FieldValues,
   FieldErrors,
   UseFormSetValue,
-  UseFormWatch,
   Controller,
 } from 'react-hook-form';
 import InputField from '@/shared-components/InputField';
@@ -20,6 +19,7 @@ import {
   ILinkedAccount,
 } from '@/app/goals/interface/goal-interface';
 import SelectedAccounts from './SelectedAccounts';
+import { DollarIcon } from '@/assets/icons/bussiness-panel-icons';
 
 interface GoalFormProps {
   control: Control<FieldValues>;
@@ -32,7 +32,6 @@ interface GoalFormProps {
   linkedAccounts: ILinkedAccount[];
   userAccounts: IUserAccounts[];
   setValue: UseFormSetValue<IGoalFormData>;
-  watch: UseFormWatch<IGoalFormData>;
   isLoading: boolean;
   isPending: boolean;
 }
@@ -47,11 +46,15 @@ const GoalForm: React.FC<GoalFormProps> = ({
   linkedAccounts,
   userAccounts,
   setValue,
-  watch,
   isLoading,
   isPending,
 }) => {
   const handleSubmit = () => {
+    if (linkedAccounts.length === 0) {
+      notification.error({
+        message: 'No linked accounts found. Please link an account.',
+      });
+    }
     onSubmit();
   };
 
@@ -94,7 +97,7 @@ const GoalForm: React.FC<GoalFormProps> = ({
         error={formErrors.goal_amount?.message}
         label='Target Amount'
         type='number'
-        labelPosition='outside'
+        icon={<DollarIcon />}
       />
       <DatePickerField
         control={control}
@@ -102,42 +105,8 @@ const GoalForm: React.FC<GoalFormProps> = ({
         label='Target Date'
         error={formErrors.target_date?.message}
       />
-      {/* Linked Accounts Section */}
-      <div className='my-2'>
-        <div className='flex items-center justify-between'>
-          <div className='flex-1'>
-            {watch('linked_accounts').length === 0 && (
-              <p className='text-sm text-red-500'>
-                {formErrors.linked_accounts?.message}
-              </p>
-            )}
-          </div>
-          <div className='ml-auto w-32'>
-            <CustomButton
-              className='w-24 bg-primary-dark text-primary-light'
-              type='button'
-              title='Add Account'
-              onClick={handleAddAccount}
-              disable={
-                !goalPurpose ||
-                (goalPurpose === 'repayment' && linkedAccounts.length >= 1) ||
-                isLoading
-              }
-            />
-          </div>
-        </div>
-      </div>
-      {/* Preview Section */}
-      {linkedAccounts.length > 0 && (
-        <SelectedAccounts
-          linkedAccounts={linkedAccounts}
-          userAccounts={userAccounts}
-          goalPurpose={goalPurpose}
-          setValue={setValue}
-        />
-      )}
-      <div className='flex justify-between py-4'>
-        <div className='ml-auto flex gap-4'>
+      <div className='flex items-center justify-between py-4'>
+        <div className='flex items-center gap-4'>
           <p className='font-light'>Goal Status</p>
           <Controller
             control={control}
@@ -160,8 +129,32 @@ const GoalForm: React.FC<GoalFormProps> = ({
             )}
           />
         </div>
+        <div className='ml-auto w-32'>
+          <CustomButton
+            className='w-24 bg-primary-dark text-primary-light'
+            type='button'
+            title='Link Account'
+            onClick={handleAddAccount}
+            disable={
+              !goalPurpose ||
+              (goalPurpose === 'repayment' && linkedAccounts.length >= 1) ||
+              isLoading
+            }
+          />
+        </div>
       </div>
-      <div className='ml-auto w-32'>
+
+      {/* Preview Section */}
+      {linkedAccounts.length > 0 && (
+        <SelectedAccounts
+          linkedAccounts={linkedAccounts}
+          userAccounts={userAccounts}
+          goalPurpose={goalPurpose}
+          setValue={setValue}
+        />
+      )}
+
+      <div className='ml-auto mt-2 w-32'>
         <CustomButton
           onClick={handleSubmit}
           type='button'

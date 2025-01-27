@@ -16,6 +16,7 @@ import {
   ILinkedAccount,
   IUserAccounts,
 } from '@/app/goals/interface/goal-interface';
+import { DollarIcon } from '@/assets/icons/bussiness-panel-icons';
 
 interface AccountSelectionModalProps {
   showModal: boolean;
@@ -149,7 +150,7 @@ const AccountSelectionModal: React.FC<AccountSelectionModalProps> = ({
                     <InputField
                       type='number'
                       label='Contribution Limit'
-                      labelPosition='outside'
+                      icon={<DollarIcon />}
                       id={`contribution-${acc.account.id}`}
                       name={`tempSelectedAccounts.${
                         watch('tempSelectedAccounts')?.findIndex(

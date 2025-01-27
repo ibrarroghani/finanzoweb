@@ -47,7 +47,14 @@ const InputField: React.FC<IInputFieldProps> = ({
       <div className='relative py-1'>
         {/* Render label or icon based on props */}
         {icon ? (
-          <span className='absolute left-3 top-[35%] mr-5'>{icon}</span>
+          <>
+            {label && (
+              <p className='text-small mb-1 capitalize text-muted'>{label}</p>
+            )}
+            <span className='absolute bottom-2.5 left-3 mr-5 flex -translate-y-1/2 transform items-center'>
+              {icon}
+            </span>
+          </>
         ) : labelPosition === 'inside' ? (
           <p className='text-extra-small absolute left-4 top-[20%] text-muted'>
             {label}
