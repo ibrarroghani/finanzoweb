@@ -37,9 +37,16 @@ const SelectedAccounts: React.FC<SelectedAccountsProps> = ({
             >
               <div>
                 <p className='font-medium'>{accountDetails.account.name}</p>
+                <p className='text-sm'>
+                  Available Balance: $
+                  {accountDetails.account.balances_available}
+                </p>
+                <p className='text-sm'>
+                  Current Balance: ${accountDetails.account.balances_current}
+                </p>
                 {goalPurpose !== 'repayment' && (
                   <p className='text-sm text-gray-600'>
-                    Monthly Contribution: ${account.contribution_limit}
+                    Contribution Limit: ${account.contribution_limit}
                   </p>
                 )}
               </div>

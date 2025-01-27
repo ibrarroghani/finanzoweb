@@ -107,6 +107,11 @@ const GoalModal: React.FC<IGoalModalProps> = ({
     }
   }, [goalPurpose, linkedAccounts, setValue]);
 
+  const handleAddAccountClick = () => {
+    setValue('tempSelectedAccounts', linkedAccounts);
+    setShowAccountSelectionModal(true);
+  };
+
   return (
     <>
       <Modal
@@ -128,6 +133,7 @@ const GoalModal: React.FC<IGoalModalProps> = ({
           watch={watch}
           isLoading={isLoading}
           isPending={isPending}
+          onAddAccountClick={handleAddAccountClick}
         />
       </Modal>
 

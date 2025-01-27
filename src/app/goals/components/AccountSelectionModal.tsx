@@ -133,13 +133,13 @@ const AccountSelectionModal: React.FC<AccountSelectionModalProps> = ({
                       htmlFor={`account-${acc.account.id}`}
                       className='flex-1'
                     >
-                      Available Balance: {acc.account.balances_available}
+                      Available Balance: ${acc.account.balances_available}
                     </label>
                     <label
                       htmlFor={`account-${acc.account.id}`}
                       className='flex-1'
                     >
-                      Current Balance: {acc.account.balances_current}
+                      Current Balance: ${acc.account.balances_current}
                     </label>
                   </div>
                 </div>
@@ -148,7 +148,7 @@ const AccountSelectionModal: React.FC<AccountSelectionModalProps> = ({
                   <div className='mt-4'>
                     <InputField
                       type='number'
-                      label='Monthly Contribution'
+                      label='Contribution Limit'
                       labelPosition='outside'
                       id={`contribution-${acc.account.id}`}
                       name={`tempSelectedAccounts.${
