@@ -41,7 +41,7 @@ const SelectField: React.FC<ISelectFieldProps> = ({
             <Select
               disabled={disabled ?? false}
               placeholder={placeholder ?? ''}
-              className='w-full'
+              className='custom-placeholder w-full'
               onChange={onChange}
               options={options}
               size='large'

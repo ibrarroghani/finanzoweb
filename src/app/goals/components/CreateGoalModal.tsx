@@ -73,6 +73,8 @@ const GoalModal: React.FC<IGoalModalProps> = ({
   });
 
   const handleGoalCreate = (data: IGoalFormData) => {
+    console.log(data);
+    return;
     const formData = {
       title: data.title,
       goal_purpose: data.goal_purpose,

@@ -1,5 +1,6 @@
 import type { Config } from 'tailwindcss';
 import tailwindScrollbar from 'tailwind-scrollbar';
+import { PluginAPI } from 'tailwindcss/types/config';
 
 const config: Config = {
   content: [
@@ -30,6 +31,7 @@ const config: Config = {
         'success-light': 'var(--color-success-light)',
         'link-primary': 'var(--color-link-primary)',
         'link-secondary': 'var(--color-link-secondary)',
+        'custom-placeholder': 'var(--color-text-muted)',
       },
       fontSize: {
         '10': '0.625rem',
@@ -47,6 +49,27 @@ const config: Config = {
       },
     },
   },
-  plugins: [tailwindScrollbar({ nocompatible: true })],
+  plugins: [
+    tailwindScrollbar({ nocompatible: true }),
+    function ({ addComponents }: PluginAPI) {
+      addComponents({
+        '.custom-placeholder .ant-select-selection-placeholder': {
+          '@apply text-custom-placeholder': {},
+        },
+        '.custom-placeholder input::placeholder': {
+          '@apply text-custom-placeholder': {},
+        },
+        '.custom-placeholder select::placeholder': {
+          '@apply text-custom-placeholder': {}, // Apply to select placeholders
+        },
+        '.custom-placeholder textarea::placeholder': {
+          '@apply text-custom-placeholder': {},
+        },
+        '.custom-placeholder .ant-picker-input input::placeholder': {
+          '@apply text-custom-placeholder': {},
+        },
+      });
+    },
+  ],
 };
 export default config;

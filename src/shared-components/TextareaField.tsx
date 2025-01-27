@@ -35,6 +35,7 @@ const TextareaField: React.FC<ITextareaFieldProps> = ({
               showCount
               maxLength={maxLength}
               onChange={onChange}
+              className='custom-placeholder'
               placeholder={placeholder}
               value={value}
               style={{ height: rows * 20, resize: 'none' }}

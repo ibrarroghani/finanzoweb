@@ -72,6 +72,7 @@ const GoalForm: React.FC<GoalFormProps> = ({
         error={formErrors.title?.message}
         label='Goal Title'
         labelPosition='outside'
+        placeholder='Enter goal title'
       />
       <SelectField
         control={control}
@@ -82,6 +83,7 @@ const GoalForm: React.FC<GoalFormProps> = ({
           { value: 'savings', label: 'Savings' },
           { value: 'repayment', label: 'Repayment' },
         ]}
+        placeholder='Select goal purpose'
       />
       <TextareaField
         label='Goal Description'
@@ -89,6 +91,7 @@ const GoalForm: React.FC<GoalFormProps> = ({
         name='description'
         error={formErrors.description?.message}
         rows={3}
+        placeholder='Enter goal description'
       />
       <InputField
         id='goal_amount'
@@ -98,12 +101,14 @@ const GoalForm: React.FC<GoalFormProps> = ({
         label='Target Amount'
         type='number'
         icon={<DollarIcon />}
+        placeholder='Enter target amount'
       />
       <DatePickerField
         control={control}
         name='target_date'
         label='Target Date'
         error={formErrors.target_date?.message}
+        placeholder='YYYY-MM-DD'
       />
       <div className='flex items-center justify-between py-4'>
         <div className='flex items-center gap-4'>
@@ -131,7 +136,7 @@ const GoalForm: React.FC<GoalFormProps> = ({
         </div>
         <div className='ml-auto w-32'>
           <CustomButton
-            className='w-24 bg-primary-dark text-primary-light'
+            className='btn-gradient'
             type='button'
             title='Link Account'
             onClick={handleAddAccount}
@@ -160,6 +165,7 @@ const GoalForm: React.FC<GoalFormProps> = ({
           type='button'
           title='save changes'
           disable={isPending}
+          className='btn-gradient'
         />
       </div>
     </form>

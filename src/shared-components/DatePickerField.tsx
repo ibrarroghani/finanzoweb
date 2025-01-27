@@ -28,7 +28,7 @@ const DatePickerField: React.FC<IDatePickerFieldProps> = ({
           control={control}
           render={({ field: { onChange, value } }) => (
             <DatePicker
-              className='w-full cursor-pointer p-2.5'
+              className='custom-placeholder w-full cursor-pointer p-2.5'
               onChange={onChange}
               placeholder={placeholder}
               value={value ? dayjs(value) : null} // Convert Date to dayjs
