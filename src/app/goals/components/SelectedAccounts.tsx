@@ -20,9 +20,15 @@ const SelectedAccounts: React.FC<SelectedAccountsProps> = ({
   goalPurpose,
   setValue,
 }) => {
+  const handleRemoveAccount = (index: number) => {
+    const currentAccounts = [...linkedAccounts];
+    currentAccounts.splice(index, 1);
+    setValue('linked_accounts', currentAccounts);
+  };
+
   return (
-    <div className='mt-6'>
-      <h3 className='mb-2 text-lg font-semibold'>Selected Accounts</h3>
+    <div className='mb-2'>
+      <h3 className='mb-1 text-lg font-semibold'>Selected Accounts</h3>
       <div className='space-y-2'>
         {linkedAccounts.map((account, index) => {
           const accountDetails = userAccounts.find(
@@ -34,7 +40,7 @@ const SelectedAccounts: React.FC<SelectedAccountsProps> = ({
           return (
             <div
               key={index}
-              className='flex items-center justify-between rounded-lg border bg-gray-50 p-4 shadow'
+              className='card flex items-center justify-between rounded-lg border p-4 shadow'
             >
               <div>
                 <p className='font-medium'>{accountDetails.account.name}</p>
@@ -46,20 +52,12 @@ const SelectedAccounts: React.FC<SelectedAccountsProps> = ({
                   Current Balance: ${accountDetails.account.balances_current}
                 </p>
                 {goalPurpose !== 'repayment' && (
-                  <p className='text-sm text-gray-600'>
+                  <p className='text-sm'>
                     Contribution Limit: ${account.contribution_limit}
                   </p>
                 )}
               </div>
-              <button
-                type='button'
-                className='text-red-500 hover:text-red-700'
-                onClick={() => {
-                  const currentAccounts = [...linkedAccounts];
-                  currentAccounts.splice(index, 1);
-                  setValue('linked_accounts', currentAccounts);
-                }}
-              >
+              <button type='button' onClick={() => handleRemoveAccount(index)}>
                 <p title='Remove Account'>
                   <DeleteIcon color='red' />
                 </p>

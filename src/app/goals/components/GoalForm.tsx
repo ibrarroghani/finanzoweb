@@ -110,7 +110,7 @@ const GoalForm: React.FC<GoalFormProps> = ({
         error={formErrors.target_date?.message}
         placeholder='YYYY-MM-DD'
       />
-      <div className='flex items-center justify-between py-4'>
+      <div className='my-2 flex items-center justify-between'>
         <div className='flex items-center gap-4'>
           <p className='font-light'>Goal Status</p>
           <Controller
