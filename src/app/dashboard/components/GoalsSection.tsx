@@ -24,7 +24,7 @@ const GoalsSection: React.FC<IGoalsSection> = ({
   const slug = useSelector((state: RootState) => state.auth.client.slug);
 
   const { data, isLoading, isError, error } = useGetGoals(slug, {
-    force_initial_plaid_account_fetch: 'no',
+    force_initial_plaid_account_fetch: 'yes',
   });
 
   const isFetching = useIsFetching({ queryKey: ['getGoals'] });

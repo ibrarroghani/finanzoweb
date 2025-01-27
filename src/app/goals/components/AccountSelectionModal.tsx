@@ -19,6 +19,7 @@ import AccountCheckbox from './AccountCheckbox';
 
 interface AccountSelectionModalProps {
   showModal: boolean;
+  //eslint-disable-next-line
   setShowModal: (value: boolean) => void;
   userAccounts: IUserAccounts[];
   goalPurpose: string;

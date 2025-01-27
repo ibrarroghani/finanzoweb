@@ -77,7 +77,7 @@ const UpdateGoalModal: React.FC<IUpdateGoalModalProps> = ({
   );
   const { mutate: updateGoal, isPending } = useUpdateGoal(slug, goalSlug);
   const { data: bankAccounts, isLoading } = useGetBankAccounts(slug, {
-    force_initial_plaid_account_fetch: 'no',
+    force_initial_plaid_account_fetch: 'yes',
   });
 
   const handleGoalUpdate = (data: IGoalFormData) => {

@@ -9,7 +9,6 @@ import {
 import {
   Control,
   UseFormWatch,
-  UseFormSetValue,
   UseFormTrigger,
   FieldErrors,
 } from 'react-hook-form';
@@ -23,6 +22,7 @@ interface AccountCheckboxProps {
   formErrors: FieldErrors<IFormValues>;
   watch: UseFormWatch<IFormValues>;
   trigger: UseFormTrigger<IFormValues>;
+  //eslint-disable-next-line
   updateTempAccounts: (isChecked: boolean, acc: IUserAccounts) => void;
 }
 
