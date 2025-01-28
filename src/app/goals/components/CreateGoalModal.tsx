@@ -5,29 +5,26 @@ import {
   useForm,
   Control,
   FieldValues,
-  UseFormSetValue,
-  UseFormWatch,
-  FieldErrors,
   UseFormTrigger,
+  FieldErrors,
+  UseFormWatch,
+  UseFormSetValue,
 } from 'react-hook-form';
 import { goalCreateValidationSchema } from '../validations/goal-create-validation-schema';
+import useCreateGoal from '@/hooks/data-hooks/goal/use-create-goal';
 import { convertDateApiFormat, getTomorrowDate } from '@/utils/date-formatter';
-import { useGoalPageContext } from '../context/GoalPageContext';
-import useUpdateGoal from '@/hooks/data-hooks/goal/use-update-goal';
-import useGetSingleGoal from '@/hooks/data-hooks/goal/use-get-single-goal';
-import Spinner from '@/shared-components/Spinner';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store';
 import useGetBankAccounts from '@/hooks/data-hooks/account/use-get-bank-accounts';
 import {
-  IGoalFormData,
   IFormValues,
+  IGoalFormData,
   IUserAccounts,
 } from '@/app/goals/interface/goal-interface';
 import AccountSelectionModal from './AccountSelectionModal';
 import GoalForm from './GoalForm';
 
-interface IUpdateGoalModalProps {
+interface IGoalModalProps {
   title: string;
   showModal: boolean;
   setShowModal: () => void;
@@ -44,7 +41,7 @@ const INITIAL_GOAL_FORM_DATA: IGoalFormData = {
   tempSelectedAccounts: [],
 };
 
-const UpdateGoalModal: React.FC<IUpdateGoalModalProps> = ({
+const GoalModal: React.FC<IGoalModalProps> = ({
   title,
   showModal,
   setShowModal,
@@ -53,35 +50,29 @@ const UpdateGoalModal: React.FC<IUpdateGoalModalProps> = ({
   const [showAccountSelectionModal, setShowAccountSelectionModal] =
     useState(false);
   const slug = useSelector((state: RootState) => state.auth.client.slug);
-  const { goalSlug } = useGoalPageContext();
 
   const {
     control,
     handleSubmit,
     formState: { errors: formErrors },
-    reset,
     watch,
     setValue,
     trigger,
   } = useForm<IGoalFormData>({
     defaultValues: INITIAL_GOAL_FORM_DATA,
-    resolver: yupResolver(goalCreateValidationSchema),
+    resolver: yupResolver<IGoalFormData>(goalCreateValidationSchema),
+    reValidateMode: 'onChange',
   });
 
   const goalPurpose = watch('goal_purpose');
   const linkedAccounts = watch('linked_accounts');
 
-  const { data: goalData, isLoading: isGoalLoading } = useGetSingleGoal(
-    slug,
-    goalSlug
-  );
-  const { mutate: updateGoal, isPending } = useUpdateGoal(slug, goalSlug);
-  const { data: bankAccounts, isLoading: isBankAccountsLoading } =
-    useGetBankAccounts(slug, {
-      force_initial_plaid_account_fetch: 'yes',
-    });
+  const { mutate: CreateGoal, isPending } = useCreateGoal(slug);
+  const { data: bankAccounts, isLoading } = useGetBankAccounts(slug, {
+    force_initial_plaid_account_fetch: 'yes',
+  });
 
-  const handleGoalUpdate = (data: IGoalFormData) => {
+  const handleGoalCreate = (data: IGoalFormData) => {
     const formData = {
       title: data.title,
       goal_purpose: data.goal_purpose,
@@ -95,7 +86,7 @@ const UpdateGoalModal: React.FC<IUpdateGoalModalProps> = ({
       })),
     };
 
-    updateGoal(formData, {
+    CreateGoal(formData, {
       onSuccess: () => {
         setShowModal();
       },
@@ -108,20 +99,13 @@ const UpdateGoalModal: React.FC<IUpdateGoalModalProps> = ({
     }
   }, [bankAccounts]);
 
+  // Add this useEffect to handle purpose changes
   useEffect(() => {
-    if (goalData?.data?.goal) {
-      const { goal } = goalData.data;
-      reset({
-        title: goal.title || '',
-        goal_purpose: goal.goal_purpose || '',
-        description: goal.description || '',
-        goal_amount: goal.goal_amount || '',
-        target_date: goal.target_date || getTomorrowDate(),
-        goal_status: goal.goal_status || 'active',
-        linked_accounts: goal.goalAccounts || [],
-      });
+    if (goalPurpose === 'repayment' && linkedAccounts.length > 1) {
+      // Keep only the first account when switching to repayment
+      setValue('linked_accounts', [linkedAccounts[0]]);
     }
-  }, [goalData, reset]);
+  }, [goalPurpose, linkedAccounts, setValue]);
 
   const handleAddAccountClick = () => {
     setValue('tempSelectedAccounts', linkedAccounts);
@@ -137,27 +121,19 @@ const UpdateGoalModal: React.FC<IUpdateGoalModalProps> = ({
         onCancel={setShowModal}
         footer={null}
       >
-        <div className='flex min-h-[350px] flex-col'>
-          {isGoalLoading || isBankAccountsLoading ? (
-            <div className='flex flex-1 items-center justify-center'>
-              <Spinner />
-            </div>
-          ) : (
-            <GoalForm
-              control={control as unknown as Control<FieldValues>}
-              formErrors={formErrors as unknown as FieldErrors<IGoalFormData>}
-              onSubmit={handleSubmit(handleGoalUpdate)}
-              setShowAccountSelectionModal={setShowAccountSelectionModal}
-              goalPurpose={goalPurpose}
-              linkedAccounts={linkedAccounts}
-              userAccounts={userAccounts}
-              setValue={setValue}
-              isLoading={isBankAccountsLoading}
-              isPending={isPending}
-              onAddAccountClick={handleAddAccountClick}
-            />
-          )}
-        </div>
+        <GoalForm
+          control={control as unknown as Control<FieldValues>}
+          formErrors={formErrors as unknown as FieldErrors<IGoalFormData>}
+          onSubmit={handleSubmit(handleGoalCreate)}
+          setShowAccountSelectionModal={setShowAccountSelectionModal}
+          goalPurpose={goalPurpose}
+          linkedAccounts={linkedAccounts}
+          userAccounts={userAccounts}
+          setValue={setValue}
+          isLoading={isLoading}
+          isPending={isPending}
+          onAddAccountClick={handleAddAccountClick}
+        />
       </Modal>
 
       {showAccountSelectionModal && (
@@ -177,4 +153,4 @@ const UpdateGoalModal: React.FC<IUpdateGoalModalProps> = ({
   );
 };
 
-export default UpdateGoalModal;
+export default GoalModal;

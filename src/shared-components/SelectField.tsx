@@ -15,7 +15,7 @@ interface ISelectFieldProps {
   placeholder?: string;
   disabled?: boolean;
   control: Control<FieldValues>;
-  value?: string;
+  defaultValue?: string;
 }
 
 const SelectField: React.FC<ISelectFieldProps> = ({
@@ -25,34 +25,35 @@ const SelectField: React.FC<ISelectFieldProps> = ({
   error,
   control,
   disabled,
-  value,
   label,
+  defaultValue,
 }) => {
   return (
     <div className='flex flex-col'>
-      <div className='my-2'>
+      <div className='py-1'>
         {label && (
-          <p className='text-small my-1 capitalize text-muted'>{label}</p>
+          <p className='text-small mb-1 capitalize text-muted'>{label}</p>
         )}
         <Controller
           name={name}
           control={control}
-          render={({ field: { onChange } }) => (
+          render={({ field: { onChange, value } }) => (
             <Select
               disabled={disabled ?? false}
               placeholder={placeholder ?? ''}
-              className='w-full'
+              className='custom-placeholder w-full'
               onChange={onChange}
               options={options}
               size='large'
-              defaultValue={value}
+              value={value || undefined}
+              defaultValue={defaultValue}
             />
           )}
         />
       </div>
 
       {error && (
-        <p className='text-small flex items-center gap-1 py-1 text-danger'>
+        <p className='text-small flex items-center gap-1 text-danger'>
           {error}
         </p>
       )}

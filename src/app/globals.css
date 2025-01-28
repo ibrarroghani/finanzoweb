@@ -93,7 +93,7 @@ input[type='password'] {
   /* End Border Radious  */
 
   .btn-gradient {
-    @apply to-primary-gradient-dark bg-gradient-to-r from-primary-dark text-primary-light;
+    @apply bg-gradient-to-r from-primary-dark to-primary-gradient-dark text-primary-light;
   }
 }
 

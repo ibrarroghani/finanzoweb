@@ -3,15 +3,15 @@ import Section from './Section';
 import BankCard from './BankCard';
 import DataSection from './DataSection';
 import { notification } from 'antd';
-import useGetBankAccounts from '@/hooks/data-hooks/account/use-get-bank-accounts';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store';
+import useGetBankInstitutions from '@/hooks/data-hooks/account/use-get-bank-institutions';
 
 const AccountsSection = () => {
   const slug = useSelector((state: RootState) => state.auth.client.slug);
 
-  const { data, isLoading, isError, error } = useGetBankAccounts(slug, {
-    force_initial_plaid_account_fetch: 'yes',
+  const { data, isLoading, isError, error } = useGetBankInstitutions(slug, {
+    force_initial_plaid_account_fetch: 'no',
   });
 
   useEffect(() => {

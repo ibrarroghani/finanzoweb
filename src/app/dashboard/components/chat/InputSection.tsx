@@ -41,9 +41,14 @@ const InputSection: React.FC = () => {
         // Allow new line when Shift+Enter is pressed
         return;
       }
+
       // Prevent default to avoid unwanted new line
       e.preventDefault();
+
+      if (isUploading) return;
+      if (!message.trim()) return;
       handleSendMessage(message);
+      setMessage('');
     }
   };
 

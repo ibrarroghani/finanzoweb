@@ -2,18 +2,9 @@
 import React, { useEffect, useState } from 'react';
 import AccountDetailsModal from './AccountDetailsModal';
 import Link from 'next/link';
-import useGetBankAccountDetails from '@/hooks/data-hooks/account/use-get-bank-account-details';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store';
-
-// interface IBankData {
-//   title: string;
-//   account: string;
-//   card: string;
-// }
-// interface IBankCardProps {
-//   bankData: IBankData;
-// }
+import useGetBankInstitutionDetails from '@/hooks/data-hooks/account/use-get-bank-institution-details';
 
 interface IInstitution {
   plaid_institution_id: string;
@@ -52,7 +43,7 @@ const BankCard: React.FC<IBankCardProps> = ({ bankData }) => {
     data: accountDetailsResponse,
     //isLoading:isAccountListLoading,
     //isError: isAccountListError,
-  } = useGetBankAccountDetails(slug, institution.slug, {
+  } = useGetBankInstitutionDetails(slug, institution.plaid_institution_id, {
     force_initial_plaid_account_fetch: 'yes',
   });
 

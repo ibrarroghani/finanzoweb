@@ -96,7 +96,7 @@ const Setting = () => {
               name='gender'
               label='Gender'
               error={formErrors.gender?.message}
-              value='none'
+              defaultValue='none'
               options={[
                 { value: 'none', label: 'None' },
                 { value: 'male', label: 'Male' },

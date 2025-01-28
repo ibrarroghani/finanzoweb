@@ -19,16 +19,16 @@ const DatePickerField: React.FC<IDatePickerFieldProps> = ({
 }) => {
   return (
     <div className='flex flex-col'>
-      <div>
+      <div className='py-1'>
         {label && (
-          <p className='text-small my-1 capitalize text-muted'>{label}</p>
+          <p className='text-small mb-1 capitalize text-muted'>{label}</p>
         )}
         <Controller
           name={name}
           control={control}
           render={({ field: { onChange, value } }) => (
             <DatePicker
-              className='w-full cursor-pointer p-2.5'
+              className='custom-placeholder w-full cursor-pointer p-2.5'
               onChange={onChange}
               placeholder={placeholder}
               value={value ? dayjs(value) : null} // Convert Date to dayjs
