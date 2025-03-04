@@ -28,6 +28,7 @@ jobs:
 
               # Path to the .env file in the project directory
               sudo mkdir -p /www/finanzo_web
+              sudo chown azureuser:azureuser -R /www
               ENV_FILE="/www/finanzo_web/.env"
 
               # Clear or create new .env file
