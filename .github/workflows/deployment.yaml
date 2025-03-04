@@ -27,7 +27,7 @@ jobs:
             set -e  # Exit on any error
 
               # Path to the .env file in the project directory
-              mkdir -p /www/finanzo_web
+              sudo mkdir -p /www/finanzo_web
               ENV_FILE="/www/finanzo_web/.env"
 
               # Clear or create new .env file
