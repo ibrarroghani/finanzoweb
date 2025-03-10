@@ -51,6 +51,7 @@ jobs:
               [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
             nvm install 20
             cd /www/finanzoweb
+            ssh-keyscan github.com >> ~/.ssh/known_hosts
             eval $(ssh-agent); ssh-add ~/.ssh/github
             git stash || echo "No changes to stash"
             git pull origin main || exit 1
