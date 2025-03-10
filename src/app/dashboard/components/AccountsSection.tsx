@@ -6,8 +6,17 @@ import { notification } from 'antd';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store';
 import useGetBankInstitutions from '@/hooks/data-hooks/account/use-get-bank-institutions';
+import { IInstitutions } from '../interface/account-interface';
+import { BankIcon } from '@/assets/icons/bussiness-panel-icons';
+interface AccountsSectionProps {
+  className?: string;
+  showDetails?: boolean;
+}
 
-const AccountsSection = () => {
+const AccountsSection: React.FC<AccountsSectionProps> = ({
+  className = 'lg:w-1/2',
+  showDetails = false,
+}) => {
   const slug = useSelector((state: RootState) => state.auth.client.slug);
 
   const { data, isLoading, isError, error } = useGetBankInstitutions(slug, {
@@ -22,18 +31,22 @@ const AccountsSection = () => {
 
   return (
     <>
-      <Section title='Linked Accounts' className='lg:w-1/2'>
+      <Section
+        icon={showDetails ? <BankIcon /> : null}
+        available={showDetails ? data?.data.length : undefined}
+        title='Bank'
+        className={className}
+      >
         <Section.Scrollable>
           <DataSection
             isLoading={isLoading}
             data={data?.data || []}
-            //eslint-disable-next-line
-            renderItem={(bank: any, index: any) => (
+            renderItem={(bank: IInstitutions, index: number) => (
               <Section.Item key={index}>
                 <BankCard bankData={bank} />
               </Section.Item>
             )}
-            emptyMessage='No linked accounts available.'
+            emptyMessage='No bank accounts available.'
           />
         </Section.Scrollable>
       </Section>

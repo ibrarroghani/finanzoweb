@@ -12,7 +12,6 @@ import {
 } from 'react-hook-form';
 import { goalCreateValidationSchema } from '../validations/goal-create-validation-schema';
 import { convertDateApiFormat, getTomorrowDate } from '@/utils/date-formatter';
-import { useGoalPageContext } from '../context/GoalPageContext';
 import useUpdateGoal from '@/hooks/data-hooks/goal/use-update-goal';
 import useGetSingleGoal from '@/hooks/data-hooks/goal/use-get-single-goal';
 import Spinner from '@/shared-components/Spinner';
@@ -22,15 +21,16 @@ import useGetBankAccounts from '@/hooks/data-hooks/account/use-get-bank-accounts
 import {
   IGoalFormData,
   IFormValues,
-  IUserAccounts,
 } from '@/app/goals/interface/goal-interface';
 import AccountSelectionModal from './AccountSelectionModal';
 import GoalForm from './GoalForm';
+import { IUserAccounts } from '@/app/dashboard/interface/account-interface';
 
 interface IUpdateGoalModalProps {
   title: string;
   showModal: boolean;
   setShowModal: () => void;
+  goalSlug: string;
 }
 
 const INITIAL_GOAL_FORM_DATA: IGoalFormData = {
@@ -48,12 +48,12 @@ const UpdateGoalModal: React.FC<IUpdateGoalModalProps> = ({
   title,
   showModal,
   setShowModal,
+  goalSlug,
 }) => {
   const [userAccounts, setUserAccounts] = useState<IUserAccounts[]>([]);
   const [showAccountSelectionModal, setShowAccountSelectionModal] =
     useState(false);
   const slug = useSelector((state: RootState) => state.auth.client.slug);
-  const { goalSlug } = useGoalPageContext();
 
   const {
     control,

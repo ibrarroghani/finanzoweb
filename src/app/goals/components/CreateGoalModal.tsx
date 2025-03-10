@@ -19,10 +19,10 @@ import useGetBankAccounts from '@/hooks/data-hooks/account/use-get-bank-accounts
 import {
   IFormValues,
   IGoalFormData,
-  IUserAccounts,
 } from '@/app/goals/interface/goal-interface';
 import AccountSelectionModal from './AccountSelectionModal';
 import GoalForm from './GoalForm';
+import { IUserAccounts } from '@/app/dashboard/interface/account-interface';
 
 interface IGoalModalProps {
   title: string;

@@ -2,10 +2,10 @@ import React from 'react';
 import {
   IGoalFormData,
   ILinkedAccount,
-  IUserAccounts,
 } from '@/app/goals/interface/goal-interface';
 import { UseFormSetValue } from 'react-hook-form';
 import { DeleteIcon } from '@/assets/icons/bussiness-panel-icons';
+import { IUserAccounts } from '@/app/dashboard/interface/account-interface';
 
 interface SelectedAccountsProps {
   linkedAccounts: ILinkedAccount[];

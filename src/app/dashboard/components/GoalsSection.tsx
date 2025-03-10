@@ -7,15 +7,16 @@ import { notification } from 'antd';
 import { useIsFetching } from '@tanstack/react-query';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store';
+import { IGoal } from '@/app/goals/interface/goal-interface';
 
-interface IGoalsSection {
+interface IGoalsSectionProps {
   scroll?: boolean;
   title?: string;
   edit?: boolean;
   className?: string;
 }
 
-const GoalsSection: React.FC<IGoalsSection> = ({
+const GoalsSection: React.FC<IGoalsSectionProps> = ({
   scroll = false,
   title,
   edit = false,
@@ -39,12 +40,11 @@ const GoalsSection: React.FC<IGoalsSection> = ({
     <>
       <Section title={title} className={`${className}`}>
         {scroll ? (
-          <Section.Scrollable>
+          <Section.Scrollable height='440px'>
             <DataSection
               isLoading={isLoadingState}
               data={data?.data || []}
-              //eslint-disable-next-line
-              renderItem={(goal: any, index: any) => (
+              renderItem={(goal: IGoal, index: number) => (
                 <Section.Item key={index}>
                   <GoalCard edit={edit} goal={goal} />
                 </Section.Item>
@@ -56,8 +56,7 @@ const GoalsSection: React.FC<IGoalsSection> = ({
           <DataSection
             isLoading={isLoadingState}
             data={data?.data || []}
-            //eslint-disable-next-line
-            renderItem={(goal: any, index: any) => (
+            renderItem={(goal: IGoal, index: number) => (
               <Section.Item key={index}>
                 <GoalCard edit={edit} goal={goal} />
               </Section.Item>

@@ -2,7 +2,6 @@ import React from 'react';
 import InputField from '@/shared-components/InputField';
 import { DollarIcon } from '@/assets/icons/bussiness-panel-icons';
 import {
-  IUserAccounts,
   ILinkedAccount,
   IFormValues,
 } from '@/app/goals/interface/goal-interface';
@@ -12,6 +11,7 @@ import {
   UseFormTrigger,
   FieldErrors,
 } from 'react-hook-form';
+import { IUserAccounts } from '@/app/dashboard/interface/account-interface';
 
 interface AccountCheckboxProps {
   account: IUserAccounts;

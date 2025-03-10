@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { io, Socket } from 'socket.io-client';
 import { SOCKET_EVENTS } from './constants/socketEvents';
-import { handleSocketErrors } from './error/handler';
+// import { handleSocketErrors } from './error/handler';
 
 const SOCKET_URL = process.env.NEXT_PUBLIC_SOCKET_URL!;
 
@@ -39,7 +39,7 @@ const connectSocket = () => {
   });
 
   // Handle socket errors globally
-  handleSocketErrors(socket);
+  // handleSocketErrors(socket);
 
   socket.on(SOCKET_EVENTS.MESSAGE.SEND.BROADCASTER, (message: unknown) => {
     //eslint-disable-next-line

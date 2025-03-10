@@ -14,12 +14,12 @@ import TextareaField from '@/shared-components/TextareaField';
 import DatePickerField from '@/shared-components/DatePickerField';
 import CustomButton from '@/shared-components/CustomButton';
 import {
-  IUserAccounts,
   IGoalFormData,
   ILinkedAccount,
 } from '@/app/goals/interface/goal-interface';
 import SelectedAccounts from './SelectedAccounts';
 import { DollarIcon } from '@/assets/icons/bussiness-panel-icons';
+import { IUserAccounts } from '@/app/dashboard/interface/account-interface';
 
 interface GoalFormProps {
   control: Control<FieldValues>;
@@ -69,6 +69,10 @@ const GoalForm: React.FC<GoalFormProps> = ({
   };
 
   const handleAddAccount = () => {
+    if (!goalPurpose) {
+      notification.warning({ message: 'Please select a goal purpose first' });
+      return;
+    }
     if (onAddAccountClick) onAddAccountClick();
     setShowAccountSelectionModal(true);
   };
@@ -151,7 +155,6 @@ const GoalForm: React.FC<GoalFormProps> = ({
             title='Link Account'
             onClick={handleAddAccount}
             disable={
-              !goalPurpose ||
               (goalPurpose === 'repayment' && linkedAccounts.length >= 1) ||
               isLoading
             }

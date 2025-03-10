@@ -10,9 +10,9 @@ export const MENU_ITEM_ROUTE = [
   {
     id: 2,
     permission: [],
-    title: 'Clients',
+    title: 'Financial Overview',
     icon: '',
-    url: '/clients',
+    url: '/financial-overview',
     showable: true,
   },
   {
@@ -23,14 +23,14 @@ export const MENU_ITEM_ROUTE = [
     url: '/goals',
     showable: true,
   },
-  {
-    id: 4,
-    permission: [],
-    title: 'Transaction Wizard',
-    icon: '',
-    url: '/transaction-wizard',
-    showable: true,
-  },
+  // {
+  //   id: 4,
+  //   permission: [],
+  //   title: 'Transaction Wizard',
+  //   icon: '',
+  //   url: '/transaction-wizard',
+  //   showable: true,
+  // },
   {
     id: 5,
     permission: [],

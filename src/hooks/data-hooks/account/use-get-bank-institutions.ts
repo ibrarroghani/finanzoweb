@@ -5,7 +5,7 @@ import { handleApiError } from '@/utils/error/api-error-handler';
 //eslint-disable-next-line
 const useGetBankInstitutions = (slug: string, params: any) => {
   return useQuery({
-    queryKey: ['getBankInstitutions', slug, params], // Unique key for the query
+    queryKey: ['getBankInstitutions', slug],
     enabled: !!slug,
     queryFn: async () => {
       try {

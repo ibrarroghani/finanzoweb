@@ -51,7 +51,7 @@ const InputField: React.FC<IInputFieldProps> = ({
             {label && (
               <p className='text-small mb-1 capitalize text-muted'>{label}</p>
             )}
-            <span className='absolute bottom-2.5 left-3 mr-5 flex -translate-y-1/2 transform items-center'>
+            <span className='absolute bottom-2 left-3 mr-5 flex -translate-y-1/2 transform items-center'>
               {icon}
             </span>
           </>
@@ -78,7 +78,18 @@ const InputField: React.FC<IInputFieldProps> = ({
                 onChange(newValue); // Update form state
                 onCustomChange?.(newValue); // Trigger custom logic
               }}
-              className={`${icon ? 'py-2 pl-8 pr-4' : labelPosition === 'outside' ? 'p-2.5' : 'px-4 py-6 pb-2'} custom-placeholder no-spinner text-medium block w-full max-w-full rounded-md border border-border-light bg-primary-light text-primary-dark ring-offset-0 hover:ring-1 hover:ring-success focus:outline-1 focus:outline-success`}
+              onKeyDown={(e) => {
+                if (
+                  type === 'number' &&
+                  (e.key === 'e' ||
+                    e.key === 'E' ||
+                    e.key === '+' ||
+                    e.key === '-')
+                ) {
+                  e.preventDefault();
+                }
+              }}
+              className={`${icon ? 'py-2 pl-8 pr-4' : labelPosition === 'outside' ? 'p-2.5' : 'px-4 py-6 pb-2'} no-spinner text-medium custom-placeholder block w-full max-w-full rounded-md border border-border-light bg-primary-light text-primary-dark ring-offset-0 hover:ring-1 hover:ring-success focus:outline-1 focus:outline-success`}
             />
           )}
         />

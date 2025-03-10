@@ -2,20 +2,21 @@ import { useQuery } from '@tanstack/react-query';
 import { accountAPIEndpoint } from '@/config/api/api-endpoints/account-api-endpoint';
 import { handleApiError } from '@/utils/error/api-error-handler';
 
-const useGetBankInstitutionDetails = (
-  slug: string,
-  institution_slug: string,
+const useGetTransactionByAccount = (
+  accountId: string,
+  clintSlug: string,
   //eslint-disable-next-line
-  params?: any
+  params: any
 ) => {
   return useQuery({
-    queryKey: ['getBankInstitutionDetails', slug, institution_slug],
-    enabled: !!slug && !!institution_slug,
+    queryKey: ['getTransactionByAccount', accountId, clintSlug, params],
+    enabled: !!accountId && !!clintSlug,
+
     queryFn: async () => {
       try {
-        const response = await accountAPIEndpoint.getBankInstitutionDetails(
-          slug,
-          institution_slug,
+        const response = await accountAPIEndpoint.getTransactionByAccount(
+          accountId,
+          clintSlug,
           params
         );
         return response;
@@ -26,4 +27,4 @@ const useGetBankInstitutionDetails = (
   });
 };
 
-export default useGetBankInstitutionDetails;
+export default useGetTransactionByAccount;

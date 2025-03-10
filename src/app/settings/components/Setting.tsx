@@ -11,7 +11,7 @@ import { settingValidationSchema } from '../validations/setting-validation-schem
 interface ISettingFormData {
   firstName: string;
   lastName: string;
-  dateOfBirth: Date;
+  dateOfBirth: Date | null;
   gender: string;
   email: string;
   phone: string;
@@ -22,7 +22,7 @@ const Setting = () => {
   const initialValue: ISettingFormData = {
     firstName: '',
     lastName: '',
-    dateOfBirth: new Date(0),
+    dateOfBirth: null,
     gender: '',
     email: '',
     phone: '',
@@ -36,7 +36,7 @@ const Setting = () => {
     //setValue,
   } = useForm<ISettingFormData>({
     defaultValues: initialValue,
-    resolver: yupResolver(settingValidationSchema),
+    resolver: yupResolver<ISettingFormData>(settingValidationSchema),
   });
 
   const handleUpdateProfile = (data: ISettingFormData) => {
@@ -89,6 +89,7 @@ const Setting = () => {
               name='dateOfBirth'
               label='Date of Birth'
               error={formErrors.dateOfBirth?.message}
+              placeholder='YYYY-MM-DD'
             />
 
             <SelectField

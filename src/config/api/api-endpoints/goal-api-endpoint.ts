@@ -1,3 +1,4 @@
+import { IGoalApiRequest } from '@/app/goals/interface/goal-interface';
 import apiService from '@/utils/services/api-service';
 
 export const goalAPIEndpoint = {
@@ -8,11 +9,13 @@ export const goalAPIEndpoint = {
   getSingleGoal: (slug: string, goalSlug: string) =>
     apiService.get(`/goals/client/${slug}/${goalSlug}`),
 
-  //eslint-disable-next-line
-  createGoal: (slug: string, data: any) =>
+  createGoal: (slug: string, data: IGoalApiRequest) =>
     apiService.post(`/goals/client/${slug}`, data),
 
   //eslint-disable-next-line
-  updateGoal: (userSlug: string, goalSlug: string, data: any) =>
+  getGoalChart: (clientSlug: string, goalSlug: string, data: any) =>
+    apiService.post(`/goals/snapshots/client/${clientSlug}/${goalSlug}`, data),
+
+  updateGoal: (userSlug: string, goalSlug: string, data: IGoalApiRequest) =>
     apiService.put(`/goals/client/${userSlug}/${goalSlug}`, data),
 };

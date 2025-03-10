@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 import {
   AttachmentIcon,
@@ -7,7 +7,7 @@ import {
 } from '@/assets/icons/bussiness-panel-icons';
 
 import Link from 'next/link';
-import { Modal } from 'antd';
+import { Modal, Skeleton } from 'antd';
 import { useDashboardPageContext } from '@/app/dashboard/context/DashboardPageContext';
 import { File } from '@/app/dashboard/interface/chat-interface';
 
@@ -26,6 +26,7 @@ const FileItem: React.FC<FileItemProps> = ({
 }) => {
   const { handleDeleteDocument } = useDashboardPageContext();
   const isImage = file.file_type === 'image';
+  const [loading, setLoading] = useState(true);
 
   const handleDeleteConfirm = () => {
     Modal.confirm({
@@ -47,13 +48,24 @@ const FileItem: React.FC<FileItemProps> = ({
       ) : (
         <>
           {isImage ? (
-            <Image
-              src={file.file_url}
-              alt='preview'
-              height={250}
-              width={250}
-              className='rounded object-cover p-2'
-            />
+            <>
+              <div className='relative'>
+                {loading && (
+                  <div className='absolute inset-0 flex items-center justify-center'>
+                    <Skeleton.Image active={loading} />
+                  </div>
+                )}
+                <Image
+                  src={file.file_url}
+                  alt='preview'
+                  height={250}
+                  width={250}
+                  className='rounded object-cover p-2'
+                  onLoad={() => setLoading(false)}
+                  onError={() => setLoading(false)}
+                />
+              </div>
+            </>
           ) : (
             <div className='flex flex-col gap-2 px-3'>
               <div className='my-3 flex gap-2'>

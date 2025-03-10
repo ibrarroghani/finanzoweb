@@ -24,17 +24,19 @@ const MenuItem = ({ menu }: IMenuItemProps) => {
   useEffect(() => {
     if (url === pathname || pathname.startsWith(url)) {
       setActive(true);
+    } else {
+      setActive(false);
     }
   }, [url, pathname]);
 
-  const onSideClick = (e: React.MouseEvent<HTMLDivElement>) => {
+  const handleMenuItemClick = (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
     if (showable) router.push(url);
   };
 
   return (
     <div
-      onClick={onSideClick}
+      onClick={handleMenuItemClick}
       className={`flex cursor-pointer items-center rounded-full px-4 py-1 ${active ? 'bg-primary-dark' : 'hover:bg-primary-dark hover:text-primary-light'}`}
     >
       <span

@@ -1,20 +1,19 @@
 import Spinner from '@/shared-components/Spinner';
 
-interface IDataSectionProps {
+interface IDataSectionProps<T> {
   isLoading: boolean;
+  data: T[];
   //eslint-disable-next-line
-  data: any;
-  //eslint-disable-next-line
-  renderItem: any;
+  renderItem: (goal: T, index: number) => React.ReactNode;
   emptyMessage?: string;
 }
 
-const DataSection: React.FC<IDataSectionProps> = ({
+const DataSection = <T,>({
   isLoading,
   data,
   renderItem,
   emptyMessage,
-}) => {
+}: IDataSectionProps<T>) => {
   if (isLoading) {
     return (
       <div className='mt-20 flex justify-center'>

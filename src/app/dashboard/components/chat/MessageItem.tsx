@@ -51,51 +51,48 @@ const MessageItem: React.FC<MessageItemProps> = ({ message }) => {
       className={`message mb-4 flex ${isCurrentUserMessage ? 'justify-end' : 'justify-start'}`}
     >
       <div className='overflow-wrap-anywhere max-w-[80%] break-words rounded-lg bg-content p-2'>
-        <>
-          {/* Text Message */}
-          {message.message && (
+        {/* Text Message */}
+        {message.message && (
+          <p className='text-small h-auto w-full whitespace-pre-wrap break-words'>
+            {message.message}
+          </p>
+        )}
+
+        {/* File Previews */}
+        {message.file && (
+          <FileItem
+            file={message.file}
+            className='-m-2'
+            isSender={isCurrentUserMessage}
+          />
+        )}
+
+        {message.comment && (
+          <div className='flex gap-2'>
+            <span>
+              <UnavailableIcon />
+            </span>
             <p className='text-small h-auto w-full whitespace-pre-wrap break-words'>
-              {message.message}
-            </p>
-          )}
-
-          {/* File Previews */}
-          {message.file && (
-            <FileItem
-              file={message.file}
-              className='-m-2'
-              isSender={isCurrentUserMessage}
-            />
-          )}
-
-          {message.comment && (
-            <div className='flex gap-2'>
-              <span>
-                <UnavailableIcon />
-              </span>
-              <p className='text-small h-auto w-full whitespace-pre-wrap break-words'>
-                {message.comment}
-              </p>
-            </div>
-          )}
-
-          {/* Timestamp */}
-          <div className='mt-1 flex justify-end gap-2'>
-            {message.seen_at ? (
-              <p>
-                <DoubleTickIcon />
-              </p>
-            ) : (
-              <p>
-                <SingleTickIcon />
-              </p>
-            )}
-            <p className='timestamp text-extra-small'>
-              {getDateAndTime(message.created_at)}
+              {message.comment}
             </p>
           </div>
-        </>
-        {/* )} */}
+        )}
+
+        {/* Timestamp */}
+        <div className='mt-1 flex justify-end gap-2'>
+          {message.seen_at ? (
+            <p>
+              <DoubleTickIcon />
+            </p>
+          ) : (
+            <p>
+              <SingleTickIcon />
+            </p>
+          )}
+          <p className='timestamp text-extra-small'>
+            {getDateAndTime(message.created_at)}
+          </p>
+        </div>
       </div>
     </div>
   );

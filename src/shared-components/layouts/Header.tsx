@@ -9,18 +9,25 @@ import { MENU_ITEM_ROUTE } from '@/config/route-config';
 import { Dropdown, MenuProps } from 'antd';
 import Link from 'next/link';
 import MenuItem from './MenuItem';
+import { logout } from '../auth/authService';
+import { logoutUser } from '@/store/slices/auth-slice';
+import { useDispatch } from 'react-redux';
+import { useRouter } from 'next/navigation';
 
 const Header = () => {
-  const handleLogout = () => {
-    //eslint-disable-next-line no-console
-    console.log('Logout Button is clicked');
+  const dispatch = useDispatch();
+  const router = useRouter(); 
+
+  const handleLogout = async () => {
+    await logout();
+    dispatch(logoutUser());
+    router.push('/login'); 
   };
 
   const items = [
     {
-      label: <Link href='/login'>Logout</Link>,
+      label: <span onClick={handleLogout}>Logout</span>,
       key: '1',
-      onClick: handleLogout,
     },
   ];
 
@@ -30,15 +37,18 @@ const Header = () => {
 
   const menuItems: MenuProps['items'] = [
     { key: '1', label: <Link href='/dashboard'>Dashboard</Link> },
-    { key: '2', label: <Link href='/clients'>Clients</Link> },
+    // { key: '2', label: <Link href='/clients'>Clients</Link> },
     { key: '3', label: <Link href='/goals'>goals</Link> },
-    {
-      key: '4',
-      label: <Link href='/transection-wizard'>Transection Wizard</Link>,
-    },
+    // {
+    //   key: '4',
+    //   label: <Link href='/transection-wizard'>Transection Wizard</Link>,
+    // },
     { key: '5', label: <Link href='/reports'>Reports</Link> },
     { key: '6', label: <Link href='/settings'>Setting</Link> },
-    { key: '7', label: <Link href='#'>Logout</Link>, onClick: handleLogout },
+    {
+      key: '7',
+      label: <span onClick={handleLogout}>Logout</span>, 
+    },
   ];
 
   return (

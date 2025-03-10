@@ -23,14 +23,11 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          command_timeout: 30m
           script: |
             set -e  # Exit on any error
 
               # Path to the .env file in the project directory
-              sudo mkdir -p /www/finanzoweb
-              sudo chown azureuser:azureuser -R /www
-              ENV_FILE="/www/finanzoweb/.env"
+              ENV_FILE="/www/finanzo_web/.env"
 
               # Clear or create new .env file
               : > $ENV_FILE
@@ -45,19 +42,24 @@ jobs:
               echo "NEXT_PUBLIC_AZURE_AD_AUTHORITY=${{ secrets.DEV_NEXT_PUBLIC_AZURE_AD_AUTHORITY }}" >> $ENV_FILE
               echo "NEXT_PUBLIC_AZURE_AD_SCOPES=${{ vars.DEV_NEXT_PUBLIC_AZURE_AD_SCOPES }}" >> $ENV_FILE
 
+              #adb2c vars and screts for .env file
+              echo "NEXT_PUBLIC_B2C_CLIENT_ID=${{secrets.NEXT_PUBLIC_B2C_CLIENT_ID}}" >> $ENV_FILE
+              echo "NEXT_PUBLIC_B2C_AUTHORITY=${{ vars.NEXT_PUBLIC_B2C_AUTHORITY}}" >> $ENV_FILE
+              echo "NEXT_PUBLIC_B2C_KNOWN_AUTHORITY=${{ vars.NEXT_PUBLIC_B2C_KNOWN_AUTHORITY}}" >> $ENV_FILE
+              echo "NEXT_PUBLIC_B2C_SIGNUP_AUTHORITY=${{ vars.NEXT_PUBLIC_B2C_SIGNUP_AUTHORITY}}" >> $ENV_FILE
+              echo "NEXT_PUBLIC_REDIRECT_URI=${{ vars.NEXT_PUBLIC_REDIRECT_URI}}" >> $ENV_FILE
+
               # Continue the further Deployment process  
 
             export NVM_DIR="$HOME/.nvm"
               [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
             nvm install 20
-            cd /www/finanzoweb
-            ssh-keyscan github.com >> ~/.ssh/known_hosts
-            eval $(ssh-agent); ssh-add ~/.ssh/github
+            cd /www/finanzo_web
             git stash || echo "No changes to stash"
             git pull origin main || exit 1
             npm install || exit 1
             npm i pm2
-            npm run build || exit 1  # Ensure build failure exit with error
+            npm run build || exit 1  # Ensure build failure exits with error
             pm2 install pm2-logrotate
             pm2 restart dev_website || pm2 start npm --name "dev_website" -- start
             pm2 save

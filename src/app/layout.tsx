@@ -4,7 +4,7 @@ import type { Metadata } from 'next';
 import { product_sans } from '@/assets/fonts/google-font';
 import './globals.css';
 import ProviderWrapper from './provider';
-
+import DashboardLayout from '@/shared-components/layouts/DashboardLayout';
 // const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
@@ -20,7 +20,9 @@ const RootLayout = ({
   return (
     <html lang='en'>
       <body className={`${product_sans.className} font-sans`}>
-        <ProviderWrapper>{children}</ProviderWrapper>
+        <ProviderWrapper>
+          <DashboardLayout>{children}</DashboardLayout>
+        </ProviderWrapper>
       </body>
     </html>
   );

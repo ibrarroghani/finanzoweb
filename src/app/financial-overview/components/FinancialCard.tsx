@@ -1,16 +1,14 @@
 'use client';
 import React, { useState } from 'react';
-import AccountDetailsModal from './AccountDetailsModal';
-import { IInstitutions } from '../interface/account-interface';
+import TransactionDetailsModal from './TransactionDetailsModal';
 
 interface IBankCardProps {
-  bankData: IInstitutions;
+  //eslint-disable-next-line
+  data: any;
 }
 
-const BankCard: React.FC<IBankCardProps> = ({ bankData }) => {
+const FinancialCard: React.FC<IBankCardProps> = ({ data }) => {
   const [showModal, setShowModal] = useState(false);
-
-  const { institution, counts } = bankData;
 
   const handleToggleModal = () => {
     setShowModal((prev) => !prev);
@@ -18,12 +16,16 @@ const BankCard: React.FC<IBankCardProps> = ({ bankData }) => {
 
   return (
     <div className='card card-border w-full'>
-      <p className='card-title'>{institution.name}</p>
+      <p className='card-title'>{data.name}</p>
       <p className='card-subtitle'>
-        Accounts: {counts.reduce((total, count) => total + count.count, 0)}
+        {data.type === 'loan' ? (
+          <>Loan Amount: ${data.balances_current}</>
+        ) : (
+          <>Balance: ${data.balances_current}</>
+        )}
       </p>
       <button
-        onClick={() => setShowModal(true)}
+        onClick={() => setShowModal(!showModal)}
         className='card-link text-link-secondary'
       >
         View Details
@@ -31,11 +33,11 @@ const BankCard: React.FC<IBankCardProps> = ({ bankData }) => {
 
       {showModal && (
         <div>
-          <AccountDetailsModal
+          <TransactionDetailsModal
             showModal={showModal}
             setShowModal={handleToggleModal}
-            title='Bank Accounts'
-            institutionSlug={institution.slug}
+            title='Transaction Details'
+            accountId={data.id}
           />
         </div>
       )}
@@ -43,4 +45,4 @@ const BankCard: React.FC<IBankCardProps> = ({ bankData }) => {
   );
 };
 
-export default BankCard;
+export default FinancialCard;

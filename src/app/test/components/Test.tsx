@@ -8,6 +8,10 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import CustomButton from '@/shared-components/CustomButton';
 import DoughnutChart from '@/shared-components/chart/DoughnutChart';
+// import LineChart from '@/shared-components/chart/LineChart';
+// import useGetGoalChart from '@/hooks/data-hooks/goal/use-get-goal-chart';
+// import { useEffect, useState } from 'react';
+// import { format } from 'date-fns';
 
 const testValidationSchema = yup.object().shape({
   firstName: yup
@@ -44,6 +48,20 @@ interface IFormData {
   date: Date;
 }
 
+// interface IGoalChart {
+//   data: IGoalChartData[];
+// }
+// interface IGoalChartData {
+//   id: number;
+//   label: string;
+//   value: string;
+// }
+
+// const formatDateLabel = (dateString: string): string => {
+//   const date = new Date(dateString);
+//   return format(date, 'dd MMM yy');
+// };
+
 const Test = () => {
   const initialValue: IFormData = {
     firstName: '',
@@ -61,13 +79,41 @@ const Test = () => {
     resolver: yupResolver(testValidationSchema),
   });
 
+  // const [labels, setLabels] = useState<string[]>([]);
+  // const [values, setValues] = useState<number[]>([]);
+
+  // const { mutate: getGoalChart } = useGetGoalChart();
+
+  // useEffect(() => {
+  //   getGoalChart(
+  //     {
+  //       dataPoint: 5,
+  //     },
+  //     {
+  //       onSuccess: (response) => {
+  //         if (response.data.length > 0) {
+  //           const newLabels = response.data.map((item: IGoalChartData) =>
+  //             formatDateLabel(item.label)
+  //           );
+  //           const newValues = response.data.map((item: IGoalChartData) =>
+  //             Number(item.value)
+  //           );
+
+  //           setLabels(newLabels);
+  //           setValues(newValues);
+  //         }
+  //       },
+  //     }
+  //   );
+  // }, [getGoalChart]);
+
   const handleFormSubmit = (data: IFormData) => {
     //eslint-disable-next-line no-console
     console.log('data', data);
   };
 
   return (
-    <div className='flex h-screen justify-center bg-primary-light'>
+    <div className='flex h-screen flex-col justify-center overflow-hidden overflow-y-auto bg-primary-light'>
       <form
         onSubmit={handleSubmit(handleFormSubmit)}
         className='mx-6 flex w-full flex-col items-center justify-center gap-2'
@@ -123,6 +169,10 @@ const Test = () => {
           backgroundColor={['#3fa75a', '#34A8531A']}
         />
       </div>
+
+      {/* <div className='p-4'>
+        <LineChart labels={labels} data={values} />
+      </div> */}
     </div>
   );
 };

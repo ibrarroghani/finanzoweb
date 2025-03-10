@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Upload, Input, notification } from 'antd';
+import { Upload, Input, notification, UploadFile } from 'antd';
 import {
   MessageSendIcon,
   ImageUploadIcon,
@@ -12,6 +12,7 @@ import Image from 'next/image';
 import useFileUpload from '@/hooks/data-hooks/chat/use-file-upload';
 import { fileSizeCheck } from '@/utils/file-size';
 import { useDashboardPageContext } from '@/app/dashboard/context/DashboardPageContext';
+import { UploadChangeParam } from 'antd/es/upload';
 
 interface ISelectedFile {
   file: File;
@@ -22,8 +23,7 @@ const InputSection: React.FC = () => {
   const [message, setMessage] = useState('');
   const [fileSlug, setFileSlug] = useState('');
   const [selectedFiles, setSelectedFiles] = useState<ISelectedFile[]>([]);
-  //eslint-disable-next-line
-  const [fileList, setFileList] = useState<any[]>([]);
+  const [fileList, setFileList] = useState<UploadFile[]>([]);
 
   const {
     connectionSlugId,
@@ -66,28 +66,31 @@ const InputSection: React.FC = () => {
     setFileList([]);
   };
 
-  //eslint-disable-next-line
-  const handleFileChange = (info: any) => {
+  const handleFileChange = (info: UploadChangeParam<UploadFile>) => {
     // Only keep the latest file
     const file = info.fileList[info.fileList.length - 1];
     if (file) {
-      if (fileSizeCheck(file.size)) {
+      if (
+        file.size === undefined ||
+        file.size === 0 ||
+        fileSizeCheck(file.size)
+      ) {
         notification.error({
-          message: 'File size is too large',
-          description: 'Please select a file smaller than 5MB',
+          message: 'File size is too large or invalid',
+          description: 'Please select a valid file smaller than 5MB',
         });
         return;
       }
       const newFile = {
         file: file.originFileObj as File,
-        url: URL.createObjectURL(file.originFileObj),
+        url: URL.createObjectURL(file.originFileObj as File),
       };
       setSelectedFiles([newFile]);
       setFileList([file]);
 
       const formData = new FormData();
 
-      formData.append('file', file.originFileObj);
+      formData.append('file', file.originFileObj as File);
 
       uploadFile(formData, {
         onSuccess: (response) => {
@@ -118,17 +121,14 @@ const InputSection: React.FC = () => {
       <div className='relative flex w-full flex-col'>
         {/* Input Field */}
         <TextArea
+          key={selectedFiles.length}
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           autoSize={{ minRows: 2, maxRows: 6 }}
           placeholder='Enter your message here...'
           onKeyDown={handleKeyDown}
           disabled={selectedFiles.length > 0}
-          style={{
-            resize: 'none',
-            paddingRight: '5rem',
-            paddingBottom: selectedFiles.length > 0 ? '5rem' : '1rem', // Adjust padding to accommodate image preview
-          }}
+          className={`resize-none pr-20 ${selectedFiles.length > 0 ? 'pb-20' : 'pb-4'}`}
         />
 
         {/* File Preview */}

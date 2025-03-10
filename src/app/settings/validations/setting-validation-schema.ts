@@ -10,6 +10,7 @@ export const settingValidationSchema = yup.object().shape({
     .trim()
     .min(2, 'First Name is required and at least 2 characters long')
     .required(),
+
   lastName: yup
     .string()
     .trim()
@@ -18,14 +19,12 @@ export const settingValidationSchema = yup.object().shape({
 
   dateOfBirth: yup
     .date()
-    .nullable()
-    .default(null)
-    .required('Date is required')
-    .test(
-      'not-epoch',
-      'Date is required',
-      (value) => value?.getTime() !== new Date(0).getTime()
-    ),
+    .nullable() // Allow null
+    .transform((value, originalValue) => {
+      // Convert empty string to null
+      return originalValue === '' ? null : value;
+    })
+    .required('Date of Birth is required'), // Adjust this if you want to allow empty
 
   gender: yup.string().trim().min(1, 'Gender is required').required(),
 

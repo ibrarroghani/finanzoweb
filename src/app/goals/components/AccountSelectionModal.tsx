@@ -13,9 +13,9 @@ import {
 import {
   IFormValues,
   ILinkedAccount,
-  IUserAccounts,
 } from '@/app/goals/interface/goal-interface';
 import AccountCheckbox from './AccountCheckbox';
+import { IUserAccounts } from '@/app/dashboard/interface/account-interface';
 
 interface AccountSelectionModalProps {
   showModal: boolean;
@@ -139,33 +139,39 @@ const AccountSelectionModal: React.FC<AccountSelectionModalProps> = ({
       }}
     >
       <div className='custom-scrollbar h-full overflow-y-auto pr-6'>
-        <div className='grid grid-cols-1 gap-4 pb-24'>
-          {userAccounts.map((acc) => (
-            <AccountCheckbox
-              key={acc.account.id}
-              account={acc}
-              isSelected={isAccountSelected(acc)}
-              existingContributionLimit={getExistingContributionLimit(acc)}
-              goalPurpose={goalPurpose}
-              control={control as unknown as Control<FieldValues>}
-              formErrors={formErrors}
-              watch={watch}
-              trigger={trigger}
-              updateTempAccounts={updateTempAccounts}
-            />
-          ))}
-        </div>
+        {userAccounts.length === 0 ? (
+          <div className='mt-20 text-center text-muted'>No accounts found.</div>
+        ) : (
+          <div className='grid grid-cols-1 gap-4 pb-24'>
+            {userAccounts.map((acc) => (
+              <AccountCheckbox
+                key={acc.account.id}
+                account={acc}
+                isSelected={isAccountSelected(acc)}
+                existingContributionLimit={getExistingContributionLimit(acc)}
+                goalPurpose={goalPurpose}
+                control={control as unknown as Control<FieldValues>}
+                formErrors={formErrors}
+                watch={watch}
+                trigger={trigger}
+                updateTempAccounts={updateTempAccounts}
+              />
+            ))}
+          </div>
+        )}
       </div>
 
-      <div className='absolute bottom-0 left-0 right-0 border-t bg-white px-6 py-4'>
-        <div className='flex items-center justify-between'>
-          <CustomButton
-            type='button'
-            title='Select Account'
-            onClick={handleSelectAccount}
-          />
+      {userAccounts.length > 0 && (
+        <div className='absolute bottom-0 left-0 right-0 border-t bg-white px-6 py-4'>
+          <div className='flex items-center justify-between'>
+            <CustomButton
+              type='button'
+              title='Select Account'
+              onClick={handleSelectAccount}
+            />
+          </div>
         </div>
-      </div>
+      )}
     </Modal>
   );
 };

@@ -6,10 +6,13 @@ interface ISectionProps {
   //eslint-disable-next-line
   data?: any[];
   className?: string;
+  icon?: React.ReactNode;
+  available?: string;
 }
 
 interface IScrollableProps {
   children: React.ReactNode;
+  height?: string;
 }
 
 interface IItemProps {
@@ -19,11 +22,21 @@ interface IItemProps {
 const Section: React.FC<ISectionProps> & {
   Scrollable: React.FC<IScrollableProps>;
   Item: React.FC<IItemProps>;
-} = ({ title, children, className }) => (
+} = ({ title, children, className, icon, available }) => (
   <div
     className={`${title ? 'rounded-extra-small bg-primary-light p-2' : ''} ${className}`}
   >
-    {title && <p className='px-2 py-1 font-semibold'>{title}</p>}
+    {(title || icon || available) && (
+      <div className='flex items-center justify-between'>
+        <div className='flex items-center'>
+          {icon && <span className='ml-2'>{icon}</span>}
+          {title && <p className='px-2 py-1 font-semibold'>{title}</p>}
+        </div>
+        {available && (
+          <span className='card-subtitle text-right'>Total: {available}</span>
+        )}
+      </div>
+    )}
     {children}
     {/* {data && data.length > 0 ? (
       <>{children}</>
@@ -33,8 +46,11 @@ const Section: React.FC<ISectionProps> & {
   </div>
 );
 
-Section.Scrollable = ({ children }) => (
-  <div className='custom-scrollbar h-[300px] w-full overflow-y-auto px-3'>
+Section.Scrollable = ({ children, height }) => (
+  <div
+    className='custom-scrollbar w-full overflow-y-auto px-3'
+    style={{ height: height ? height : '100%' }}
+  >
     {children}
   </div>
 );
