@@ -59,7 +59,7 @@ jobs:
             git stash || echo "No changes to stash"
             git pull origin main || exit 1
             npm install || exit 1
-            npm i pm2
+            npm i -g pm2
             npm run build || exit 1  # Ensure build failure exits with error
             pm2 install pm2-logrotate
             pm2 restart dev_website || pm2 start npm --name "dev_website" -- start
