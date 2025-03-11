@@ -27,7 +27,7 @@ jobs:
             set -e  # Exit on any error
 
               # Path to the .env file in the project directory
-              ENV_FILE="/www/finanzo_web/.env"
+              ENV_FILE="/www/finanzoweb/.env"
 
               # Clear or create new .env file
               : > $ENV_FILE
@@ -54,7 +54,7 @@ jobs:
             export NVM_DIR="$HOME/.nvm"
               [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
             nvm install 20
-            cd /www/finanzo_web
+            cd /www/finanzoweb
             git stash || echo "No changes to stash"
             git pull origin main || exit 1
             npm install || exit 1
