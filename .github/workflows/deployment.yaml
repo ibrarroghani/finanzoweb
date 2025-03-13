@@ -26,7 +26,7 @@ jobs:
           script: |
             mkdir -p ~/.ssh
 
-            # Add GitHub private key for authentication
+            #Add GitHub private key for authentication
             echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
             chmod 600 ~/.ssh/id_rsa
         
