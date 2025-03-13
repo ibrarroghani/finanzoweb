@@ -24,43 +24,45 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
+            mkdir -p ~/.ssh
+
+            # Use the existing SSH key named 'github'
+            echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/github
+            chmod 600 ~/.ssh/github
+
+            # Configure SSH to use the correct key for GitHub
+            echo "Host github.com
+            IdentityFile ~/.ssh/github
+            StrictHostKeyChecking no" > ~/.ssh/config
+
+            # Add GitHub's host key to known_hosts to prevent confirmation prompt
+            ssh-keyscan github.com >> ~/.ssh/known_hosts
+
+            # Test SSH connection with GitHub
+            ssh -i ~/.ssh/github -T git@github.com || exit 1
             set -e  # Exit on any error
 
-              # Path to the .env file in the project directory
-              ENV_FILE="/www/finanzoweb/.env"
+            # Path to the .env file in the project directory
+            ENV_FILE="/www/finanzoweb/.env"
 
-              # Clear or create new .env file
-              : > $ENV_FILE
+            # Clear or create new .env file
+            : > $ENV_FILE
 
-              # Write all secrets to the .env file
-              echo "NEXT_PUBLIC_API_URL=${{ vars.DEV_NEXT_PUBLIC_API_URL }}" >> $ENV_FILE
-              echo "NEXT_PUBLIC_SOCKET_URL=${{ vars.DEV_NEXT_PUBLIC_SOCKET_URL }}" >> $ENV_FILE
-              
-              echo "NEXT_PUBLIC_AZURE_AD_CLIENT_ID=${{ secrets.DEV_NEXT_PUBLIC_AZURE_AD_CLIENT_ID }}" >> $ENV_FILE
-              echo "NEXT_PUBLIC_AZURE_AD_TENANT_ID=${{ secrets.DEV_NEXT_PUBLIC_AZURE_AD_TENANT_ID }}" >> $ENV_FILE
-              echo "NEXT_PUBLIC_AZURE_AD_REDIRECT_URI=${{ vars.DEV_NEXT_PUBLIC_AZURE_AD_REDIRECT_URI }}" >> $ENV_FILE
-              echo "NEXT_PUBLIC_AZURE_AD_AUTHORITY=${{ secrets.DEV_NEXT_PUBLIC_AZURE_AD_AUTHORITY }}" >> $ENV_FILE
-              echo "NEXT_PUBLIC_AZURE_AD_SCOPES=${{ vars.DEV_NEXT_PUBLIC_AZURE_AD_SCOPES }}" >> $ENV_FILE
+            # Write all secrets to the .env file
+            echo "NEXT_PUBLIC_API_URL=${{ vars.DEV_NEXT_PUBLIC_API_URL }}" >> $ENV_FILE
+            echo "NEXT_PUBLIC_SOCKET_URL=${{ vars.DEV_NEXT_PUBLIC_SOCKET_URL }}" >> $ENV_FILE
+            echo "NEXT_PUBLIC_AZURE_AD_CLIENT_ID=${{ secrets.DEV_NEXT_PUBLIC_AZURE_AD_CLIENT_ID }}" >> $ENV_FILE
+            echo "NEXT_PUBLIC_AZURE_AD_TENANT_ID=${{ secrets.DEV_NEXT_PUBLIC_AZURE_AD_TENANT_ID }}" >> $ENV_FILE
+            echo "NEXT_PUBLIC_AZURE_AD_REDIRECT_URI=${{ vars.DEV_NEXT_PUBLIC_AZURE_AD_REDIRECT_URI }}" >> $ENV_FILE
+            echo "NEXT_PUBLIC_AZURE_AD_AUTHORITY=${{ secrets.DEV_NEXT_PUBLIC_AZURE_AD_AUTHORITY }}" >> $ENV_FILE
+            echo "NEXT_PUBLIC_AZURE_AD_SCOPES=${{ vars.DEV_NEXT_PUBLIC_AZURE_AD_SCOPES }}" >> $ENV_FILE
 
-              #adb2c vars and screts for .env file
-              echo "NEXT_PUBLIC_B2C_CLIENT_ID=${{secrets.NEXT_PUBLIC_B2C_CLIENT_ID}}" >> $ENV_FILE
-              echo "NEXT_PUBLIC_B2C_AUTHORITY=${{ vars.NEXT_PUBLIC_B2C_AUTHORITY}}" >> $ENV_FILE
-              echo "NEXT_PUBLIC_B2C_KNOWN_AUTHORITY=${{ vars.NEXT_PUBLIC_B2C_KNOWN_AUTHORITY}}" >> $ENV_FILE
-              echo "NEXT_PUBLIC_B2C_SIGNUP_AUTHORITY=${{ vars.NEXT_PUBLIC_B2C_SIGNUP_AUTHORITY}}" >> $ENV_FILE
-              echo "NEXT_PUBLIC_REDIRECT_URI=${{ vars.NEXT_PUBLIC_REDIRECT_URI}}" >> $ENV_FILE
+            # adb2c vars and secrets for .env file
+            echo "NEXT_PUBLIC_B2C_CLIENT_ID=${{ secrets.NEXT_PUBLIC_B2C_CLIENT_ID }}" >> $ENV_FILE
+            echo "NEXT_PUBLIC_B2C_AUTHORITY=${{ vars.NEXT_PUBLIC_B2C_AUTHORITY }}" >> $ENV_FILE
+            echo "NEXT_PUBLIC_B2C_KNOWN_AUTHORITY=${{ vars.NEXT_PUBLIC_B2C_KNOWN_AUTHORITY }}" >> $ENV_FILE
+            echo "NEXT_PUBLIC_B2C_SIGNUP_AUTHORITY=${{ vars.NEXT_PUBLIC_B2C_SIGNUP_AUTHORITY }}" >> $ENV_FILE
+            echo "NEXT_PUBLIC_REDIRECT_URI=${{ vars.NEXT_PUBLIC_REDIRECT_URI }}" >> $ENV_FILE
 
-              # Continue the further Deployment process  
-
-            export NVM_DIR="$HOME/.nvm"
-              [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-            nvm install 20
-            cd /www/finanzoweb
-            eval $(ssh-agent); ssh-add ~/.ssh/github
-            git stash || echo "No changes to stash"
-            git pull origin main || exit 1
-            npm install || exit 1
-            npm i -g pm2
-            npm run build || exit 1  # Ensure build failure exits with error
-            pm2 install pm2-logrotate
-            pm2 restart dev_website || pm2 start npm --name "dev_website" -- start
-            pm2 save
+            # Continue the further Deployment process  
+            expor
