@@ -26,10 +26,10 @@ jobs:
           script: |
             set -e        
             # Add GitHub to known hosts to prevent manual confirmation
-            ssh-keyscan github.com >> ~/.ssh/known_hosts
+            # ssh-keyscan github.com >> ~/.ssh/known_hosts
         
             # Test SSH connection with GitHub
-            ssh -T git@github.com || true
+            #ssh -T git@github.com || true
             set -e  # Exit on any error
 
             # Path to the .env file in the project directory
